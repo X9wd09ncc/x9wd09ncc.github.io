@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>扫雷</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-white">
+    <div class="container">
+        <header>
+            <h1 class="main-title">扫雷</h1>
+        </header>
+        
+        <div class="settings-panel">
+            <div class="settings-grid">
+                <div class="setting-item">
+                    <label>游戏模式</label>
+                    <div class="select-wrapper">
+                        <select id="game-mode">
+                            <option value="single">单人模式</option>
+                            <option value="pve" selected>人机对战</option>
+                            <option value="pvp">双人对战</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label>对局机制</label>
+                    <div class="select-wrapper">
+                        <select id="play-style">
+                            <option value="speed" selected>拼速度</option>
+                            <option value="turn">回合制</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-item">
+                    <label>难度选择</label>
+                    <div class="select-wrapper">
+                        <select id="difficulty">
+                            <option value="easy">简单 (9×9, 10雷)</option>
+                            <option value="medium" selected>中等 (16×16, 40雷)</option>
+                            <option value="hard">困难 (24×24, 99雷)</option>
+                            <option value="custom">自定义</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item" id="ai-difficulty-container">
+                    <label>对手强度</label>
+                    <div class="select-wrapper">
+                        <select id="ai-difficulty">
+                            <option value="easy">简单</option>
+                            <option value="medium">中等</option>
+                            <option value="hard" selected>困难</option>
+                            <option value="nightmare">噩梦</option>
+                            <option value="crazy">疯狂</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="custom-settings hidden" id="custom-settings">
+                <div class="custom-input-group">
+                    <label>行</label>
+                    <input type="number" id="custom-rows" min="5" max="30" value="16">
+                </div>
+                <div class="custom-input-group">
+                    <label>列</label>
+                    <input type="number" id="custom-cols" min="5" max="30" value="16">
+                </div>
+                <div class="custom-input-group">
+                    <label>雷</label>
+                    <input type="number" id="custom-mines" min="1" max="200" value="40">
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-showcase">
+            <button class="theme-orb active" data-theme="white"></button>
+            <button class="theme-orb" data-theme="milk"></button>
+            <button class="theme-orb" data-theme="dark"></button>
+            <button class="theme-orb" data-theme="blue"></button>
+            <button class="theme-orb" data-theme="green"></button>
+        </div>
+
+        <div id="status-bar" class="status-bar">
+            <span id="turn-indicator" class="turn-indicator hidden"></span>
+            <span id="global-message">准备就绪</span>
+        </div>
+
+        <div class="battlefield">
+            <div class="board-wrapper" id="player1-wrapper">
+                <div class="board-header">
+                    <div class="avatar">玩家 1</div>
+                    <div class="stats">
+                        <span class="badge time-badge"><span class="icon-time"></span> <span id="p1-timer">0</span></span>
+                        <span class="badge mine-badge"><span class="icon-mine"></span> <span id="p1-mines">0</span></span>
+                    </div>
+                </div>
+                <div class="board-scroll">
+                    <div id="p1-board" class="mine-board"></div>
+                </div>
+            </div>
+
+            <div class="board-wrapper" id="player2-wrapper">
+                <div class="board-header">
+                    <div class="avatar" id="p2-name">电脑</div>
+                    <div class="stats">
+                        <span class="badge time-badge"><span class="icon-time"></span> <span id="p2-timer">0</span></span>
+                        <span class="badge mine-badge"><span class="icon-mine"></span> <span id="p2-mines">0</span></span>
+                    </div>
+                </div>
+                <div class="board-scroll">
+                    <div id="p2-board" class="mine-board"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-center">
+            <button id="btn-restart" class="primary-btn">重新开始</button>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+
+ body {
+     background: transparent;
+ }
+
+ .games-page {
+     max-width: 1200px;
+     margin: 0 auto;
+     padding: 40px 20px;
+ }
+
+ .page-header {
+     text-align: center;
+     margin-bottom: 40px;
+ }
+
+ .page-title {
+     font-size: 32px;
+     font-weight: 600;
+     margin-bottom: 8px;
+ }
+
+ .page-subtitle {
+     font-size: 14px;
+     opacity: 0.7;
+ }
+
+ .games-grid {
+     display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 24px;
+ }
+
+ .game-card {
+     background: var(--card-bg, #fff);
+     border-radius: 16px;
+     padding: 24px 20px 20px;
+     transition: transform 0.2s, box-shadow 0.2s;
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+     border: 1px solid var(--border-color, #eaeef2);
+     text-align: center;
+ }
+
+ .game-card:hover {
+     transform: translateY(-4px);
+     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+ }
+
+.game-icon {
+    width: 75px;
+    height: 75px;
+    background: var(--icon-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-left: auto;   /* 添加这两行 */
+    margin-right: auto;  /* 让块级元素水平居中 */
+}
+
+ .game-title {
+     font-size: 22px;
+     font-weight: 600;
+     margin-bottom: 12px;
+ }
+
+ .game-description {
+     font-size: 14px;
+     line-height: 1.5;
+     opacity: 0.75;
+     margin-bottom: 20px;
+     min-height: 60px;
+ }
+
+ .game-btn {
+     display: inline-block;
+     background: var(--btn-bg, #f5f5f5);
+     color: var(--btn-color, #333);
+     padding: 8px 28px;
+     border-radius: 30px;
+     font-size: 14px;
+     font-weight: 500;
+     text-decoration: none;
+     transition: all 0.2s;
+     border: 1px solid var(--border-color, #e0e0e0);
+     cursor: pointer;
+ }
+
+ .game-btn:hover {
+     background: var(--btn-hover-bg, #e8e8e8);
+     transform: scale(1.02);
+ }
+
+ @media (max-width: 900px) {
+     .games-grid {
+         grid-template-columns: repeat(2, 1fr);
+         gap: 20px;
+     }
+ }
+
+ @media (max-width: 600px) {
+     .games-grid {
+         grid-template-columns: 1fr;
+         gap: 16px;
+     }
+
+     .page-title {
+         font-size: 26px;
+     }
+ }

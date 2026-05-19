@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>贪吃蛇游戏</title>
+    <link rel="stylesheet" href="snake.css">
+</head>
+
+<body>
+
+    <div class="game-wrapper">
+        <!-- 标题 -->
+        <div class="game-title">🐍 贪吃蛇</div>
+
+        <!-- 信息栏（含难度 + 操作按钮） -->
+        <div class="info-glass">
+            <div class="info-item">
+                难度:
+                <select id="difficultySelect">
+                    <option value="1" selected>1 ⭐</option>
+                    <option value="2">2 ⭐⭐</option>
+                    <option value="3">3 ⭐⭐⭐</option>
+                    <option value="4">4 ⭐⭐⭐⭐</option>
+                    <option value="5">5 ⭐⭐⭐⭐⭐</option>
+                </select>
+            </div>
+            <div class="info-buttons">
+                <button class="info-btn primary" id="startBtn">▶ 开始</button>
+                <button class="info-btn" id="pauseBtn">⏸ 暂停</button>
+                <button class="info-btn" id="replayBtn">🔄 重开</button>
+                <button class="info-btn" id="rulesBtn">📖 规则</button>
+            </div>
+            <div class="game-status playing" id="statusDisplay">▶ 进行中</div>
+        </div>
+
+        <!-- 三栏主体：排行榜 | 画布 | 信息面板（等高） -->
+        <div class="main-row">
+            <!-- 左侧：排行榜 -->
+            <div class="leaderboard-panel" id="leaderboardPanel">
+                <div class="panel-title">🏆 排行榜</div>
+                <div id="lbEntries">
+                    <div class="lb-empty">暂无记录<br>≥500 分可上榜</div>
+                </div>
+            </div>
+
+            <!-- 中间：核心游戏区 -->
+            <div class="main-col-center">
+                <!-- 画布 -->
+                <div class="canvas-glass">
+                    <canvas id="snakeCanvas" width="520" height="520"></canvas>
+                </div>
+
+                <!-- 移动端触摸方向键 -->
+                <div class="mobile-controls" id="mobileControls">
+                    <div class="row">
+                        <div class="mobile-btn mobile-btn-placeholder"></div>
+                        <div class="mobile-btn" data-dir="up">▲</div>
+                        <div class="mobile-btn mobile-btn-placeholder"></div>
+                    </div>
+                    <div class="row">
+                        <div class="mobile-btn" data-dir="left">◀</div>
+                        <div class="mobile-btn" data-dir="down">▼</div>
+                        <div class="mobile-btn" data-dir="right">▶</div>
+                    </div>
+                </div>
+
+                <div class="hint-text">⬆⬇⬅➡ / WASD 控制 &nbsp;|&nbsp; ␣ 空格暂停 &nbsp;|&nbsp; 食物: 🟢🔵🟣🟡</div>
+            </div>
+
+            <!-- 右侧：信息面板 -->
+            <div class="side-panel" id="sidePanel">
+                <div class="panel-title">📊 游戏数据</div>
+
+                <div class="stat-row">
+                    <span class="label">🏆 当前分数</span>
+                    <span class="val" id="statScore">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">👑 最高分</span>
+                    <span class="val" id="statHighScore">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">📏 蛇身长度</span>
+                    <span class="val" id="statLength">3</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">🎯 分数倍率</span>
+                    <span class="val" id="statMultiplier">×1</span>
+                </div>
+                <div class="stat-row">
+                    <span class="label">⚡ 当前速度</span>
+                    <span class="val" id="statSpeed">220ms</span>
+                </div>
+
+                <div class="panel-title" style="margin-top:4px;">🍎 食物统计</div>
+                <div class="food-stats" id="foodStats">
+                    <div class="food-stat-item">
+                        <span class="dot" style="background:#43a047;"></span> 绿色
+                        <span class="count" id="countGreen">0</span>
+                    </div>
+                    <div class="food-stat-item">
+                        <span class="dot" style="background:#1e88e5;"></span> 蓝色
+                        <span class="count" id="countBlue">0</span>
+                    </div>
+                    <div class="food-stat-item">
+                        <span class="dot" style="background:#8e24aa;"></span> 紫色
+                        <span class="count" id="countPurple">0</span>
+                    </div>
+                    <div class="food-stat-item">
+                        <span class="dot" style="background:#ffb300;"></span> 金色
+                        <span class="count" id="countGold">0</span>
+                    </div>
+                </div>
+
+                <div class="custom-grid-section">
+                    <div style="font-size:0.85rem;font-weight:600;color:#4a5568;">🔧 自定义网格</div>
+                    <div class="grid-inputs">
+                        <label>宽</label>
+                        <input type="number" id="gridWidth" value="20" min="5" max="40">
+                        <label>高</label>
+                        <input type="number" id="gridHeight" value="20" min="5" max="40">
+                        <button class="btn-sm" id="applyGridBtn">应用</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 规则弹窗 ===== -->
+    <div class="modal-overlay" id="rulesModal">
+        <div class="modal-content">
+            <h2>🐍 贪吃蛇规则</h2>
+
+            <div class="rule-section">
+                <h3>🎮 基本操作</h3>
+                <ul>
+                    <li>使用 <strong>方向键 ↑↓←→</strong> 或 <strong>WASD</strong> 控制蛇的移动方向</li>
+                    <li>按 <strong>空格键</strong> 暂停 / 继续游戏</li>
+                    <li>蛇不能反向移动（例如向右时不能立即向左）</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h3>🍎 食物系统</h3>
+                <ul>
+                    <li><span style="color:#43a047;">●</span> <strong>绿色</strong> 1 分</li>
+                    <li><span style="color:#1e88e5;">●</span> <strong>蓝色</strong> 5 分</li>
+                    <li><span style="color:#8e24aa;">●</span> <strong>紫色</strong> 10 分</li>
+                    <li><span style="color:#ffb300;">●</span> <strong>金色</strong> 100 分</li>
+                    <li>概率随难度提升，稀有食物在更高难度下更容易出现</li>
+                </ul>
+                <table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:0.82rem;">
+                    <tr style="border-bottom:1px solid rgba(100,100,130,0.2);">
+                        <th style="padding:4px 6px;text-align:left;color:#4a5568;">难度</th>
+                        <th style="padding:4px 6px;color:#43a047;">🟢</th>
+                        <th style="padding:4px 6px;color:#1e88e5;">🔵</th>
+                        <th style="padding:4px 6px;color:#8e24aa;">🟣</th>
+                        <th style="padding:4px 6px;color:#ffb300;">🟡</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px 6px;">1</td>
+                        <td style="padding:3px 6px;">80%</td>
+                        <td style="padding:3px 6px;">15%</td>
+                        <td style="padding:3px 6px;">5%</td>
+                        <td style="padding:3px 6px;">0.1%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px 6px;">2</td>
+                        <td style="padding:3px 6px;">76%</td>
+                        <td style="padding:3px 6px;">16%</td>
+                        <td style="padding:3px 6px;">7%</td>
+                        <td style="padding:3px 6px;">1%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px 6px;">3</td>
+                        <td style="padding:3px 6px;">68%</td>
+                        <td style="padding:3px 6px;">19%</td>
+                        <td style="padding:3px 6px;">11%</td>
+                        <td style="padding:3px 6px;">2%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px 6px;">4</td>
+                        <td style="padding:3px 6px;">58%</td>
+                        <td style="padding:3px 6px;">22%</td>
+                        <td style="padding:3px 6px;">15%</td>
+                        <td style="padding:3px 6px;">5%</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:3px 6px;">5</td>
+                        <td style="padding:3px 6px;">45%</td>
+                        <td style="padding:3px 6px;">25%</td>
+                        <td style="padding:3px 6px;">18%</td>
+                        <td style="padding:3px 6px;">12%</td>
+                    </tr>
+                </table>
+                <p style="font-size:0.82rem;margin-top:6px;color:#555;">最终得分 = 食物基础分 × <strong>难度倍率</strong></p>
+            </div>
+
+            <div class="rule-section">
+                <h3>⚡ 难度说明</h3>
+                <ul>
+                    <li>难度 1~5，倍率 = 难度值，速度 = 基础间隔 ÷ 难度</li>
+                    <li>难度越高，稀有食物出现概率越大</li>
+                    <li>难度 ≥ 2 时，食物会在一定时间后消失并重新生成</li>
+                    <li>难度 2 → 30s &nbsp;|&nbsp; 难度 3 → 20s &nbsp;|&nbsp; 难度 4 → 10s &nbsp;|&nbsp; 难度 5 → 5s</li>
+                    <li>游戏开始后难度锁定，不可修改</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h3>🏁 胜负条件</h3>
+                <ul>
+                    <li>蛇头撞到墙壁或自身身体 → <strong>游戏结束</strong></li>
+                    <li>蛇占满所有网格 → <strong>游戏胜利</strong></li>
+                    <li>随着蛇身变长，移动速度会逐渐加快</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h3>🔧 自定义网格</h3>
+                <ul>
+                    <li>可在侧面板自定义网格宽高（5~40），点击"应用"后生效</li>
+                    <li>修改网格大小后游戏会自动重置</li>
+                </ul>
+            </div>
+
+            <div class="rule-section">
+                <h3>🏆 排行榜</h3>
+                <ul>
+                    <li>游戏结束时分数 ≥ <strong>500</strong> 可录入排行榜</li>
+                    <li>排行榜保存前 10 名，按分数从高到低排序</li>
+                    <li>数据保存在浏览器本地</li>
+                </ul>
+            </div>
+
+            <button class="modal-close-btn" id="rulesCloseBtn">知道了</button>
+        </div>
+    </div>
+
+    <script src="snake.js"></script>
+
+</body>
+
+</html>

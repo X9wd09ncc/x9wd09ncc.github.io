@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>五子棋</title>
+    <link rel="stylesheet" href="wuziqi.css">
+</head>
+
+<body>
+    <!-- ========== 主菜单界面 ========== -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-container">
+            <h1 class="game-title">五 子 棋</h1>
+            <p class="game-subtitle">Gomoku</p>
+            <div class="menu-buttons">
+                <button class="menu-btn" id="btn-ai-mode">🤖 人机对战</button>
+                <button class="menu-btn" id="btn-friend-mode">👥 好友对战</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 设置界面 ========== -->
+    <div id="settings-screen" class="screen">
+        <div class="settings-container">
+            <h2>游戏设置</h2>
+            <div class="setting-row">
+                <label>棋盘大小</label>
+                <div class="size-control">
+                    <input type="range" id="board-size" class="size-slider" min="9" max="19" value="15">
+                    <span class="size-display" id="size-display">15 × 15</span>
+                </div>
+            </div>
+            <div class="setting-row" id="setting-difficulty">
+                <label>AI 难度</label>
+                <div class="btn-group" id="difficulty-group">
+                    <button class="opt-btn" data-value="novice">新手</button>
+                    <button class="opt-btn active" data-value="expert">高手</button>
+                    <button class="opt-btn" data-value="master">大师</button>
+                </div>
+            </div>
+            <div class="setting-row" id="setting-first">
+                <label>先手选择</label>
+                <div class="btn-group" id="first-group">
+                    <button class="opt-btn active" data-value="player">玩家先手</button>
+                    <button class="opt-btn" data-value="ai">AI 先手</button>
+                </div>
+            </div>
+            <div class="settings-actions">
+                <button class="action-btn primary" id="btn-start-game">开始游戏</button>
+                <button class="action-btn secondary" id="btn-back-menu-from-settings">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 游戏界面 ========== -->
+    <div id="game-screen" class="screen">
+        <div class="game-header">
+            <div class="game-info">
+                <span class="turn-badge" id="turn-badge">黑方走棋</span>
+                <span class="mode-badge" id="mode-badge">人机对战</span>
+            </div>
+            <div class="game-stats">
+                <span class="stat-item" id="undo-stat">悔棋: 3/3</span>
+            </div>
+        </div>
+        <div class="board-wrapper">
+            <canvas id="board-canvas"></canvas>
+        </div>
+        <div class="game-controls">
+            <button class="ctrl-btn" id="btn-undo">↩ 悔棋</button>
+            <button class="ctrl-btn" id="btn-reset">🔄 重新开始</button>
+            <button class="ctrl-btn" id="btn-settings">⚙ 设置</button>
+            <button class="ctrl-btn" id="btn-quit">🚪 退出</button>
+        </div>
+    </div>
+
+    <!-- ========== 好友对战悔棋对话框 ========== -->
+    <div id="undo-dialog" class="dialog-overlay">
+        <div class="dialog-box">
+            <p class="dialog-icon">🤔</p>
+            <p class="dialog-text" id="undo-dialog-text">对方请求悔棋，是否同意？</p>
+            <div class="dialog-actions">
+                <button class="dialog-btn accept" id="btn-undo-accept">✅ 同意</button>
+                <button class="dialog-btn reject" id="btn-undo-reject">❌ 拒绝</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== 游戏结束对话框 ========== -->
+    <div id="gameover-dialog" class="dialog-overlay">
+        <div class="dialog-box">
+            <p class="dialog-icon" id="gameover-icon">🎉</p>
+            <p class="dialog-text" id="gameover-text">黑方获胜！</p>
+            <div class="dialog-actions">
+                <button class="dialog-btn primary" id="btn-gameover-ok">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="wuziqi.js"></script>
+</body>
+
+</html>

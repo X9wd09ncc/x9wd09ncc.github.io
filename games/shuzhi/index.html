@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>数织游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="game-title-header">数织</div>
+    <div class="controls-glass">
+        <div class="controls-row">
+            <div class="difficulty-group">
+                <label for="difficultySelect">难度: </label>
+                <select id="difficultySelect">
+                    <option value="5">5×5</option>
+                    <option value="10" selected>10×10</option>
+                    <option value="20">20×20</option>
+                </select>
+            </div>
+            <div class="timer-display" id="timerDisplay">⏱️ 00:00</div>
+        </div>
+    </div>
+    <div class="game-container">
+        <canvas id="nonogramCanvas"></canvas>
+        <div class="button-panel">
+            <button id="hintBtn">💡 提示</button>
+            <button id="resetBtn">✨ 新游戏</button>
+            <button id="answerBtn">🔍 答案</button>
+            <button id="checkBtn">✅ 验证</button>
+        </div>
+        <div id="messageBox" class="message-area"></div>
+        <div class="info-text">
+            🖱️ 左键填充 / 取消填充 &nbsp;&nbsp;|&nbsp;&nbsp;
+            ✖️ 右键标记 / 取消标记
+        </div>
+    </div>
+
+    <script src="shuzhi.js"></script>
+</body>
+
+</html>

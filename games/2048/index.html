@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>2048</title>
+    <link rel="stylesheet" href="2048.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="title-section">
+                <h1 class="game-title">2048</h1>
+                <div class="scores">
+                    <div class="score-box">
+                        <span class="score-label">分数</span>
+                        <span id="score" class="score-value">0</span>
+                    </div>
+                    <div class="score-box">
+                        <span class="score-label">最高分</span>
+                        <span id="bestScore" class="score-value">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sub-header">
+                <span class="tagline">合并数字，到达 <strong>2048</strong>！</span>
+                <div class="header-buttons">
+                    <button id="newGameBtn" class="btn btn-primary">新游戏</button>
+                    <button id="settleBtn" class="btn btn-secondary">结算</button>
+                    <button id="leaderboardBtn" class="btn btn-secondary">排行</button>
+                    <button id="rulesBtn" class="btn btn-secondary">规则</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 网格大小控制 -->
+        <div class="grid-size-control">
+            <label for="gridSizeSlider">网格大小: <span id="gridSizeDisplay">4</span>x<span
+                    id="gridSizeDisplay2">4</span></label>
+            <div class="slider-container">
+                <span class="slider-label">4</span>
+                <input type="range" id="gridSizeSlider" min="4" max="10" value="4" step="1">
+                <span class="slider-label">10</span>
+            </div>
+        </div>
+
+        <!-- 游戏容器 -->
+        <div class="game-container">
+            <!-- 游戏结束/胜利遮罩 -->
+            <div id="gameOverlay" class="game-overlay hidden">
+                <div class="overlay-content">
+                    <h2 id="overlayTitle">游戏结束!</h2>
+                    <p id="overlayScore">得分: 0</p>
+                    <button id="overlayBtn" class="btn btn-primary">再来一局</button>
+                    <button id="continueBtn" class="btn btn-secondary hidden">继续游戏</button>
+                </div>
+            </div>
+            <!-- 游戏网格 -->
+            <div id="gridContainer" class="grid-container">
+                <!-- 背景网格 -->
+                <div id="gridBg" class="grid-bg"></div>
+                <!-- 数字方块 -->
+                <div id="tileContainer" class="tile-container"></div>
+            </div>
+        </div>
+
+        <!-- 操作提示 -->
+        <div class="footer-hint">
+            <p>使用 <kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd> 或 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 控制
+            </p>
+            <p>支持触摸滑动操作</p>
+        </div>
+    </div>
+
+    <!-- 规则弹窗 -->
+    <div id="rulesModal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <span id="closeRules" class="modal-close">&times;</span>
+            <h2>游戏规则</h2>
+            <ul>
+                <li>使用方向键或滑动屏幕移动所有方块</li>
+                <li>相同数字的方块碰撞后会合并为它们的和</li>
+                <li>每次有效移动后，会在空白位置随机生成一个新数字（2或4）</li>
+                <li>当出现 <strong>2048</strong> 方块时，恭喜你获胜！</li>
+                <li>当所有格子被填满且无可合并方块时，游戏结束</li>
+                <li>你可以随时调整网格大小（4×4 到 10×10）开始新挑战</li>
+            </ul>
+            <p class="modal-footer-text">祝你好运！</p>
+        </div>
+    </div>
+
+    <!-- 排行榜弹窗 -->
+    <div id="leaderboardModal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content leaderboard-content">
+            <span id="closeLeaderboard" class="modal-close">&times;</span>
+            <h2>🏆 排行榜</h2>
+            <div class="leaderboard-tabs" id="leaderboardTabs"></div>
+            <div class="leaderboard-body" id="leaderboardBody">
+                <p class="leaderboard-empty">暂无记录</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 结算弹窗（输入用户名） -->
+    <div id="settleModal" class="modal hidden">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content settle-content">
+            <span id="closeSettle" class="modal-close">&times;</span>
+            <h2>💎 结算分数</h2>
+            <p class="settle-score">当前得分: <strong id="settleScoreDisplay">0</strong></p>
+            <p class="settle-size">网格: <span id="settleSizeDisplay">4</span>×<span id="settleSizeDisplay2">4</span></p>
+            <div class="settle-input-group">
+                <label for="settleUsername">请输入用户名:</label>
+                <input type="text" id="settleUsername" maxlength="12" placeholder="你的名字">
+            </div>
+            <div class="settle-buttons">
+                <button id="settleConfirmBtn" class="btn btn-primary">确认提交</button>
+                <button id="settleCancelBtn" class="btn btn-secondary">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="2048.js"></script>
+</body>
+
+</html>
