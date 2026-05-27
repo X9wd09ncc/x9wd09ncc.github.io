@@ -1,0 +1,423 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Juicy Details | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TryHackMe Juicy Details - 日志分析报告概述本报告分析 logs_1618139984797 文件夹中的三份日志文件：access.log（Web 访问日志）、auth.log（系统认证日志）和 vsftpd.log（FTP 服务日志）。所有攻击流量均来自攻击者 IP：192.168.10.5，目标服务器为 192.168.10.4。攻击发生在 2021年4月11日 08:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Juicy Details">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Juicy_Details.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="TryHackMe Juicy Details - 日志分析报告概述本报告分析 logs_1618139984797 文件夹中的三份日志文件：access.log（Web 访问日志）、auth.log（系统认证日志）和 vsftpd.log（FTP 服务日志）。所有攻击流量均来自攻击者 IP：192.168.10.5，目标服务器为 192.168.10.4。攻击发生在 2021年4月11日 08:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-26T10:09:16.000Z">
+<meta property="article:modified_time" content="2026-05-27T12:21:00.843Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="ai">
+<meta property="article:tag" content="日志分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Juicy_Details.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Juicy Details',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-27 20:21:00'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Juicy Details</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-26T10:09:16.000Z" title="发表于 2026-05-26 18:09:16">2026-05-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-27T12:21:00.843Z" title="更新于 2026-05-27 20:21:00">2026-05-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="TryHackMe-Juicy-Details-日志分析报告"><a href="#TryHackMe-Juicy-Details-日志分析报告" class="headerlink" title="TryHackMe Juicy Details - 日志分析报告"></a>TryHackMe Juicy Details - 日志分析报告</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本报告分析 <code>logs_1618139984797</code> 文件夹中的三份日志文件：<code>access.log</code>（Web 访问日志）、<code>auth.log</code>（系统认证日志）和 <code>vsftpd.log</code>（FTP 服务日志）。所有攻击流量均来自攻击者 IP：<strong>192.168.10.5</strong>，目标服务器为 <strong>192.168.10.4</strong>。攻击发生在 <strong>2021年4月11日 08:29 - 09:43 UTC</strong>。</p>
+<hr>
+<h2 id="攻击时间线"><a href="#攻击时间线" class="headerlink" title="攻击时间线"></a>攻击时间线</h2><table>
+<thead>
+<tr>
+<th>时间 (UTC)</th>
+<th>阶段</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>08:29 - 09:08</td>
+<td>侦察</td>
+<td>Nmap 扫描、FTP 连接、匿名登录</td>
+</tr>
+<tr>
+<td>09:08 - 09:13</td>
+<td>初始访问</td>
+<td>浏览 Web 应用、注册账户、登录</td>
+</tr>
+<tr>
+<td>09:13 - 09:15</td>
+<td>信息收集</td>
+<td>浏览产品评论，抓取电子邮件地址</td>
+</tr>
+<tr>
+<td>09:16</td>
+<td>暴力破解</td>
+<td>Hydra 对 <code>/rest/user/login</code> 发起暴力破解</td>
+</tr>
+<tr>
+<td>09:16:31</td>
+<td>暴力破解成功</td>
+<td>Hydra 成功登录其他用户账户</td>
+</tr>
+<tr>
+<td>09:20 - 09:29</td>
+<td>横向移动</td>
+<td>使用被盗账户浏览、尝试 SQL 注入</td>
+</tr>
+<tr>
+<td>09:29 - 09:31</td>
+<td>SQL 注入</td>
+<td>sqlmap 扫描 + 手动 UNION 注入提取用户数据</td>
+</tr>
+<tr>
+<td>09:34 - 09:36</td>
+<td>文件发现与下载</td>
+<td>feroxbuster 发现 <code>/ftp</code>、通过 FTP 下载文件</td>
+</tr>
+<tr>
+<td>09:35 - 09:41</td>
+<td>SSH 暴力破解</td>
+<td>对 <code>www-data</code> 用户发起 SSH 暴力破解</td>
+</tr>
+<tr>
+<td>09:41:19</td>
+<td>SSH 登录成功</td>
+<td>获取 shell 访问权限</td>
+</tr>
+<tr>
+<td>09:42 - 09:43</td>
+<td>权限提升尝试</td>
+<td>sudo 和 su 命令活动</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="问题详细分析"><a href="#问题详细分析" class="headerlink" title="问题详细分析"></a>问题详细分析</h2><h3 id="Q1-攻击者使用了哪些工具？"><a href="#Q1-攻击者使用了哪些工具？" class="headerlink" title="Q1: 攻击者使用了哪些工具？"></a>Q1: 攻击者使用了哪些工具？</h3><p>通过分析 <code>access.log</code> 中的 User-Agent 字段，识别出以下五种工具：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>出现次数</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Hydra</strong></td>
+<td>288</td>
+<td>Web 登录暴力破解 (<code>/rest/user/login</code>)</td>
+</tr>
+<tr>
+<td><strong>sqlmap</strong></td>
+<td>78</td>
+<td>SQL 注入自动化扫描与利用 (<code>/rest/products/search</code>)</td>
+</tr>
+<tr>
+<td><strong>Nmap</strong></td>
+<td>10</td>
+<td>网络侦察与扫描</td>
+</tr>
+<tr>
+<td><strong>feroxbuster</strong></td>
+<td>9</td>
+<td>目录&#x2F;文件暴力枚举</td>
+</tr>
+<tr>
+<td><strong>curl</strong></td>
+<td>1</td>
+<td>手动 HTTP 请求（用于确认 SQL 注入结果）</td>
+</tr>
+</tbody></table>
+<p><strong>答案</strong>: <code>Hydra, sqlmap, Nmap, feroxbuster, curl</code></p>
+<p><strong>证据</strong>:</p>
+<ul>
+<li>Nmap: <code>&quot;Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)&quot;</code> — access.log 行 2-11</li>
+<li>Hydra: <code>&quot;Mozilla/5.0 (Hydra)&quot;</code> — access.log 行 208-495</li>
+<li>sqlmap: <code>&quot;sqlmap/1.5.2#stable (http://sqlmap.org)&quot;</code> — access.log 行 550-627</li>
+<li>feroxbuster: <code>&quot;feroxbuster/2.2.1&quot;</code> — access.log 行 632-640</li>
+<li>curl: <code>&quot;curl/7.74.0&quot;</code> — access.log 行 631</li>
+</ul>
+<hr>
+<h3 id="Q2-哪个端点容易受到暴力破解攻击？"><a href="#Q2-哪个端点容易受到暴力破解攻击？" class="headerlink" title="Q2: 哪个端点容易受到暴力破解攻击？"></a>Q2: 哪个端点容易受到暴力破解攻击？</h3><p><strong>答案</strong>: <code>/rest/user/login</code></p>
+<p>Hydra 工具对该端点发起了大规模暴力破解攻击：</p>
+<ul>
+<li><strong>时间范围</strong>: <code>09:16:27</code> - <code>09:16:32</code></li>
+<li><strong>攻击模式</strong>: 交替使用 GET（返回 500）和 POST（返回 401 &#x2F; 200）</li>
+<li><strong>成功标志</strong>: 第三个批次的 POST 请求返回 <code>200</code> 状态码，响应体 831 字节</li>
+</ul>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 208-223: GET &#x2F;rest&#x2F;user&#x2F;login → 500 (Hydra 初始探测)
+行 224-239: POST &#x2F;rest&#x2F;user&#x2F;login → 401 (认证失败)
+...
+行 450: POST &#x2F;rest&#x2F;user&#x2F;login → 200 831 (成功登录!)
+行 451-495: POST &#x2F;rest&#x2F;user&#x2F;login → 401 (继续尝试其他密码)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q3-哪个端点存在-SQL-注入漏洞？"><a href="#Q3-哪个端点存在-SQL-注入漏洞？" class="headerlink" title="Q3: 哪个端点存在 SQL 注入漏洞？"></a>Q3: 哪个端点存在 SQL 注入漏洞？</h3><p><strong>答案</strong>: <code>/rest/products/search</code></p>
+<p>sqlmap 对该端点进行了全面的 SQL 注入测试，涵盖了以下数据库引擎的有效载荷：</p>
+<ul>
+<li>MySQL &#x2F; MariaDB (<code>SLEEP()</code>, <code>EXTRACTVALUE()</code>)</li>
+<li>PostgreSQL (<code>PG_SLEEP()</code>)</li>
+<li>Microsoft SQL Server (<code>WAITFOR DELAY</code>)</li>
+<li>Oracle (<code>DBMS_PIPE.RECEIVE_MESSAGE()</code>)</li>
+</ul>
+<p>sqlmap 测试完成后，攻击者在浏览器中手动构造 UNION 注入，确认漏洞可利用。</p>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 550: sqlmap 初始探测
+行 551-627: sqlmap 注入测试载荷
+行 628-629: 手动 UNION SELECT 1,2,3,4,5,6,7,8,9 FROM Users--
+行 630: UNION SELECT id, email, password FROM Users--<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q4-SQL-注入使用了哪个参数？"><a href="#Q4-SQL-注入使用了哪个参数？" class="headerlink" title="Q4: SQL 注入使用了哪个参数？"></a>Q4: SQL 注入使用了哪个参数？</h3><p><strong>答案</strong>: <code>q</code></p>
+<p>所有 SQL 注入载荷均通过 URL 查询参数 <code>q</code> 传递。</p>
+<p><strong>证据</strong> — access.log 行 550:</p>
+<pre class="line-numbers language-none"><code class="language-none">GET &#x2F;rest&#x2F;products&#x2F;search?q&#x3D;1 HTTP&#x2F;1.1 → sqlmap 初始请求
+GET &#x2F;rest&#x2F;products&#x2F;search?q&#x3D;&lt;SQL注入payload&gt; → 所有后续请求
+GET &#x2F;rest&#x2F;products&#x2F;search?q&#x3D;qwert&#39;)) UNION SELECT id, email, password, ... FROM Users-- → 数据提取<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q5-攻击者尝试使用哪个端点来获取文件？"><a href="#Q5-攻击者尝试使用哪个端点来获取文件？" class="headerlink" title="Q5: 攻击者尝试使用哪个端点来获取文件？"></a>Q5: 攻击者尝试使用哪个端点来获取文件？</h3><p><strong>答案</strong>: <code>/ftp</code></p>
+<p>feroxbuster 在目录枚举中发现 <code>/ftp</code> 端点，该端点提供了 FTP 服务的 Web 界面，允许浏览和下载文件。</p>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 640: GET &#x2F;ftp HTTP&#x2F;1.1 → 200 4852 (目录列表页)
+行 641: GET &#x2F;ftp&#x2F;www-data.bak HTTP&#x2F;1.1 → 403 (直接访问被拒)
+行 642: GET &#x2F;ftp&#x2F;coupons_2013.md.bak HTTP&#x2F;1.1 → 403 (直接访问被拒)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q6-攻击者利用网站的哪个部分抓取了用户的电子邮件地址？"><a href="#Q6-攻击者利用网站的哪个部分抓取了用户的电子邮件地址？" class="headerlink" title="Q6: 攻击者利用网站的哪个部分抓取了用户的电子邮件地址？"></a>Q6: 攻击者利用网站的哪个部分抓取了用户的电子邮件地址？</h3><p><strong>答案</strong>: <code>product reviews</code></p>
+<p>在注册并登录账户后，攻击者系统地浏览了几乎全部产品的评论页面。<code>/rest/products/&#123;id&#125;/reviews</code> 端点的响应中包含了评论者的电子邮件地址。响应体越大的评论（如产品 37 返回 503 字节，产品 20 返回 405 字节）可能包含更多用户信息。</p>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 21-144: 遍历 &#x2F;rest&#x2F;products&#x2F;&#123;1-42&#125;&#x2F;reviews
+较大响应体:
+- &#x2F;rest&#x2F;products&#x2F;37&#x2F;reviews → 503 bytes
+- &#x2F;rest&#x2F;products&#x2F;42&#x2F;reviews → 413 bytes
+- &#x2F;rest&#x2F;products&#x2F;20&#x2F;reviews → 405 bytes
+- &#x2F;rest&#x2F;products&#x2F;38&#x2F;reviews → 352 bytes
+- &#x2F;rest&#x2F;products&#x2F;41&#x2F;reviews → 284 bytes<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q7-暴力破解攻击成功了吗？登录成功的时间戳是什么？"><a href="#Q7-暴力破解攻击成功了吗？登录成功的时间戳是什么？" class="headerlink" title="Q7: 暴力破解攻击成功了吗？登录成功的时间戳是什么？"></a>Q7: 暴力破解攻击成功了吗？登录成功的时间戳是什么？</h3><p><strong>答案</strong>: <code>Yay, 11/Apr/2021:09:16:31 +0000</code></p>
+<p>Hydra 对 <code>/rest/user/login</code> 的 Web 暴力破解在 <code>09:16:31</code> 成功获取了 <code>200</code> 响应码（第 450 行），这表明攻击者成功登录了一个有效账户。</p>
+<p>此外，SSH 暴力破解在 <code>09:41:19</code> 也成功了（auth.log 第 186 行）。</p>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 450: [11&#x2F;Apr&#x2F;2021:09:16:31 +0000] &quot;POST &#x2F;rest&#x2F;user&#x2F;login HTTP&#x2F;1.0&quot; 200 831<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>证据</strong> — auth.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 186: Apr 11 09:41:19 thunt sshd[8260]: Accepted password for www-data from 192.168.10.5 port 40112 ssh2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q8-攻击者从存在-SQL-注入漏洞的端点获取了哪些用户信息？"><a href="#Q8-攻击者从存在-SQL-注入漏洞的端点获取了哪些用户信息？" class="headerlink" title="Q8: 攻击者从存在 SQL 注入漏洞的端点获取了哪些用户信息？"></a>Q8: 攻击者从存在 SQL 注入漏洞的端点获取了哪些用户信息？</h3><p><strong>答案</strong>: <code>email, password</code></p>
+<p>攻击者使用 UNION SELECT 注入从 <code>Users</code> 表中提取了三个字段：<code>id</code>、<code>email</code> 和 <code>password</code>。</p>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 630: qwert&#39;)) UNION SELECT id, email, password, &#39;4&#39;, &#39;5&#39;, &#39;6&#39;, &#39;7&#39;, &#39;8&#39;, &#39;9&#39; FROM Users--
+
+行 631: 相同请求使用 curl&#x2F;7.74.0  → 200 3742
+返回了 3742 字节数据，确认成功提取了用户邮箱和密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q9-他们尝试从存在漏洞的端点下载哪些文件？"><a href="#Q9-他们尝试从存在漏洞的端点下载哪些文件？" class="headerlink" title="Q9: 他们尝试从存在漏洞的端点下载哪些文件？"></a>Q9: 他们尝试从存在漏洞的端点下载哪些文件？</h3><p><strong>答案</strong>: <code>coupons_2013.md.bak, www-data.bak</code></p>
+<p>攻击者先通过 Web 界面（<code>/ftp/</code>）尝试访问这些文件（返回 403），然后通过 FTP 协议直接匿名登录下载。</p>
+<p><strong>证据</strong> — access.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 641: GET &#x2F;ftp&#x2F;www-data.bak HTTP&#x2F;1.1 → 403
+行 642: GET &#x2F;ftp&#x2F;coupons_2013.md.bak HTTP&#x2F;1.1 → 403<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>证据</strong> — vsftpd.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 37: OK DOWNLOAD: Client &quot;::ffff:192.168.10.5&quot;, &quot;&#x2F;www-data.bak&quot;, 2602 bytes, 544.81Kbyte&#x2F;sec
+行 38: OK DOWNLOAD: Client &quot;::ffff:192.168.10.5&quot;, &quot;&#x2F;coupons_2013.md.bak&quot;, 131 bytes, 3.01Kbyte&#x2F;sec<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q10-用于检索文件的服务和帐户名是什么？"><a href="#Q10-用于检索文件的服务和帐户名是什么？" class="headerlink" title="Q10: 用于检索文件的服务和帐户名是什么？"></a>Q10: 用于检索文件的服务和帐户名是什么？</h3><p><strong>答案</strong>: <code>ftp, anonymous</code></p>
+<p>攻击者通过 FTP 服务匿名登录下载文件。密码使用 <code>IEUser@</code>（Windows 匿名 FTP 登录的常见模式）。</p>
+<p><strong>证据</strong> — vsftpd.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 17: [ftp] OK LOGIN: Client &quot;::ffff:192.168.10.5&quot;, anon password &quot;IEUser@&quot;
+行 18: [ftp] OK LOGIN: Client &quot;::ffff:192.168.10.5&quot;, anon password &quot;IEUser@&quot;
+行 29: [ftp] OK LOGIN: Client &quot;::ffff:192.168.10.5&quot;, anon password &quot;IEUser@&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h3 id="Q11-使用什么服务和用户名获取了服务器的-shell-访问权限？"><a href="#Q11-使用什么服务和用户名获取了服务器的-shell-访问权限？" class="headerlink" title="Q11: 使用什么服务和用户名获取了服务器的 shell 访问权限？"></a>Q11: 使用什么服务和用户名获取了服务器的 shell 访问权限？</h3><p><strong>答案</strong>: <code>ssh, www-data</code></p>
+<p>攻击者通过 SSH 暴力破解成功获取了 <code>www-data</code> 用户的密码，建立了两个 SSH 会话，获得了 shell 访问权限。</p>
+<p><strong>证据</strong> — auth.log:</p>
+<pre class="line-numbers language-none"><code class="language-none">行 186: Accepted password for www-data from 192.168.10.5 port 40112 ssh2
+行 187: session opened for user www-data by (uid&#x3D;0)
+行 193: Accepted password for www-data from 192.168.10.5 port 40114 ssh2
+行 194: session opened for user www-data by (uid&#x3D;0)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="攻击链总结"><a href="#攻击链总结" class="headerlink" title="攻击链总结"></a>攻击链总结</h2><pre class="line-numbers language-none"><code class="language-none">[1] Nmap 侦察 (09:08)
+    ↓
+[2] Web 应用探索、注册账户、登录 (09:08-09:15)
+    ↓
+[3] 产品评论抓取 → 收集电子邮件 (09:09-09:11)
+    ↓
+[4] Hydra Web 暴力破解 → 获取额外账户 (09:16)
+    ↓
+[5] 使用被盗账户浏览更多内容 (09:20-09:26)
+    ↓
+[6] sqlmap + 手动 SQL 注入 → 提取 Users 表 (email, password) (09:29-09:31)
+    ↓
+[7] feroxbuster 目录枚举 → 发现 &#x2F;ftp (09:34)
+    ↓
+[8] FTP 匿名登录 → 下载 www-data.bak, coupons_2013.md.bak (09:35-09:36)
+    ↓
+[9] SSH 暴力破解 www-data → 获取 Shell 访问 (09:38-09:41)
+    ↓
+[10] sudo &#x2F; su 权限提升尝试 (09:42-09:43)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="影响评估"><a href="#影响评估" class="headerlink" title="影响评估"></a>影响评估</h2><ul>
+<li><strong>数据泄露</strong>: <code>Users</code> 表中所有用户的 <code>id</code>、<code>email</code>、<code>password</code> 已泄露</li>
+<li><strong>账户沦陷</strong>: 通过 Hydra 暴力破解和 SQL 注入获取了多个有效账户</li>
+<li><strong>Shell 访问</strong>: 攻击者通过 SSH 以 <code>www-data</code> 身份获得了服务器命令行访问权限</li>
+<li><strong>敏感文件泄露</strong>: <code>www-data.bak</code>（2602 字节）和 <code>coupons_2013.md.bak</code>（131 字节）被下载</li>
+<li><strong>权限提升尝试</strong>: 攻击者在获得 shell 后尝试了 <code>sudo</code> 和 <code>su</code> 命令，表明他们试图获取 root 权限</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Juicy_Details.html">https://x9wd09ncc.github.io/post/TryHackMe_Juicy_Details.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/ai/">ai</a><a class="post-meta__tags" href="/tags/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">日志分析</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Gallery</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Corridor</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent T</div></div></a></div><div><a href="/post/TryHackMe_Compiled.html" title="TryHackMe_Compiled"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Compiled</div></div></a></div><div><a href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Corridor</div></div></a></div><div><a href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate Factory"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="title">TryHackMe_Chocolate Factory</div></div></a></div><div><a href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-26</div><div class="title">TryHackMe_Gallery</div></div></a></div><div><a href="/post/TryHackMe_Team.html" title="TryHackMe_Team"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="title">TryHackMe_Team</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

