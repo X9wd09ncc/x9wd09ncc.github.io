@@ -8,7 +8,7 @@
 <meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
 <meta property="article:author" content="X9wd09ncc">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
@@ -37,8 +37,8 @@
   Snackbar: undefined,
   source: {
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
@@ -55,7 +55,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2026-05-27 21:46:46'
+  postUpdate: '2026-06-03 16:59:19'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -144,13 +144,22 @@
           if (t === 'dark') activateDarkMode()
           else if (t === 'light') activateLightMode()
         
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
     const detectApple = () => {
       if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
 </head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
   endLoading: () => {
     document.body.style.overflow = '';
@@ -168,213 +177,181 @@ window.addEventListener('load',()=> { preloader.endLoading() })
 if (false) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/images/R-C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">X9wd09ncc</h1><div id="site-subtitle"><span id="subtitle"></span></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout hide-aside" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate Factory">TryHackMe_Chocolate Factory</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-27T07:18:01.000Z" title="发表于 2026-05-27 15:18:01">2026-05-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a></span></div><div class="content">TryHackMe - Chocolate Factory 渗透测试报告基本信息
-
-
-项目
-内容
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/images/R-C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">X9wd09ncc</h1><div id="site-subtitle"><span id="subtitle"></span></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate_Factory">TryHackMe_Chocolate_Factory</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-27T07:18:01.000Z" title="发表于 2026-05-27 15:18:01">2026-05-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/fernet/">Fernet</a></span></div><div class="content">Chocolate Factory
+A Chocolate Factory for Charlie
 
 
 
-靶场名称
-Squirrel Room
+信息收集端口扫描
 
 
-目标 IP
+序号
+Host地址
+端口
+协议
+Uri地址
+标题
+Banner
+状态码
+
+
+
+1
 10.49.185.101
-
-
-攻击机
-本地主机 (Windows 11)
-
-
-测试日期
-2026-05-27
-
-
-最终结果
-获取 Root 权限，拿到全部 Flag
-
-
-Flag 汇总
-
-
-题目
-答案
-
-
-
-Enter the key you found!
-b&#39;-VkgXhFf6sAEcAwrC6YR-SZbiuSb8ABXeQuvhcGSQzY=&#39;
-
-
-Charlie’s password
-cn7824
-
-
-User Flag
-flag&#123;cd5509042371b34e4826e4838b522d2e&#125;
-
-
-Root Flag
-flag&#123;cec59161d338fef787fcb4e296b42124&#125;
-
-
-
-一、信息收集1.1 端口扫描nmap -sV -sC -p- 10.49.185.101
-
-结果：
-
-
-
-端口
-服务
-版本
-
-
-
 21
 FTP
-vsFTPd 3.0 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Team.html" title="TryHackMe_Team">TryHackMe_Team</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-27T05:48:10.000Z" title="发表于 2026-05-27 13:48:10">2026-05-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a></span></div><div class="content">TryHackMe - Team 渗透测试报告基本信息
+10.49.185.101:21
 
-
-项目
-内容
-
-
-
-靶场名称
-TryHackMe - Team
-
-
-目标 IP
-10.48.147.235
-
-
-攻击机
-本地主机 (Windows 11)
-
-
-测试日期
-2026-05-27
-
-
-最终结果
-获取 Root 权限，拿到两个 Flag
-
-
-Flag 汇总
-
-
-类型
-Flag
-
-
-
-User Flag
-THM&#123;6Y0TXHz7c2d&#125;
-
-
-Root Flag
-THM&#123;fhqbznavfonq&#125;
-
-
-
-一、信息收集1.1 端口扫描nmap -sV -sC -p- 10.48.147.235
-
-结果：
-
-
-
-端口
-服务
-版本
-
-
-
-21
-FTP
 vsFTPd 3.0.5
+0
 
 
+2
+10.49.185.101
 22
 SSH
-OpenSSH 7.6p1 Ubuntu
+10.49.185.101:22
+
+OpenSSH 8.2p1 Ubuntu
+0
 
 
+3
+10.49.185.101
 80
 HTTP
-Apache httpd 2.4.29
+http://10.49.185.101:80
+
+Apache 2.4.41 (Ubuntu)
+200
 
 
-1.2 Web 目录枚举访问 http://10.48.147.235 显示 Apache 默认页面，页面源码中包含注释提示域名 team.thm。
-将 team.thm 和 dev.team. ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery">TryHackMe_Gallery</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-26T13:02:20.000Z" title="发表于 2026-05-26 21:02:20">2026-05-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a></span></div><div class="content">TryHackMe - Simple Image Gallery System 渗透测试报告基本信息
+4
+10.49.185.101
+110
+POP3
+10.49.185.101:110
 
 
-项目
-内容
+0
 
 
-
-靶场名称
-Simple Image Gallery System
-
-
-靶场地址
-http://10.49.131.166/
-
-
-CMS
-Simple Image Gallery System by oretnom23 v1.0
-
-
-操作系统
-Ubuntu 20.04.6 LTS (Focal Fossa)
-
-
-内核版本
-5.15.0-139-generic
-
-
-Web服务器
-Apache 2.4.41
-
-
-测试日期
-2026-05-27
-
-
-测试结果
-成功获取所有flag
-
-
-最终答案
-
-
-问题
-答案
+Web 目录枚举访问 http://10.49.185.101 显示一个登录页面，表单提交到 validate.php
+1234567&lt;form method=&quot;post&quot; action=&quot;validate.php&quot;&gt;    &lt;lab ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Team.html" title="TryHackMe_Team">TryHackMe_Team</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-27T05:48:10.000Z" title="发表于 2026-05-27 13:48:10">2026-05-27</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/lfi/">LFI</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/lxd/">LXD</a></span></div><div class="content">Team
+Enumerate and get the flags.
 
 
 
-开放端口数量
+信息收集端口扫描
+
+
+序号
+Host地址
+端口
+协议
+Uri地址
+标题
+Banner
+状态码
+
+
+
+1
+10.48.147.235
+21
+FTP
+10.48.147.235:21
+
+vsFTPd 3.0.5
+0
+
+
+2
+10.48.147.235
+22
+SSH
+10.48.147.235:22
+
+OpenSSH 7.6p1 Ubuntu
+0
+
+
 3
+10.48.147.235
+80
+HTTP
+http://10.48.147.235:80
+
+Apache httpd 2.4.29
+200
 
 
-CMS名称
+Web 目录枚举访问 http://10.48.147.235 显示 Apache 默认页面，页面源码中包含注释提示域名 team.thm
+将 team.thm 和 dev.team.thm 添加到 /etc/hosts：
+110.48.147.235 team.thm dev.team.thm
+
+访问 http://team.thm，目录扫描发现 /scripts/ 目录
+访问 http://dev.team.thm 发现 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery">TryHackMe_Gallery</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-26T13:02:20.000Z" title="发表于 2026-05-26 21:02:20">2026-05-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/sql%E6%B3%A8%E5%85%A5/">SQL注入</a></span></div><div class="content">Gallery
 Simple Image Gallery System
 
 
-管理员哈希密码
-a228b12a08b6527e7978cbe5d914531c
+
+信息收集端口扫描
 
 
-User flag
-THM{af05cd30bfed67849befd546ef}
+序号
+Host地址
+端口
+协议
+Uri地址
+标题
+Banner
+状态码
 
 
-Root flag
-THM{ba87e0dfe5903adfa6b8b450ad7567baf ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Juicy_Details.html" title="TryHackMe_Juicy Details">TryHackMe_Juicy Details</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-26T10:09:16.000Z" title="发表于 2026-05-26 18:09:16">2026-05-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">日志分析</a></span></div><div class="content">TryHackMe Juicy Details - 日志分析报告概述本报告分析 logs_1618139984797 文件夹中的三份日志文件：access.log（Web 访问日志）、auth.log（系统认证日志）和 vsftpd.log（FTP 服务日志）。所有攻击流量均来自攻击者 IP：192.168.10.5，目标服务器为 192.168.10.4。攻击发生在 2021年4月11日 08:29 - 09:43 UTC。
 
+1
+10.49.131.166
+22
+SSH
+10.49.131.166:22
+
+OpenSSH 8.2p1
+0
+
+
+2
+10.49.131.166
+80
+HTTP
+http://10.49.131.166:80
+
+Apache 2.4.41
+200
+
+
+3
+10.49.131.166
+8080
+HTTP
+http://10.49.131.166:8080
+
+Apache 2.4.41
+200
+
+
+CMS 识别访问 80 端口，发现是一个图片画廊系统。通过查看页面源码和响应头，识别出 CMS 为 Simple Image Gallery System by oretnom23 v1.0
+目录枚举发现以下关键路径：
+
+/gallery/ - 主应用目录
+/gallery/admin/ - 管理后台
+/gallery/classes/Login.php - 登录处理接口
+/gallery/initialize.ph ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Juicy_Details.html" title="TryHackMe_Juicy_Details">TryHackMe_Juicy_Details</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-26T10:09:16.000Z" title="发表于 2026-05-26 18:09:16">2026-05-26</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">日志分析</a></span></div><div class="content">Juicy Details
+Analyse the logs to find the flags.
+
+
+
+概述本报告分析 logs_1618139984797 文件夹中的三份日志文件：access.log（Web 访问日志）、auth.log（系统认证日志）和 vsftpd.log（FTP 服务日志）。所有攻击流量均来自攻击者 IP：192.168.10.5，目标服务器为 192.168.10.4。攻击发生在 2021年4月11日 08:29 - 09:43 UTC。
 攻击时间线
 
 
@@ -414,130 +391,47 @@ Hydra 成功登录其他用户账户
 使用被盗账户浏览、尝试 SQL 注入
 
 
-09:29 - 09:31
-SQL 注入
-s ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor">TryHackMe_Corridor</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T04:39:42.000Z" title="发表于 2026-05-25 12:39:42">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a></span></div><div class="content">IDOR 漏洞渗透测试报告一、漏洞概述
-
-
-项目
-内容
+09 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor">TryHackMe_Corridor</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T04:39:42.000Z" title="发表于 2026-05-25 12:39:42">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/idor/">IDOR</a></span></div><div class="content">Corridor
+Can you escape the corridor?
 
 
 
-漏洞名称
-不安全的直接对象引用 (IDOR)
-
-
-漏洞编号
-CWE-639
-
-
-目标系统
-http://10.49.161.165
-
-
-发现日期
-2026-05-25
-
-
-风险等级
-高危 (High)
-
-
-CVSS 评分
-7.5 (CVSS:3.1&#x2F;AV:N&#x2F;AC:L&#x2F;PR:N&#x2F;UI:N&#x2F;S:U&#x2F;C:H&#x2F;I:N&#x2F;A:N)
-
-
-影响范围
-可未授权访问隐藏的敏感资源
+信息收集页面分析访问主页 http://10.49.161.165/，分析 HTML 源码发现图片地图 &lt;map&gt; 包含 13 个 &lt;area&gt; 元素：
+123456&lt;map name=&quot;image-map&quot;&gt;    &lt;area alt=&quot;c4ca4238a0b923820dcc509a6f75849b&quot; href=&quot;c4ca4238a0b923820dcc509a6f75849b&quot; ...&gt;    &lt;area alt=&quot;c81e728d9d4c2f636f067f89cc14862c&quot; href=&quot;c81e728d9d4c2f636f067f89cc14862c&quot; ...&gt;    &lt;area alt=&quot;eccbc87e4b5ce2fe28308fd9f2a7baf3&quot; href=&quot;eccbc87e4b5ce2f ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_W1seGuy.html" title="TryHackMe_W1seGuy">TryHackMe_W1seGuy</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T04:21:41.000Z" title="发表于 2026-05-25 12:21:41">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/xor/">XOR</a></span></div><div class="content">W1seGuy
+Crack the encryption to get the flag.
 
 
 
-二、漏洞描述目标系统是一个名为 “Corridor” 的 Web 应用。主页呈现一条走廊图片，包含 13 扇门（房间 1-13），用户通过点击图片热点区域进入对应房间。每个房间的 URL 端点使用数字的 MD5 哈希值标识。
-系统对资源访问控制存在缺陷：服务器未校验用户是否被授权访问特定房间，攻击者可通过枚举 MD5 哈希值访问页面中未引用的隐藏房间（房间 0），从而获取敏感信息（Flag）。
-
-三、漏洞发现过程3.1 信息收集访问主页 http://10.49.161.165/， ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_W1seGuy.html" title="TryHackMe_W1seGuy">TryHackMe_W1seGuy</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T04:21:41.000Z" title="发表于 2026-05-25 12:21:41">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a></span></div><div class="content">已知明文 XOR 攻击漏洞渗透测试报告一、漏洞概述
-
-
-项目
-内容
-
-
-
-漏洞名称
-已知明文攻击 (Known-Plaintext Attack) &#x2F; XOR 密钥泄露
-
-
-漏洞编号
-CWE-327 (使用破损的加密算法)
-
-
-目标系统
-10.49.149.157:1337 (TCP)
-
-
-发现日期
-2026-05-25
-
-
-风险等级
-高危 (High)
-
-
-CVSS 评分
-9.1 (CVSS:3.1&#x2F;AV:N&#x2F;AC:L&#x2F;PR:N&#x2F;UI:N&#x2F;S:U&#x2F;C:H&#x2F;I:H&#x2F;A:N)
-
-
-漏洞类型
-加密实现缺陷 &#x2F; 信息泄露
-
-
-
-二、漏洞描述目标系统在 TCP 端口 1337 上运行一个 Python 服务，声称通过 XOR 加密保护 flag。服务每次连接时：
+信息收集服务识别目标系统在 TCP 端口 1337 上运行一个 Python 服务，声称通过 XOR 加密保护 flag。
+服务每次连接时：
 
 生成一个 5 字符随机密钥（从 ascii_letters + digits 中选取）
 使用密钥对已知字符串 THM&#123;thisisafakeflag&#125; 进行重复 XOR 加密
 将密文以十六进制形式发送给客户端
-要求 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent T">TryHackMe_Agent T</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T03:45:12.000Z" title="发表于 2026-05-25 11:45:12">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a></span></div><div class="content">PHP 8.1.0-dev 后门远代码执行漏洞渗透测试报告一、漏洞概述
+要求客户端猜测密钥，答对则返回真正的 flag
 
-
-项目
-内容
-
-
-
-漏洞名称
-PHP 8.1.0-dev 后门远程代码执行 (Backdoor RCE)
-
-
-漏洞编号
-CVE-2021-XXXXXXXX &#x2F; PHP 供应链后门
-
-
-目标系统
-http://10.48.171.23
-
-
-发现日期
-2026-05-25
-
-
-风险等级
-严重 (Critical)
-
-
-CVSS 评分
-10.0 (CVSS:3.1&#x2F;AV:N&#x2F;AC:L&#x2F;PR:N&#x2F;UI:N&#x2F;S:C&#x2F;C:H&#x2F;I:H&#x2F;A:H)
-
-
-漏洞类型
-供应链攻击 &#x2F; 后门 &#x2F; 远程代码执行
+源代码分析1234567891011121314151617def setup(server, key):    flag = &#x27;THM&#123;thisisafakeflag&#125;&#x27;     xored = &quot;&quot;    for i in range(0, len(flag)):        xored += chr(ord(flag[i]) ^ ord(key[i % len(key)]))    hex_encoded  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T">TryHackMe_Agent_T</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T03:45:12.000Z" title="发表于 2026-05-25 11:45:12">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/php%E5%90%8E%E9%97%A8/">PHP后门</a></span></div><div class="content">Agent T
+Exploit a vulnerable version of PHP to get a flag.
 
 
 
-二、漏洞描述目标服务器运行 PHP 8.1.0-dev 版本。该版本在 2021 年 3 月遭遇恶意供应链攻击——PHP 官方 git 仓库被入侵，攻击者在源码中植入了后门代码，导致该开发版本发布的二进制包包含远程代码执行后门。
-后门触发机制：攻击者发送带有特殊 User-Agentt HTTP 头（注意双 t）的请求 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Compiled.html" title="TryHackMe_Compiled">TryHackMe_Compiled</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T03:37:20.000Z" title="发表于 2026-05-25 11:37:20">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/ai/">ai</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%B4%AB%E9%98%9F/">紫队</a></span></div><div class="content">漏洞分析报告：Compiled-1688545393558.Compiled
-1. 基本信息
+信息收集页面分析首先浏览网站 http://10.48.171.23/，前端显示为标准的 Bootstrap “Admin Dashboard” 模板页面，无任何明显的登录入口或功能交互。
+关键线索发现检查 HTTP 响应头是关键的突破口：
+1X-Powered-By: PHP/8.1.0-dev
+
+-dev 后缀 是极其危险的信号。PHP 开发版本：
+
+未经充分测试
+不应部署在生产环境
+PHP 8.1.0-dev 已知被植入后门
+
+漏洞利用PHP 8.1.0-dev 后门2021 年 3 月 28 日，两名恶意攻击者向 PHP 官方 git 仓库 php-src 提交了两个恶意 commit：
+123+    if (strstr(ZSTR_VAL(user_agent), &quot;zerodium&quot;)) &#123;+        zend_eval_string(ZSTR_VAL(user_agent)+8, NULL, &quot;User ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Compiled.html" title="TryHackMe_Compiled">TryHackMe_Compiled</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-25T03:37:20.000Z" title="发表于 2026-05-25 11:37:20">2026-05-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%B4%AB%E9%98%9F/">紫队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E9%80%86%E5%90%91/">逆向</a></span></div><div class="content">Compiled
+Analyse and reverse the compiled binary.
+
+
+
+信息收集文件信息
 
 
 属性
@@ -565,16 +459,11 @@ GCC 11.3.0 (Debian)
 未剥离 (not stripped)
 
 
-入口点
-0x1080
-
-
 源文件
 zzz.c
 
 
-
-2. 安全缓解措施评估
+安全缓解措施评估
 
 
 缓解措施
@@ -600,19 +489,20 @@ GNU_RELRO 存在但仅覆盖部分区域
 
 Stack Canary
 未启用
-无 __stack_chk_fail 符号，main 函数中无 canary 检查
+无 __stack_chk_fail 符号
 
 
 FORTIFY_SOURCE
 未启用
-使用 scanf 而非边界检查版本，无编译期加固
+使用 scanf 而非边界检查版本
 
 
-风险评级：虽然启用了 PIE 和 NX ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Year_of_the_Rabbit.html" title="TryHackMe_Year of the Rabbit">TryHackMe_Year of the Rabbit</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-17T09:15:52.000Z" title="发表于 2026-05-17 17:15:52">2026-05-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/cve-2019-14287/">CVE-2019-14287</a></span></div><div class="content">Year of the Rabbit
+漏洞分析硬编码密码密码 _init 以明文硬编码在二进制中。通过 strings 命令即可提取所 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Year_of_the_Rabbit.html" title="TryHackMe_Year_of_the_Rabbit">TryHackMe_Year_of_the_Rabbit</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-17T09:15:52.000Z" title="发表于 2026-05-17 17:15:52">2026-05-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/cve-2019-14287/">CVE-2019-14287</a></span></div><div class="content">Year of the Rabbit
 Time to enter the warren…
 
-端口扫描
 
+
+信息收集端口扫描
 
 
 序号
@@ -656,10 +546,9 @@ Apache&#x2F;2.4.10 (Debian), Apache-Web-Server, Apache2 默认页, Apache-HTTP-S
 200
 
 
-目录扫描得到 /assets，访问是一个文件目录，点击 /style.css，里面藏有一个新地址
+目录扫描目录扫描得到 /assets，访问是一个文件目录，点击 /style.css，里面藏有 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Chill_Hack.html" title="TryHackMe_Chill_Hack">TryHackMe_Chill_Hack</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-17T05:56:08.000Z" title="发表于 2026-05-17 13:56:08">2026-05-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/docker/">docker</a></span></div><div class="content">Chill Hack
 
-&# ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/post/TryHackMe_Chill_Hack.html" title="TryHackMe_Chill Hack">TryHackMe_Chill Hack</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-17T05:56:08.000Z" title="发表于 2026-05-17 13:56:08">2026-05-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/thm/">thm</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/easy/">easy</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><span class="article-meta-link">•</span><a class="article-meta__tags" href="/tags/docker/">docker</a></span></div><div class="content">Chill Hack端口扫描
-
+信息收集端口扫描
 
 
 序号
@@ -703,14 +592,21 @@ Apache-HTTP-Server&#x2F;2.4.41, Apache-Web-Server, jQuery-official-website-CDN, 
 200
 
 
-目录扫描得到 /secret，是一个可以命令执行的地方
+目录扫描目录扫描得到 /secret，是一个可以命令执行的地方
 可以执行 id 命令
 
-执行 ls 被拦截，使用绝对路径 /bin/ls 成功，看来是黑名单拦截
+漏洞利用命令执行绕过执行 ls 被拦截，使用绝对路径 /bin/ls 成功，看来是黑名单拦截
 查看用户
-&#x2F;bin&#x2F;ls -al &#x2F;home
-total 24
-drwxr-xr-x  6 roo ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#content-inner">5</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div></main><footer id="footer" style="background-image: url('/images/R-C.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+1/bin/ls -al /home
+
+1234567total 24drwxr ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/#content-inner">5</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">X9wd09ncc</div><div class="author-info__description">.....</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate_Factory">TryHackMe_Chocolate_Factory</a><time datetime="2026-05-27T07:18:01.000Z" title="发表于 2026-05-27 15:18:01">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Team.html" title="TryHackMe_Team">TryHackMe_Team</a><time datetime="2026-05-27T05:48:10.000Z" title="发表于 2026-05-27 13:48:10">2026-05-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery">TryHackMe_Gallery</a><time datetime="2026-05-26T13:02:20.000Z" title="发表于 2026-05-26 21:02:20">2026-05-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Juicy_Details.html" title="TryHackMe_Juicy_Details">TryHackMe_Juicy_Details</a><time datetime="2026-05-26T10:09:16.000Z" title="发表于 2026-05-26 18:09:16">2026-05-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor">TryHackMe_Corridor</a><time datetime="2026-05-25T04:39:42.000Z" title="发表于 2026-05-25 12:39:42">2026-05-25</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/cve/"><span class="card-category-list-name">cve</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/php/"><span class="card-category-list-name">php</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/shell/"><span class="card-category-list-name">shell</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/web/"><span class="card-category-list-name">web</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%8A%A0%E5%9B%BA/"><span class="card-category-list-name">加固</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%B7%A5%E5%85%B7/"><span class="card-category-list-name">工具</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><span class="card-category-list-name">渗透测试</span><span class="card-category-list-count">38</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/php%E5%90%8E%E9%97%A8/" style="font-size: 1.1em; color: #999">PHP后门</a> <a href="/tags/path%E5%8A%AB%E6%8C%81/" style="font-size: 1.1em; color: #999">PATH劫持</a> <a href="/tags/ajp/" style="font-size: 1.1em; color: #999">AJP</a> <a href="/tags/borg/" style="font-size: 1.1em; color: #999">Borg</a> <a href="/tags/redis/" style="font-size: 1.1em; color: #999">Redis</a> <a href="/tags/nssctf/" style="font-size: 1.1em; color: #999">NSSCTF</a> <a href="/tags/ssrf/" style="font-size: 1.1em; color: #999">SSRF</a> <a href="/tags/svnexploit/" style="font-size: 1.1em; color: #999">SvnExploit</a> <a href="/tags/tool/" style="font-size: 1.1em; color: #999">tool</a> <a href="/tags/smb/" style="font-size: 1.1em; color: #999">SMB</a> <a href="/tags/tomcat/" style="font-size: 1.1em; color: #999">Tomcat</a> <a href="/tags/sql%E6%B3%A8%E5%85%A5/" style="font-size: 1.1em; color: #999">SQL注入</a> <a href="/tags/cve-2020-15906-vulhub-tikiwiki/" style="font-size: 1.1em; color: #999">-CVE-2020-15906 -vulhub -tikiwiki</a> <a href="/tags/ftp/" style="font-size: 1.1em; color: #999">ftp</a> <a href="/tags/%E6%BA%90%E7%A0%81%E6%B3%84%E9%9C%B2/" style="font-size: 1.1em; color: #999">源码泄露</a> <a href="/tags/fernet/" style="font-size: 1.1em; color: #999">Fernet</a> <a href="/tags/bugku/" style="font-size: 1.3em; color: #99a1ac">bugku</a> <a href="/tags/pkexec/" style="font-size: 1.1em; color: #999">pkexec</a> <a href="/tags/ld-preload/" style="font-size: 1.1em; color: #999">LD_PRELOAD</a> <a href="/tags/lxd/" style="font-size: 1.1em; color: #999">LXD</a> <a href="/tags/tar/" style="font-size: 1.1em; color: #999">tar</a> <a href="/tags/suid/" style="font-size: 1.1em; color: #999">SUID</a> <a href="/tags/hydra/" style="font-size: 1.1em; color: #999">hydra</a> <a href="/tags/easy/" style="font-size: 1.5em; color: #99a9bf">easy</a> <a href="/tags/crontab/" style="font-size: 1.1em; color: #999">crontab</a> <a href="/tags/docker/" style="font-size: 1.1em; color: #999">docker</a> <a href="/tags/php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" style="font-size: 1.3em; color: #99a1ac">php代码审计</a> <a href="/tags/idor/" style="font-size: 1.1em; color: #999">IDOR</a> <a href="/tags/vsftpd/" style="font-size: 1.1em; color: #999">vsftpd</a> <a href="/tags/frp/" style="font-size: 1.1em; color: #999">frp</a> <a href="/tags/%E8%93%9D%E9%98%9F/" style="font-size: 1.1em; color: #999">蓝队</a> <a href="/tags/vim/" style="font-size: 1.1em; color: #999">vim</a> <a href="/tags/sweetrice-cms/" style="font-size: 1.1em; color: #999">SweetRice CMS</a> <a href="/tags/wget/" style="font-size: 1.1em; color: #999">wget</a> <a href="/tags/phar/" style="font-size: 1.1em; color: #999">phar</a> <a href="/tags/%E5%BA%94%E6%80%A5%E5%8A%A0%E5%9B%BA/" style="font-size: 1.1em; color: #999">应急加固</a> <a href="/tags/nfs/" style="font-size: 1.1em; color: #999">NFS</a> <a href="/tags/cve-2019-14287/" style="font-size: 1.1em; color: #999">CVE-2019-14287</a> <a href="/tags/cve-2017-5618/" style="font-size: 1.1em; color: #999">CVE-2017-5618</a> <a href="/tags/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" style="font-size: 1.1em; color: #999">日志分析</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2026/05/"><span class="card-archive-list-date">五月 2026</span><span class="card-archive-list-count">36</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/05/"><span class="card-archive-list-date">五月 2023</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/03/"><span class="card-archive-list-date">三月 2023</span><span class="card-archive-list-count">9</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">47</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">49.2k</div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-06-03T08:59:19.008Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/images/R-C.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
   init: (str) => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
@@ -725,7 +621,7 @@ drwxr-xr-x  6 roo ...</div></div></div><nav id="pagination"><div class="paginati
       if (typeof Typed === 'function') {
         subtitleType()
       } else {
-        getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+        getScript('https://cdn.bootcdn.net/ajax/libs/typed.js/2.0.16/typed.umd.min.js').then(subtitleType)
       }
     } else {
       subtitleType()
@@ -739,4 +635,4 @@ drwxr-xr-x  6 roo ...</div></div></div><nav id="pagination"><div class="paginati
     document.getElementById("subtitle").textContent = 'Never put off till tomorrow what you can do today'
   }
 }
-typedJSFn.run(subtitleType)</script></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+typedJSFn.run(subtitleType)</script></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

