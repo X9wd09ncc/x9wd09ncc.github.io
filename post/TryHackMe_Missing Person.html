@@ -1,0 +1,303 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Missing Person | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Missing Person题目描述 “我的朋友在2025年去度假了，还分享了一些照片，但我之后就再也没有他的消息了。你能帮我找到他，以便我去报警吗？”请下载此任务附件中的压缩文件，开始调查！  附件内容：两张图片  MotoGP.jpg food.jpg  解题过程1. 识别赛道将第一张图片使用谷歌识图搜索，AI 概述给出了答案：  Pertamina Mandalika Internation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Missing Person">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Missing%20Person.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="Missing Person题目描述 “我的朋友在2025年去度假了，还分享了一些照片，但我之后就再也没有他的消息了。你能帮我找到他，以便我去报警吗？”请下载此任务附件中的压缩文件，开始调查！  附件内容：两张图片  MotoGP.jpg food.jpg  解题过程1. 识别赛道将第一张图片使用谷歌识图搜索，AI 概述给出了答案：  Pertamina Mandalika Internation">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-23T12:10:24.669Z">
+<meta property="article:modified_time" content="2026-06-23T12:10:24.670Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="蓝队">
+<meta property="article:tag" content="信息搜集">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Missing%20Person.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Missing Person',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-23 20:10:24'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">134</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Missing Person</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-23T12:10:24.669Z" title="发表于 2026-06-23 20:10:24">2026-06-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-23T12:10:24.670Z" title="更新于 2026-06-23 20:10:24">2026-06-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E6%BA%90%E6%83%85%E6%8A%A5/">开源情报</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">597</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_Missing Person"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Missing-Person"><a href="#Missing-Person" class="headerlink" title="Missing Person"></a>Missing Person</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><blockquote>
+<p>“我的朋友在2025年去度假了，还分享了一些照片，但我之后就再也没有他的消息了。你能帮我找到他，以便我去报警吗？”<br>请下载此任务附件中的压缩文件，开始调查！</p>
+</blockquote>
+<p><strong>附件内容</strong>：两张图片</p>
+<ul>
+<li><code>MotoGP.jpg</code></li>
+<li><code>food.jpg</code></li>
+</ul>
+<h2 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h2><h3 id="1-识别赛道"><a href="#1-识别赛道" class="headerlink" title="1. 识别赛道"></a>1. 识别赛道</h3><p>将第一张图片使用谷歌识图搜索，AI 概述给出了答案：</p>
+<blockquote>
+<p><strong>Pertamina Mandalika International Street Circuit</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619112758694.png)</p>
+<h3 id="2-确定比赛日期"><a href="#2-确定比赛日期" class="headerlink" title="2. 确定比赛日期"></a>2. 确定比赛日期</h3><p>使用 <code>exiftool</code> 对 MotoGP.jpg 进行分析，得知拍摄日期：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PS D:\download\osint-1767765507985&gt; exiftool .\MotoGP.jpg</span><br><span class="line">ExifTool Version Number         : 11.54</span><br><span class="line">File Name                       : MotoGP.jpg</span><br><span class="line">...</span><br><span class="line">Date/Time Original              : 2025:10:05 12:33:12</span><br><span class="line">Create Date                     : 2025:10:05</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>谷歌搜索 MotoGP 2025&#x2F;10 的<a target="_blank" rel="noopener" href="https://rtrsports.com/zh-hans/blog/2025-%E5%B9%B4-motogp-%E8%B3%BD%E7%A8%8B%E6%89%80%E6%9C%89%E6%AF%94%E8%B3%BD%E5%92%8C%E5%A4%A7%E7%8D%8E%E8%B3%BD/">赛程</a>，10月有一个印尼的比赛：</p>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619113944933.png)</p>
+<p>谷歌搜索该比赛，日期是3号到5号：</p>
+<blockquote>
+<p><strong>03-05&#x2F;10&#x2F;2025</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619114012665.png)</p>
+<h3 id="3-识别餐厅"><a href="#3-识别餐厅" class="headerlink" title="3. 识别餐厅"></a>3. 识别餐厅</h3><p>谷歌识图搜索 food.jpg，找到餐厅名称：</p>
+<blockquote>
+<p><strong>Cantina Mexicana</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619114141944.png)</p>
+<h3 id="4-获取照片拍摄时间"><a href="#4-获取照片拍摄时间" class="headerlink" title="4. 获取照片拍摄时间"></a>4. 获取照片拍摄时间</h3><p><code>exiftool</code> 分析 food.jpg 的 EXIF 信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">PS D:\download\osint-1767765507985&gt; exiftool .\food.jpg</span><br><span class="line">ExifTool Version Number         : 11.54</span><br><span class="line">File Name                       : food.jpg</span><br><span class="line">...</span><br><span class="line">Date/Time Original              : 2025:10:05 19:55:30</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>19:55:30</strong></p>
+</blockquote>
+<h3 id="5-定位派对酒吧"><a href="#5-定位派对酒吧" class="headerlink" title="5. 定位派对酒吧"></a>5. 定位派对酒吧</h3><p>谷歌搜索 MotoGP 赛后派对相关信息，得知该酒吧为 <strong>Surfers Bar</strong>：</p>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619114442853.png)</p>
+<p>搜索 Surfers Bar 的地址：</p>
+<blockquote>
+<p><strong>Jl. Raya Kuta, Kuta, Kec. Pujut, Kabupaten Lombok Tengah, Nusa Tenggara Bar</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619114731370.png)</p>
+<h3 id="6-找到-DJ-信息"><a href="#6-找到-DJ-信息" class="headerlink" title="6. 找到 DJ 信息"></a>6. 找到 DJ 信息</h3><p>在该酒吧的 Facebook 账号视频中找到了当时的 DJ 列表，根据答案格式判断：</p>
+<blockquote>
+<p><strong>BONG LELEH</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619115141514.png)</p>
+<h3 id="7-确定洞穴位置"><a href="#7-确定洞穴位置" class="headerlink" title="7. 确定洞穴位置"></a>7. 确定洞穴位置</h3><p>谷歌搜索相关洞穴信息：</p>
+<blockquote>
+<p><strong>Gua Sumur</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619115433909.png)</p>
+<h3 id="8-获取-DJ-巡演公司电话"><a href="#8-获取-DJ-巡演公司电话" class="headerlink" title="8. 获取 DJ 巡演公司电话"></a>8. 获取 DJ 巡演公司电话</h3><p>谷歌搜索该 DJ 以及洞穴信息，发现一个 Facebook 账号：</p>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619115630017.png)</p>
+<p>在该账号主页找到电话号码：</p>
+<blockquote>
+<p><strong>085333137345</strong></p>
+</blockquote>
+<p>![](..&#x2F;image&#x2F;TryHackMe_Missing Person&#x2F;file-20260619115658477.png)</p>
+<hr>
+<h2 id="答案汇总"><a href="#答案汇总" class="headerlink" title="答案汇总"></a>答案汇总</h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>电路的商品名称</td>
+<td>Pertamina Mandalika International Street Circuit</td>
+</tr>
+<tr>
+<td>事件发生时间</td>
+<td>03-05&#x2F;10&#x2F;2025</td>
+</tr>
+<tr>
+<td>餐厅名称</td>
+<td>Cantina Mexicana</td>
+</tr>
+<tr>
+<td>照片拍摄时间</td>
+<td>19:55:30</td>
+</tr>
+<tr>
+<td>酒吧完整地址</td>
+<td>Jl. Raya Kuta, Kuta, Kec. Pujut, Kabupaten Lombok Tengah, Nusa Tenggara Bar</td>
+</tr>
+<tr>
+<td>DJ 艺名</td>
+<td>BONG LELEH</td>
+</tr>
+<tr>
+<td>洞穴名称</td>
+<td>Gua Sumur</td>
+</tr>
+<tr>
+<td>DJ 巡演公司电话</td>
+<td>085333137345</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Missing%20Person.html">https://x9wd09ncc.github.io/post/TryHackMe_Missing%20Person.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E8%93%9D%E9%98%9F/">蓝队</a><a class="post-meta__tags" href="/tags/%E4%BF%A1%E6%81%AF%E6%90%9C%E9%9B%86/">信息搜集</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/TryHackMe_Dreaming.html" title="TryHackMe_Dreaming"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Dreaming</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_letter.html" title="TryHackMe_letter"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_letter</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_All%20in%20One.html" title="TryHackMe_All in One"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_All in One</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Missing-Person"><span class="toc-number">1.</span> <span class="toc-text">Missing Person</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">题目描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">解题过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%AF%86%E5%88%AB%E8%B5%9B%E9%81%93"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 识别赛道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%A1%AE%E5%AE%9A%E6%AF%94%E8%B5%9B%E6%97%A5%E6%9C%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 确定比赛日期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AF%86%E5%88%AB%E9%A4%90%E5%8E%85"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 识别餐厅</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%8E%B7%E5%8F%96%E7%85%A7%E7%89%87%E6%8B%8D%E6%91%84%E6%97%B6%E9%97%B4"><span class="toc-number">1.2.4.</span> <span class="toc-text">4. 获取照片拍摄时间</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%AE%9A%E4%BD%8D%E6%B4%BE%E5%AF%B9%E9%85%92%E5%90%A7"><span class="toc-number">1.2.5.</span> <span class="toc-text">5. 定位派对酒吧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%89%BE%E5%88%B0-DJ-%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.6.</span> <span class="toc-text">6. 找到 DJ 信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E7%A1%AE%E5%AE%9A%E6%B4%9E%E7%A9%B4%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.2.7.</span> <span class="toc-text">7. 确定洞穴位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E8%8E%B7%E5%8F%96-DJ-%E5%B7%A1%E6%BC%94%E5%85%AC%E5%8F%B8%E7%94%B5%E8%AF%9D"><span class="toc-number">1.2.8.</span> <span class="toc-text">8. 获取 DJ 巡演公司电话</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%94%E6%A1%88%E6%B1%87%E6%80%BB"><span class="toc-number">1.3.</span> <span class="toc-text">答案汇总</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

